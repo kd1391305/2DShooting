@@ -2,6 +2,8 @@
 #include"../../../main.h"
 #include"../../../Toolkit/RandEx.h"
 #include"../../../Save/Save.h"
+#include"../../GameTimer.h"
+#include"../../Game.h"
 
 //更新
 void C_EnemyManager::Update()
@@ -25,6 +27,9 @@ void C_EnemyManager::Update()
 					SCREEN_TOP			- itr->GetRadius().y);		//最大値
 				itr->Spawn({ x, y}, { -5,0 });
 				spawnFlg = false;
+
+				//スポーンした情報を保存する
+				SAVE.WriteEnemy({ x,y }, GAME_TIMER.GetTime());
 			}
 			else
 			{
@@ -50,16 +55,36 @@ void C_EnemyManager::Update()
 			SCREEN_BOTTOM + radius,			//最小値
 			SCREEN_TOP - radius);		//最大値
 		m_enemyList[m_enemyList.size() - 1].Spawn({ x, y }, { -5,0 });
+
+		//スポーンした情報を保存する
+		SAVE.WriteEnemy({ x,y },GAME_TIMER.GetTime());
 	}
 
 	//過去の敵の更新処理
-	for (auto e : m_fEnemyList)
-	{
-		while(SAVE.)
-
-
+	for (auto& e : m_fEnemyList)
 		//活性状態の敵は更新処理
 		if (e.IsActive())e.Update();
+
+	//スポーンする敵がいなくなるまでループを回す
+	bool hit = false;
+	while (SAVE.SearchSpawnEnemy(GAME_TIMER.GetTime(), m_pGame->GetLevel()))
+	{
+		for (auto& e : m_fEnemyList)
+			if (!e.IsActive())
+			{
+				e.Spawn(SAVE.PopSpawnEnemy(m_pGame->GetLevel()), Math::Vector2{ -5,0 });
+				hit = true;
+				break;
+			}
+		//非活性状態の敵が見つからなかったら、敵を追加する
+		if (!hit)
+		{
+			m_fEnemyList.push_back(C_FormerEnemy());
+			m_fEnemyList[m_fEnemyList.size() - 1].Spawn(SAVE.PopSpawnEnemy(m_pGame->GetLevel()), Math::Vector2{ -5,0 });
+			hit = true;
+		}
+		
+		hit = false;
 	}
 }
 

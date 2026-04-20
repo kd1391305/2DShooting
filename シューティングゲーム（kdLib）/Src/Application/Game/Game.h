@@ -16,7 +16,7 @@ public:
 	void Update();
 	void Draw();
 
-	int GetGameLevel() { return m_gameLevel; }
+	int GetLevel() { return m_gameLevel; }
 
 private:
 

@@ -19,6 +19,8 @@ C_Game::C_Game(int level):
 
 	//セーブ＆ロードに使用するファイルを開ける
 	SAVE.Open(level);
+
+	ENEMY_MANAGER.SetGame(this);
 }
 
 C_Game::~C_Game()
@@ -62,8 +64,8 @@ void C_Game::Update()
 
 	m_HUD.Update();
 
-	//プレイヤーの座標をセーブする
-	SAVE.Write(m_player.GetPos());
+	//プレイヤー座標をセーブする
+	SAVE.WritePlayerPos(m_player.GetPos());
 }
 void C_Game::Draw()
 {

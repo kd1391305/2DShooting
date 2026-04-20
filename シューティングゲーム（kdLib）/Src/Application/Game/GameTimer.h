@@ -30,7 +30,7 @@ public:
 	//ミリ秒単位で停止する（実際に停止処理を行うのはUpdate()の中）
 	void Stop(int ms) { m_stopTime = ms; }
 
-	//時間を遅くする（何フレームの間、fps）
+	//時間を遅くする（何フレームの間、減速率）
 	void Slow(int frame, float slow);
 
 	//経過したフレーム数
@@ -38,6 +38,8 @@ public:
 
 	//ゲーム終了時間を返す
 	int GetGameEndTime() { return m_gameEndTime; }
+
+	long GetTime() { return m_timer; }
 
 private:
 	int m_stopTime;

@@ -18,7 +18,7 @@ void C_FormerPlayers::Update()
 {
 	for (int i = 0; i < m_fPlayerList.size(); i++) 
 	{
-		SAVE.Read(m_fPlayerList[i].GetPosAddress(), i + 1);
+		SAVE.ReadPlayerPos(m_fPlayerList[i].GetPosAddress(), i + 1);
 		m_fPlayerList[i].Update();
 	}
 }

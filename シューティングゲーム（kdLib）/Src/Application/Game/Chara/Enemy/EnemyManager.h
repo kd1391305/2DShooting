@@ -1,6 +1,9 @@
 #pragma once
 #include"Enemy.h"
 #include"FormerEnemy.h"
+
+class C_Game;		//‘O•ûéŒ¾
+
 //“G‚ğŠÇ—‚·‚éƒNƒ‰ƒX
 class C_EnemyManager
 {
@@ -13,7 +16,11 @@ public:
 	std::vector<C_Enemy>& GetEnemyList() { return m_enemyList; }
 	std::vector<C_FormerEnemy>& GetFormerEnemyList() { return m_fEnemyList; }
 
+	void SetGame(C_Game* set) { m_pGame = set; }
+
 private:
+
+	C_Game* m_pGame;
 
 	KdTexture m_tex;
 

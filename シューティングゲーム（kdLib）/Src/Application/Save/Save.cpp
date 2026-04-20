@@ -71,8 +71,12 @@ bool C_Save::SaveHighScore(long highScore, int level)
 bool C_Save::Open(int level)
 {
 	char name[50];
+	//===================================
+	//プレイヤーに関するファイルを開く
+	//===================================
+
 	//毎フレーム書き込むファイルを作る
-	sprintf_s(name, sizeof(name), "Data/Save%d.csv", level);
+	sprintf_s(name, sizeof(name), "Data/SavePlayer%d.csv", level);
 	if ((m_playerPos.write = fopen(name, "w")) == nullptr)
 		//ファイルを開けなかったら（作れなかったら）
 		return false;
@@ -80,25 +84,78 @@ bool C_Save::Open(int level)
 	//毎フレーム読み込むファイルを開く
 	for (int i = 1; i < level; i++)
 	{
-		sprintf_s(name, sizeof(name), "Data/Save%d.csv", i);
+		sprintf_s(name, sizeof(name), "Data/SavePlayer%d.csv", i);
 		if ((m_playerPos.read[i - 1] = fopen(name, "r")) == nullptr)
 			//ファイルを開けなかったら
 			return false;
 	}
 
+	//===================================
+	//敵に関するファイルを開く
+	//===================================
+
+	//毎フレーム書き込むファイルを作る
+	sprintf_s(name, sizeof(name), "Data/SaveEnemy%d.csv", level);
+	if ((m_enemy.write = fopen(name, "w")) == nullptr)
+		//ファイルを開けなかったら（作れなかったら）
+		return false;
+
+	//毎フレーム読み込むファイルを開く
+	for (int i = 1; i < level; i++)
+	{
+		sprintf_s(name, sizeof(name), "Data/SaveEnemy%d.csv", i);
+		if ((m_enemy.read[i - 1] = fopen(name, "r")) == nullptr)
+			//ファイルを開けなかったら
+			return false;
+		else
+			//次に出てくるデータを読み込む
+			fscanf_s(m_enemy.read[i - 1], "%f,%f,%ld\n", &m_nextSpawnPos[i - 1].x, &m_nextSpawnPos[i - 1].y, &m_nextSpawnTime[i - 1]);
+	}
+
+
 	//ファイルを問題なく開けた
 	return true;
 }
 
-bool C_Save::Write(Math::Vector2 pos)
+//ファイルを閉じる
+void C_Save::Close()
+{
+	//プレイヤー
+	for (auto p : m_playerPos.read)
+		if (p)
+		{
+			fclose(p);
+			p = nullptr;
+		}
+	if (m_playerPos.write)
+	{
+		fclose(m_playerPos.write);
+		m_playerPos.write = nullptr;
+	}
+
+	//敵
+	for (auto e : m_enemy.read)
+		if (e)
+		{
+			fclose(e);
+			e = nullptr;
+		}
+	if (m_enemy.write)
+	{
+		fclose(m_enemy.write);
+		m_enemy.write = nullptr;
+	}
+}
+
+bool C_Save::WritePlayerPos(Math::Vector2 pos)
 {
 	fprintf_s(m_playerPos.write, "%f, %f\n", pos.x, pos.y);
 	return true;
 }
 
-bool C_Save::Read(Math::Vector2* pPos,int level)
+bool C_Save::ReadPlayerPos(Math::Vector2* pPos,int level)
 {
-	if (fscanf_s(m_playerPos.read[level - 1], "%f,%f", &pPos->x, &pPos->y) != EOF)
+	if (fscanf_s(m_playerPos.read[level - 1], "%f,%f\n", &pPos->x, &pPos->y) != EOF)
 	{
 		//読み取り位置を次の行にする
 		char dummy[100];
@@ -110,6 +167,41 @@ bool C_Save::Read(Math::Vector2* pPos,int level)
 	return false;
 }
 
+bool C_Save::WriteEnemy(Math::Vector2 pos, long time)
+{
+	fprintf_s(m_enemy.write, "%f, %f,%ld\n", pos.x, pos.y, time);
+	return true;
+}
+
+bool C_Save::SearchSpawnEnemy(long time, int level)
+{
+	if (time == m_nextSpawnTime[level - 2])
+		return true;
+
+	//見つからなかったらfalse
+	return false;
+}
+
+Math::Vector2 C_Save::PopSpawnEnemy(int level)
+{
+	//返す座標を取り出す
+	const Math::Vector2 temp = m_nextSpawnPos[level - 2];
+
+	char dummy[100];
+	fgets(dummy, sizeof(dummy), m_enemy.read[level - 2]);
+
+	//取り出したので、次の座標をセットする
+	if (fscanf_s(m_enemy.read[level - 2], "%f,%f,%ld", &m_nextSpawnPos[level - 2].x, &m_nextSpawnPos[level - 2].y, &m_nextSpawnTime[level - 2]) == EOF)
+	{
+		//取り出すものが無かったら、初期化する
+		m_nextSpawnPos[level - 2] = { 0,0 };
+		m_nextSpawnTime[level - 2] = 0;
+	}
+
+	//取り出した座標を返す
+	return temp;
+}
+
 //セーブファイルがあるかどうかを全てチェックする（フラグに情報を格納）
 void C_Save::CheckFile()
 {
@@ -118,7 +210,7 @@ void C_Save::CheckFile()
 	{
 		FILE* fp;
 		char name[50];
-		sprintf_s(name, sizeof(name), "Data/Save%d.csv", i);
+		sprintf_s(name, sizeof(name), "Data/SavePlayer%d.csv", i);
 		//ファイルを開く
 		if ((fp = fopen(name, "r")) != nullptr)
 		{
