@@ -7,9 +7,14 @@ class C_Enemy;
 class C_PlayerBullet;
 class C_EnemyBullet;
 class C_HUD;
+class C_FormerEnemy;
+class C_FormerPlayer;
 
 //プレイヤー　と　敵
 bool Collision(C_Player* player, std::vector<C_Enemy>& enemyList);
+
+//プレイヤー　と　過去の敵
+bool Collision(C_Player* player, std::vector<C_FormerEnemy>& fEnemyList);
 
 //プレイヤー　と　弾
 bool Collision(C_Player* player, std::vector<C_EnemyBullet>& bulletList);
@@ -19,6 +24,9 @@ bool Collision(C_Player* player, std::vector<C_EnemyBullet>& bulletList);
 
 //弾　と　敵
 bool Collision(std::vector<C_PlayerBullet>&bulletList, std::vector<C_Enemy>& enemyList,C_HUD *HUD);
+
+//弾　と　過去の敵
+bool Collision(std::vector<C_PlayerBullet>& bulletList, std::vector<C_FormerEnemy>fEnemyList, C_HUD* HUD);
 
 //円形当たり判定
 bool IsCollision(Math::Vector2 pos1,float radius1, Math::Vector2 pos2,float radius2);

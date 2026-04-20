@@ -19,9 +19,10 @@ public:
 	//Šˆ«ó‘Ô‚©‚Ç‚¤‚©‚ğ•Ô‚·
 	bool IsActive() { return m_bActive; }
 
+	void SetActive(bool set) { m_bActive = set; }
+
 private:
 
 	bool m_bActive;						//Šˆ«ó‘Ô‚©‚Ç‚¤‚©
 	Math::Vector2 m_move;		//ˆÚ“®—Ê
-
 };

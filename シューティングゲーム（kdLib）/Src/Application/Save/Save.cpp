@@ -112,6 +112,28 @@ bool C_Save::Open(int level)
 			fscanf_s(m_enemy.read[i - 1], "%f,%f,%ld\n", &m_nextSpawnPos[i - 1].x, &m_nextSpawnPos[i - 1].y, &m_nextSpawnTime[i - 1]);
 	}
 
+	//===================================
+	//弾に関するファイルを開く
+	//===================================
+	//毎フレーム書き込むファイルを作る
+	sprintf_s(name, sizeof(name), "Data/SavePB%d.csv", level);
+	if ((m_shotTime.write = fopen(name, "w")) == nullptr)
+		//ファイルを開けなかったら（作れなかったら）
+		return false;
+
+	//毎フレーム読み込むファイルを開く
+	for (int i = 1; i < level; i++)
+	{
+		sprintf_s(name, sizeof(name), "Data/SavePB%d.csv", i);
+		if ((m_shotTime.read[i - 1] = fopen(name, "r")) == nullptr)
+			//ファイルを開けなかったら
+			return false;
+		else
+			//次に出てくるデータを読み込む
+			fscanf_s(m_shotTime.read[i - 1], "%ld", &m_nextShotTime[i - 1]);
+	}
+
+
 
 	//ファイルを問題なく開けた
 	return true;
@@ -202,8 +224,28 @@ Math::Vector2 C_Save::PopSpawnEnemy(int level)
 	return temp;
 }
 
-//セーブファイルがあるかどうかを全てチェックする（フラグに情報を格納）
-void C_Save::CheckFile()
+bool C_Save::WritePlayerShotTime(long time)
+{
+	fprintf_s(m_shotTime.write, "%ld\n", time);
+	return true;
+}
+
+//プレイヤーが弾を出す時間を返す
+long C_Save::GetPlayerShotTime(int level)
+{
+	return m_nextShotTime[level - 1];
+}
+
+void C_Save::PopPlayerShotTime(int level)
+{
+	//読み込む位置を一行ずらす
+	char dummy[100];
+	fgets(dummy, sizeof(dummy), m_shotTime.read[level - 1]);
+	//読み込む（前のデータを上書き）
+	fscanf_s(m_shotTime.read[level - 1], "%ld", &m_nextShotTime[level - 1]);
+}
+
+void C_Save::CheckReleaseLevel()
 {
 	m_releaseLevel = 1;
 	for (int i = 0; i < 4; i++)

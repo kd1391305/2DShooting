@@ -41,16 +41,20 @@ void C_Game::Update()
 
 
 	//当たり判定
-	if (!m_player.IsInvincible())		//無敵中は判定を行わない
-	{
-		//プレイヤー　と　敵
-		Collision(&m_player, ENEMY_MANAGER.GetEnemyList());
+	//プレイヤー　と　敵
+	Collision(&m_player, ENEMY_MANAGER.GetEnemyList());
 
-		//プレイヤー　と　敵の弾
-		Collision(&m_player, BULLET_MANAGER.GetEnemyList());
-	}
+	//プレイヤー　と　過去の敵
+	Collision(&m_player, ENEMY_MANAGER.GetFormerEnemyList());
+
+	//プレイヤー　と　敵の弾
+	Collision(&m_player, BULLET_MANAGER.GetEnemyList());
+	
 	//プレイヤーの弾　と　敵
 	Collision(BULLET_MANAGER.GetPlayerList(), ENEMY_MANAGER.GetEnemyList(), &m_HUD);
+
+	//プレイヤーの弾　と　過去の敵
+	Collision(BULLET_MANAGER.GetPlayerList(), ENEMY_MANAGER.GetFormerEnemyList(), &m_HUD);
 
 	m_back.Update();
 
@@ -64,8 +68,7 @@ void C_Game::Update()
 
 	m_HUD.Update();
 
-	//プレイヤー座標をセーブする
-	SAVE.WritePlayerPos(m_player.GetPos());
+	
 }
 void C_Game::Draw()
 {
@@ -78,6 +81,7 @@ void C_Game::Draw()
 	m_player.Draw();
 	BULLET_MANAGER.Draw();
 	ENEMY_MANAGER.Draw();
+
 	
 	m_HUD.Draw();
 }

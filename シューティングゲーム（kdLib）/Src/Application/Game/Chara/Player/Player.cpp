@@ -3,6 +3,7 @@
 #include"../../Bullet/BulletManager.h"
 #include"../../../Toolkit/KeyManager.h"
 #include"../../../Save/Save.h"
+#include"../../GameTimer.h"
 
 //コンストラクタ
 C_Player::C_Player()
@@ -59,6 +60,8 @@ void C_Player::Update()
 	Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scaleMat* transMat;
 
+	//プレイヤー座標をセーブする
+	SAVE.WritePlayerPos(m_pos);
 }
 
 //描画
@@ -106,6 +109,9 @@ void C_Player::Action()
 			BULLET_MANAGER.ShotOfPlayer(m_pos, { 15,0 });
 			//撃つ待機時間を設ける
 			m_shotWait = 10;
+
+			//弾を発射した時間を書き込む
+			SAVE.WritePlayerShotTime(GAME_TIMER.GetTime());
 		}
 	}
 }

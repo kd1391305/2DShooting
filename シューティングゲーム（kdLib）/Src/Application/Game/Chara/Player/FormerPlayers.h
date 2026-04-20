@@ -15,4 +15,5 @@ private:
 	std::vector<C_FormerPlayer> m_fPlayerList;
 
 	KdTexture* m_pTex;
+
 };

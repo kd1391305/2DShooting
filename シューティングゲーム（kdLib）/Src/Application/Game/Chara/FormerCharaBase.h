@@ -7,7 +7,7 @@ public:
 
 	//コンストラクタ（メンバ変数の初期化）
 	C_FormerCharaBase() :
-		m_pos(0,0)
+		m_pos(0,0),m_radius(32,32)
 	{
 		m_mat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	}
@@ -28,8 +28,11 @@ public:
 
 	Math::Vector2* GetPosAddress() { return &m_pos; }
 
+	Math::Vector2 GetPos() { return m_pos; }
+	Math::Vector2 GetRadius() { return m_radius; }
 protected:
 
 	Math::Vector2 m_pos;				//座標
+	Math::Vector2 m_radius;				//半径
 	Math::Matrix m_mat;					//行列
 };

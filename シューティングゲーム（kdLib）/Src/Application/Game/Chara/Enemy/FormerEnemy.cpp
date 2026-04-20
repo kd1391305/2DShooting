@@ -12,7 +12,7 @@ void C_FormerEnemy::Spawn(const Math::Vector2& pos, const Math::Vector2& move)
 	m_pos = pos;
 	m_move = move;
 	m_bActive = true;
-	Math::Matrix scaleMat = Math::Matrix::CreateScale(0.5f, 0.5f, 0);
+	Math::Matrix scaleMat = Math::Matrix::CreateScale(1, 1, 0);
 	Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scaleMat * transMat;
 }
