@@ -23,7 +23,7 @@ public:
 
 private:
 
-	Scene() {}
+	Scene(){}
 
 public:
 	static Scene& GetInstance()

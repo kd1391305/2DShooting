@@ -233,9 +233,11 @@ void Application::Execute()
 		DWORD et = timeGetTime();
 		// Fps制御
 		DWORD ms = 1000 / m_maxFps;
+		m_deltaTime = (double)(et - st) / 1000.0;			//経過した時間（秒）を求める
 		if (et - st < ms)
 		{
 			Sleep(ms - (et - st));	// 速すぎたら待つ
+			m_deltaTime += (ms - (et - st)) /1000.0;
 		}
 
 		// FPS計測

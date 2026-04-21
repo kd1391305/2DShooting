@@ -5,5 +5,5 @@
 bool HitGacha(const float probability);
 
 //Žw’è‚µ‚½”ÍˆÍ‚Å‚Ìƒ‰ƒ“ƒ_ƒ€‚È’l‚ð•Ô‚·
-float rand_Range(float min, float max);
+float randRange(float min, float max);
 

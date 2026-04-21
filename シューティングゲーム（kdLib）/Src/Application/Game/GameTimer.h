@@ -10,22 +10,11 @@ public:
 		m_stopTime = 0;
 		m_timer = 0;
 		m_slowCnt = 0;
-		m_beforeFps = 60;
 	}
 
 	//更新
-	void Update()
-	{
-		//経過したフレーム数を測る
-		m_timer++;
-
-		//Stop()が前のゲームループで呼ばれていたら、処理を止める
-		if (m_stopTime)
-		{
-			Sleep(m_stopTime);
-			m_stopTime = 0;
-		}
-	}
+	void Update();
+	
 
 	//ミリ秒単位で停止する（実際に停止処理を行うのはUpdate()の中）
 	void Stop(int ms) { m_stopTime = ms; }
@@ -47,7 +36,6 @@ private:
 	long m_timer;
 
 	int m_slowCnt;			//遅くなる時間をカウントする（0以下になったら元に戻る）
-	int m_beforeFps;		//遅くなる以前のfpsを保存しておく
 
 	const int m_gameEndTime = 60;
 
@@ -55,7 +43,7 @@ private:
 private:
 	//メンバ変数の初期化
 	C_GameTimer():
-	m_stopTime(0),m_timer(0),m_slowCnt(0),m_beforeFps(60)
+	m_stopTime(0),m_timer(0),m_slowCnt(0)
 	{}
 public:
 	static C_GameTimer& GetInstance()

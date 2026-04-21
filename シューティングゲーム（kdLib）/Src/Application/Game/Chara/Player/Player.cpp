@@ -115,3 +115,11 @@ void C_Player::Action()
 		}
 	}
 }
+
+//“|‚ê‚½‚Ìˆ—
+void C_Player::Dead()
+{
+	//ˆÚ“®—Ê‚ğ‚È‚­‚·
+	m_move = { 0,0 };
+	GAME_TIMER.Slow(20, 0.3f);
+}

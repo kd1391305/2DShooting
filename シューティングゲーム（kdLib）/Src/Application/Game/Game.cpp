@@ -8,6 +8,7 @@
 #include"FadeEffect/FadeEffectManager.h"
 #include"../Save/Save.h"
 
+//コンストラクタ
 C_Game::C_Game(int level):
 	m_gameLevel(level)
 {
@@ -21,24 +22,47 @@ C_Game::C_Game(int level):
 	SAVE.Open(level);
 
 	ENEMY_MANAGER.SetGame(this);
+
+	m_state = GameState::Game;
 }
 
+//デストラクタ
 C_Game::~C_Game()
 {
 	//セーブ＆ロードに使用したファイルを閉じる
 	SAVE.Close();
 }
 
+//更新
 void C_Game::Update()
 {
+	if (m_state == GameState::Game)
+		UpdateGame();
+	else if (m_state == GameState::GameClear)
+		UpdateGameClear();
+	else if (m_state == GameState::GameOver)
+		UpdateGameOver();
+}
+
+//描画
+void C_Game::Draw()
+{
+	if (m_state == GameState::Game)
+		DrawGame();
+	else if (m_state == GameState::GameClear)
+		DrawGameClear();
+	else if (m_state == GameState::GameOver)
+		DrawGameOver();
+}
+
+//ゲーム中の更新
+void C_Game::UpdateGame()
+{
+	//ゲームタイマーを更新する
 	GAME_TIMER.Update();
 
-	if (GetAsyncKeyState(VK_RBUTTON) & 0x8000)
-	{
-		SCENE_MANAGER.ChangeState(new C_Result());
-	}
+	//プレイヤーの行動
 	m_player.Action();
-
 
 	//当たり判定
 	//プレイヤー　と　敵
@@ -49,28 +73,49 @@ void C_Game::Update()
 
 	//プレイヤー　と　敵の弾
 	Collision(&m_player, BULLET_MANAGER.GetEnemyList());
-	
+
 	//プレイヤーの弾　と　敵
 	Collision(BULLET_MANAGER.GetPlayerList(), ENEMY_MANAGER.GetEnemyList(), &m_HUD);
 
 	//プレイヤーの弾　と　過去の敵
 	Collision(BULLET_MANAGER.GetPlayerList(), ENEMY_MANAGER.GetFormerEnemyList(), &m_HUD);
 
+	//背景の更新
 	m_back.Update();
 
+	//プレイヤーの更新
 	m_player.Update();
 
-	ENEMY_MANAGER.Update();
-	BULLET_MANAGER.Update();
-	FADE_EFFECT.Update();
-
+	//過去のプレイヤーの更新
 	m_fPlayers.Update();
 
-	m_HUD.Update();
+	//すべての敵の更新
+	ENEMY_MANAGER.Update();
 
-	
+	//全ての弾の更新
+	BULLET_MANAGER.Update();
+
+	//全ての消滅エフェクトの更新
+	FADE_EFFECT.Update();
+
+	//HeadUpDisplay（UI）の更新
+	m_HUD.Update();
 }
-void C_Game::Draw()
+
+//ゲームクリア中の更新
+void C_Game::UpdateGameClear()
+{
+	m_gameClear.Update();
+}
+
+//ゲームオーバー中の更新
+void C_Game::UpdateGameOver()
+{
+	m_gameOver.Update();
+}
+
+//ゲーム中の描画
+void C_Game::DrawGame()
 {
 	m_back.Draw();
 
@@ -82,16 +127,17 @@ void C_Game::Draw()
 	BULLET_MANAGER.Draw();
 	ENEMY_MANAGER.Draw();
 
-	
 	m_HUD.Draw();
 }
 
-bool C_Game::IsGameOver()
+//ゲームクリア中の描画
+void C_Game::DrawGameClear()
 {
-	return false;
+	m_gameClear.Draw();
 }
 
-bool C_Game::IsGameClear()
+//ゲームオーバー中の描画
+void C_Game::DrawGameOver()
 {
-	return false;
+	m_gameOver.Draw();
 }

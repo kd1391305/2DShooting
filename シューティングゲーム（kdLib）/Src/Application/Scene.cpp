@@ -9,6 +9,7 @@
 void Scene::Draw2D()
 {
 	SCENE_MANAGER.Draw();
+	MOUSE.Draw();
 }
 
 void Scene::Update()
@@ -32,7 +33,7 @@ void Scene::Release()
 
 void Scene::ImGuiUpdate()
 {
-	return;
+	//return;
 
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_Once);
@@ -41,6 +42,7 @@ void Scene::ImGuiUpdate()
 	if (ImGui::Begin("Debug Window"))
 	{
 		ImGui::Text("FPS : %d", APP.m_fps);
+		ImGui::Text("MAX_FPS : %d", APP.m_maxFps);
 		ImGui::Text("MouseX : %d\nMuseY : %d", MOUSE.GetPos().x, MOUSE.GetPos().y);
 		ImGui::End();
 	}

@@ -85,6 +85,9 @@
     <Filter Include="Src\Application\Save">
       <UniqueIdentifier>{85f9c7cf-e0a4-4df1-bb04-0decd0a6fd6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Game\Firework">
+      <UniqueIdentifier>{7075964d-3780-451c-8b80-784f0bbb65fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -288,6 +291,18 @@
     <ClInclude Include="Src\Application\Game\GameTimer.h">
       <Filter>Src\Application\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Game\GameClear.h">
+      <Filter>Src\Application\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Game\GameOver.h">
+      <Filter>Src\Application\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Game\Fireworks\FireworksManager.h">
+      <Filter>Src\Application\Game\Firework</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Game\Fireworks\Fireworks.h">
+      <Filter>Src\Application\Game\Firework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -439,6 +454,18 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Game\GameTimer.cpp">
       <Filter>Src\Application\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Game\GameClear.cpp">
+      <Filter>Src\Application\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Game\GameOver.cpp">
+      <Filter>Src\Application\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Game\Fireworks\FireworksManager.cpp">
+      <Filter>Src\Application\Game\Firework</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Game\Fireworks\Fireworks.cpp">
+      <Filter>Src\Application\Game\Firework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

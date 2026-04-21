@@ -13,6 +13,16 @@ void C_Mouse::Update()
 	m_pos.x += SCREEN_LEFT;
 	m_pos.y += SCREEN_BOTTOM;
 	m_pos.y *= -1;
+
+	Math::Matrix scale = Math::Matrix::CreateScale(0.3f, 0.3f, 0);
+	Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	m_mat = scale * trans;
+}
+
+void C_Mouse::Draw()
+{
+	SHADER.m_spriteShader.SetMatrix(m_mat);
+	SHADER.m_spriteShader.DrawTex_Src(&m_tex);
 }
 
 bool C_Mouse::Hit(Math::Vector2 pos, Math::Vector2 radius)

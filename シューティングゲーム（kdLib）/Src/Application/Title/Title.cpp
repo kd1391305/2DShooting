@@ -4,6 +4,8 @@
 #include"../Game/Game.h"
 #include"../Toolkit/KeyManager.h"
 #include"../Save/Save.h"
+#include"../Game/Fireworks/FireworksManager.h"
+#include"../Mouse/Mouse.h"
 
 C_Title::C_Title() :
 	//ゲームスタートボタンの初期化
@@ -39,6 +41,12 @@ C_Title::C_Title() :
 
 void C_Title::Update()
 {
+	//デバッグ
+	if (KEY.IsDown(VK_LBUTTON))
+		FIREWORKS_MANAGER.Shot(MOUSE.GetPosf());
+	FIREWORKS_MANAGER.Update();
+
+
 	//最初の画面のとき
 	if (m_bFirstMenu)
 	{
@@ -106,4 +114,7 @@ void C_Title::Draw()
 			DRAW_STRING.Draw(level, { left,top }, {0,0,0,1});
 		}
 	}
+
+	FIREWORKS_MANAGER.Draw();
+
 }

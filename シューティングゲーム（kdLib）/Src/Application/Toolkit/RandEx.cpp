@@ -7,7 +7,7 @@ bool HitGacha(const float probability)
 	return false;
 }
 
-float rand_Range(float min, float max)
+float randRange(float min, float max)
 {  
-	return (rand() / (float)RAND_MAX) * (max - min + 1) + min;
+	return  min + (rand() / (float)RAND_MAX) * (max - min);
 }

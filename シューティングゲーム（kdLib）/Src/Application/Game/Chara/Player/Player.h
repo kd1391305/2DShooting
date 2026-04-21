@@ -19,7 +19,11 @@ public:
 	//ƒ_ƒ[ƒW
 	void Damage(float damage) {
 		m_hp -= damage;
-		if (m_hp < 0)m_hp = 0;
+		if (m_hp <= 0)
+		{
+			m_hp = 0;
+			Dead();			//“|‚ê‚½‚Ìˆ—‚ğŒÄ‚Ño‚·
+		}
 		if (m_hp > m_hpMax)m_hp = m_hpMax;
 	}
 
@@ -39,8 +43,13 @@ public:
 		m_color = { 1,1,1,0.2f };
 	}
 
+	//“|‚ê‚½‚Æ‚«‚Ìˆ—
+	void Dead();
+
 	//–³“G‚©‚Ç‚¤‚©
 	bool IsInvincible() { return m_bInvincible; }
+
+	float GetHP() { return m_hp; }
 
 	float* GetHPAddress() { return &m_hp; }
 	float* GetHPMaxAddress() { return &m_hpMax; }

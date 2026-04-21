@@ -63,7 +63,7 @@ void C_BulletManager::ShotOfPlayer(Math::Vector2 pos, Math::Vector2 move)
 	//もし見つからなかったら
 	//オブジェクト作成（このオブジェクトは非活性状態になったらこのクラス（C_BulletManager）のUpdate()で削除される）
 	m_playerList.push_back(C_PlayerBullet(&m_playerTex));
-	m_playerList[m_playerList.size() - 1].Shot(pos, move);
+	m_playerList.back().Shot(pos, move);
 }
 
 void C_BulletManager::ShotOfEnemy(Math::Vector2 pos, Math::Vector2 move)
@@ -81,7 +81,7 @@ void C_BulletManager::ShotOfEnemy(Math::Vector2 pos, Math::Vector2 move)
 	//もし見つからなかったら
 	//オブジェクト作成（このオブジェクトは非活性状態になったらこのクラス（C_BulletManager）のUpdate()で削除される）
 	m_enemyList.push_back(C_EnemyBullet(&m_enemyTex));
-	m_enemyList[m_enemyList.size() - 1].Shot(pos, move);
+	m_enemyList.back().Shot(pos, move);
 }
 
 C_BulletManager::C_BulletManager()
