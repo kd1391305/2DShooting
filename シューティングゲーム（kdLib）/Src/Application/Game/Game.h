@@ -3,7 +3,6 @@
 #include"Chara/Player/Player.h"
 #include"Back/Back.h"
 #include"HUD/HUD.h"
-#include"Chara/Player/FormerPlayers.h"
 #include"GameClear.h"
 #include"GameOver.h"
 
@@ -47,7 +46,6 @@ private:
 	void DrawGameOver();
 
 	C_Player m_player;					//プレイヤー
-	C_FormerPlayers m_fPlayers;		//過去のプレイヤー
 	C_Back m_back;						//背景
 	C_HUD m_HUD;						//HeadUpDisplay(UI)
 	C_GameClear m_gameClear;		//ゲームクリア

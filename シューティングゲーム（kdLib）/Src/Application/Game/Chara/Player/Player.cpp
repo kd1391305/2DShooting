@@ -60,8 +60,6 @@ void C_Player::Update()
 	Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scaleMat* transMat;
 
-	//プレイヤー座標をセーブする
-	SAVE.WritePlayerPos(m_pos);
 }
 
 //描画
@@ -70,7 +68,7 @@ void C_Player::Draw()
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex_Src(&m_tex, m_color);
 	float fontSize = 8;
-	float interval = 8;		//プレイヤーと文字との間隔
+	float interval = 8;				//プレイヤーと文字との間隔
 	DRAW_STRING.Draw("Player", { m_pos.x- m_radius.x,m_pos.y + m_radius.y + fontSize + interval },fontSize);
 }
 
@@ -109,9 +107,6 @@ void C_Player::Action()
 			BULLET_MANAGER.ShotOfPlayer(m_pos, { 15,0 });
 			//撃つ待機時間を設ける
 			m_shotWait = 10;
-
-			//弾を発射した時間を書き込む
-			SAVE.WritePlayerShotTime(GAME_TIMER.GetTime());
 		}
 	}
 }

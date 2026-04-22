@@ -14,7 +14,7 @@ public:
 private:
 	C_Button m_start;
 
-	C_Button m_levelButton[5];
+	C_Button m_levelButton[3];
 
 	bool m_bFirstMenu;			//最初の選択画面か次のレベル選択画面かどうかのフラグ			
 };

@@ -9,7 +9,10 @@ void C_Fireworks::Update()
 		//座標更新
 		m_pos += m_move * APP.GetDeltaTime();
 		//重力
-		m_move.y -= 0.001f * APP.GetDeltaTime();
+		float a = APP.GetDeltaTime();
+		int b = a;
+
+		m_move.y -= 400.0f * APP.GetDeltaTime();
 
 		if (m_move.y <= 0)
 		{
@@ -24,7 +27,7 @@ void C_Fireworks::Update()
 					move.y *= -1;
 				p.m_move = move;
 				p.m_color = m_color;
-				p.m_life = randRange(1.5f, 2.5f);
+				p.m_life = randRange(1.5f, 2.5f);		//1.5秒～2.5秒
 			}
 			for (auto& p : m_lineList)
 			{
@@ -33,10 +36,11 @@ void C_Fireworks::Update()
 					move.x *= -1;
 				if (rand() % 2)
 					move.y *= -1;
+				p.m_pos.y += m_lineLen / 2.0f;
 				p.m_move = move;
 				p.m_radian = atan2f(p.m_move.y, p.m_move.x);
 				p.m_color = m_color;
-				p.m_life = randRange(1.5f, 2.5f);
+				p.m_life = randRange(1.5f, 2.5f);		//1.5秒～2.5秒
 			}
 		}
 	}
@@ -45,7 +49,7 @@ void C_Fireworks::Update()
 	for (int i = m_circleList.size() - 1; i >= 0; i--)
 	{
 		if (m_bExploded)
-			m_circleList[i].m_move -= m_lineList[i].m_move * 0.98f * APP.GetDeltaTime();
+			m_circleList[i].m_move *= 1.0f - (0.98 * APP.GetDeltaTime());
 		if(!m_circleList[i].Update(APP.GetDeltaTime()))
 			//寿命が尽きたら削除
 			m_circleList.erase(m_circleList.begin() + i);
@@ -54,8 +58,8 @@ void C_Fireworks::Update()
 	for (int i = m_lineList.size() - 1; i >= 0; i--)
 	{
 		if (m_bExploded)
-			m_lineList[i].m_move -= m_lineList[i].m_move * 0.95f *APP.GetDeltaTime();
-		if (!m_lineList[i].Update(APP.GetDeltaTime()))
+			m_lineList[i].m_move *= 1.0f - (0.95 * APP.GetDeltaTime());
+		if (!m_lineList[i].Update(APP.GetDeltaTime(),m_bExploded))
 			//寿命が尽きたら削除
 			m_lineList.erase(m_lineList.begin() + i);
 	}
@@ -71,7 +75,7 @@ void C_Fireworks::Shot(Math::Vector2 pos)
 	//花火の中心（軸）の初期化
 	//この値を元に、花火の火の部分を作成する
 	m_pos = pos;
-	m_move = { 0,randRange(5.0f,6.0f) };
+	m_move = { 0,randRange(300,500) };
 	m_color = { randRange(0, 0.6f), randRange(0, 0.6f), randRange(0, 0.6f), randRange(0.4f, 0.6f) };
 	m_bExploded = false;
 	m_bActive = true;
@@ -87,8 +91,8 @@ void C_Fireworks::Shot(Math::Vector2 pos)
 		};
 		//移動量を中心（軸）と比べて少しだけ変化させる
 		Math::Vector2 move = {
-			m_move.x + randRange(-0.5f,0.5f),
-			m_move.x + randRange(-0.5f,0.5f)
+			m_move.x + randRange(-3.0f,3.0f),
+			m_move.y + randRange(-3.0f,3.0f)
 		};
 		//色も少し変える
 		float r = m_color.R() + randRange(-0.1f, 0.1f);
@@ -101,13 +105,14 @@ void C_Fireworks::Shot(Math::Vector2 pos)
 	//棒
 	for (int i = 0; i < 150; i++)
 	{
+		
 		Math::Vector2 pos = {
-			m_pos.x + randRange(-0.5f,0.5f),
-			m_pos.y + randRange(-0.5f,0.5f)
+			m_pos.x  + randRange(-0.5f,0.5f),
+			m_pos.y - m_lineLen/2.0f + randRange(-0.5f,0.5f)
 		};
 		Math::Vector2 move = {
-			m_move.x + randRange(-0.05f,0.05f),
-			m_move.y + randRange(-0.05f,0.05f)
+			m_move.x + randRange(-3.0f,3.0f),
+			m_move.y + randRange(-3.0f,3.0f)
 		};
 		float r = m_color.R() + randRange(-0.1f, 0.1f);
 		float g = m_color.G() + randRange(-0.1f, 0.1f);

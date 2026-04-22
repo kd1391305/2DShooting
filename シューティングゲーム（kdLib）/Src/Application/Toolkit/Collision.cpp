@@ -26,25 +26,6 @@ bool Collision(C_Player* player, std::vector<C_Enemy>& enemyList)
 	return false;
 }
 
-//ƒvƒŒƒCƒ„[@‚Æ@‰ß‹‚Ì“G
-bool Collision(C_Player* player, std::vector<C_FormerEnemy>& fEnemyList)
-{
-	for (auto& e : fEnemyList)
-	{
-		if (!e.IsActive())continue;
-		if (IsCollision(player->GetPos(), player->GetRadius().x, e.GetPos(), e.GetRadius().x))
-		{
-			player->Damage(10);
-			player->Invincible(60);				//6‚OƒtƒŒ[ƒ€–³“G‚É‚È‚é
-			e.SetActive(false);
-			FADE_EFFECT.Emit(e.GetPos(), e.GetRadius().x);
-			GAME_TIMER.Stop(200);		//0.2•b’â~
-			return true;
-		}
-	}
-	return false;
-}
-
 //ƒvƒŒƒCƒ„[@‚Æ@’e
 bool Collision(C_Player* player, std::vector<C_EnemyBullet>& bulletList)
 {
@@ -104,26 +85,6 @@ bool Collision(std::vector< C_PlayerBullet>& bulletList, std::vector<C_Enemy>& e
 	return false;
 }
 
-//’e‚Æ‰ß‹‚Ì“G
-bool Collision(std::vector<C_PlayerBullet>& bulletList, std::vector<C_FormerEnemy> fEnemyList, C_HUD* HUD)
-{
-	for (auto& b : bulletList)
-	{
-		if (!b.IsActive())continue;
-		for (auto& e : fEnemyList)
-		{
-			if (!e.IsActive())continue;
-			if (IsCollision(b.GetPos(), b.GetRadius(), e.GetPos(), e.GetRadius().x))
-			{
-				b.SetActive(false);
-				e.SetActive(false);
-				HUD->AddScore(100);
-				FADE_EFFECT.Emit(e.GetPos(), e.GetRadius().x);
-			}
-		}
-	}
-	return true;
-}
 
 //‰~Œ`“–‚½‚è”»’è
 bool IsCollision(Math::Vector2 pos1,float radius1, Math::Vector2 pos2, float radius2)

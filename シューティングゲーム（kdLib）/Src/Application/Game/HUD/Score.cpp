@@ -7,7 +7,7 @@ C_Score::~C_Score()
 {
 	//ハイスコアを書き換える
 	if (m_score > m_highScore)
-		SAVE.SaveHighScore(m_score, m_level);
+		C_Save::SaveHighScore(m_score, m_level);
 }
 
 void C_Score::Init(int level)
@@ -15,7 +15,7 @@ void C_Score::Init(int level)
 	//level情報をこのクラスでも保有しておく
 	//このクラスがdeleteされるときのセーブに使用
 	m_level = level;
-	m_highScore = SAVE.LoadHighScore(m_level);
+	m_highScore = C_Save::LoadHighScore(m_level);
 }
 
 void C_Score::Draw()

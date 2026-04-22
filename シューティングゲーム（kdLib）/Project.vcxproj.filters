@@ -267,12 +267,6 @@
     <ClInclude Include="Src\Application\Save\Save.h">
       <Filter>Src\Application\Save</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Game\Chara\Player\FormerPlayer.h">
-      <Filter>Src\Application\Game\Chara\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Chara\Player\FormerPlayers.h">
-      <Filter>Src\Application\Game\Chara\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\Game\HUD\HUDTimer.h">
       <Filter>Src\Application\Game\HUD</Filter>
     </ClInclude>
@@ -281,12 +275,6 @@
     </ClInclude>
     <ClInclude Include="Src\Application\Game\Bullet\PlayerBullet.h">
       <Filter>Src\Application\Game\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Chara\FormerCharaBase.h">
-      <Filter>Src\Application\Game\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Chara\Enemy\FormerEnemy.h">
-      <Filter>Src\Application\Game\Chara\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Src\Application\Game\GameTimer.h">
       <Filter>Src\Application\Game</Filter>
@@ -431,12 +419,6 @@
     <ClCompile Include="Src\Application\Save\Save.cpp">
       <Filter>Src\Application\Save</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Game\Chara\Player\FormerPlayer.cpp">
-      <Filter>Src\Application\Game\Chara\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\Chara\Player\FormerPlayers.cpp">
-      <Filter>Src\Application\Game\Chara\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Game\HUD\HUDTimer.cpp">
       <Filter>Src\Application\Game\HUD</Filter>
     </ClCompile>
@@ -448,9 +430,6 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Game\Bullet\PlayerBullet.cpp">
       <Filter>Src\Application\Game\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\Chara\Enemy\FormerEnemy.cpp">
-      <Filter>Src\Application\Game\Chara\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Game\GameTimer.cpp">
       <Filter>Src\Application\Game</Filter>

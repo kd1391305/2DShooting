@@ -168,10 +168,6 @@
     <ClInclude Include="Src\Application\Game\Chara\CharaBase.h" />
     <ClInclude Include="Src\Application\Game\Chara\Enemy\Enemy.h" />
     <ClInclude Include="Src\Application\Game\Chara\Enemy\EnemyManager.h" />
-    <ClInclude Include="Src\Application\Game\Chara\Enemy\FormerEnemy.h" />
-    <ClInclude Include="Src\Application\Game\Chara\FormerCharaBase.h" />
-    <ClInclude Include="Src\Application\Game\Chara\Player\FormerPlayer.h" />
-    <ClInclude Include="Src\Application\Game\Chara\Player\FormerPlayers.h" />
     <ClInclude Include="Src\Application\Game\Chara\Player\Player.h" />
     <ClInclude Include="Src\Application\Game\FadeEffect\FadeEffect.h" />
     <ClInclude Include="Src\Application\Game\FadeEffect\FadeEffectManager.h" />
@@ -232,9 +228,6 @@
     <ClCompile Include="Src\Application\Game\Bullet\PlayerBullet.cpp" />
     <ClCompile Include="Src\Application\Game\Chara\Enemy\Enemy.cpp" />
     <ClCompile Include="Src\Application\Game\Chara\Enemy\EnemyManager.cpp" />
-    <ClCompile Include="Src\Application\Game\Chara\Enemy\FormerEnemy.cpp" />
-    <ClCompile Include="Src\Application\Game\Chara\Player\FormerPlayer.cpp" />
-    <ClCompile Include="Src\Application\Game\Chara\Player\FormerPlayers.cpp" />
     <ClCompile Include="Src\Application\Game\Chara\Player\Player.cpp" />
     <ClCompile Include="Src\Application\Game\FadeEffect\FadeEffect.cpp" />
     <ClCompile Include="Src\Application\Game\Fireworks\Fireworks.cpp" />

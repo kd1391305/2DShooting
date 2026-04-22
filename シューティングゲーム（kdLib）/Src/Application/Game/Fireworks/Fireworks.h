@@ -46,17 +46,26 @@ struct Particle2
 	}
 
 	//更新
-	bool Update(double deltaTime)
+	bool Update(double deltaTime,float bExploded)
 	{
 		//座標更新
 		m_pos += m_move * deltaTime;
 
+
 		//行列作成
-		Math::Matrix scale = Math::Matrix::CreateScale(0.5f, 0.5f, 0);
-		Math::Matrix rotation = Math::Matrix::CreateRotationZ(m_radian);
-		Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-		m_mat = scale * rotation * trans;
-	
+		if (bExploded)
+		{
+			Math::Matrix scale = Math::Matrix::CreateScale(0.5f, 0.5f, 0);
+			Math::Matrix rotation = Math::Matrix::CreateRotationZ(m_radian);
+			Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+			m_mat = scale * rotation * trans;
+		}
+		else
+		{
+			Math::Matrix scale = Math::Matrix::CreateScale(0.5f, 0.5f, 0);
+			Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+			m_mat = scale * trans;
+		}
 		//生存時間を減らす
 		m_life -= deltaTime;
 		//生存時間が終了したか？
@@ -97,6 +106,7 @@ private:
 	std::vector<Particle> m_circleList;		//花火の火（丸形）
 	std::vector<Particle2> m_lineList;		//花火の火（棒形）
 	Math::Color m_color;							//色
+	float m_lineLen = 40;						//棒の長さ（length）
 
 	bool m_bExploded = false;					//爆発したか（弾けたか）
 	bool m_bActive = false;						//活性化状態か

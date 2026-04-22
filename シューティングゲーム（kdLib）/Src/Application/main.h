@@ -33,7 +33,7 @@ public:
 	// FPSêßå‰
 	int				m_fps = 0;						// åªç›ÇÃFPSíl
 	int				m_maxFps = 60;				// ç≈ëÂFPS
-	double	GetDeltaTime() { return m_deltaTime /1000; }	
+	double	GetDeltaTime() { return m_deltaTime; }	
 
 private:
 
