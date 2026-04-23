@@ -5,22 +5,26 @@
 #include"../../../main.h"
 #include"../../Bullet/BulletManager.h"
 
-C_Enemy::C_Enemy()
-{
-	m_pos = { SCREEN_RIGHT,0 };			//座標
-	m_move = { -5,0 };							//移動量
-	m_radius = { 32,32 };						//半径	
-	m_bActive = false;								//活性状態
-	m_shotWait = 60;								//撃つまでのクールタイム
+//静的変数の初期化
+BulletManager* Enemy::s_pBulletManager = nullptr;
 
+//コンストラクタ
+Enemy::Enemy()
+{
+	m_pos = {};			//座標
+	m_move = {};		//移動量
+	m_radius = {32,32};		//半径	
+	m_bActive = false;	//活性状態
+	m_shotWait = 60;	//撃つまでのクールタイム
 	//行列作成
 	m_mat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 }
 
-void C_Enemy::Update()
+//更新
+void Enemy::Update(float deltaTime)
 {
 	//クールタイムを減らす
-	m_shotWait--;
+	m_shotWait -= deltaTime;
 	if (m_shotWait < 0)m_shotWait = 0;
 
 	//クールタイムが終わったら
@@ -29,15 +33,17 @@ void C_Enemy::Update()
 		//確率で弾を発射
 		if (HitGacha(s_shotProbability))
 		{
-			BULLET_MANAGER.ShotOfEnemy(m_pos, m_move * 2);
-			m_shotWait = 60;			//クールタイムを設ける
+			s_pBulletManager->Shot(m_pos, m_move * 2);
+			m_shotWait = 3;			//3秒間のクールタイムを設ける
 		}
 	}
+
 	//座標更新
-	m_pos += m_move;
+	m_pos += m_move * deltaTime;
 
 	//画面外に出たら非活性にする
-	if (m_pos.x < SCREEN_LEFT)		//一旦、左端のみ判定する
+	float left = m_pos.x - m_radius.x;
+	if (left < SCREEN_LEFT)		//一旦、左端のみ判定する
 	{
 		m_bActive = false;
 		return;
@@ -45,17 +51,21 @@ void C_Enemy::Update()
 
 	m_mat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 }
-void C_Enemy::Draw(KdTexture* tex)
+
+//描画
+void Enemy::Draw(KdTexture* tex)
 {
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex_Src(tex);
 }
 
-void C_Enemy::Spawn(Math::Vector2 pos, Math::Vector2 move)
+//敵をスポーンさせる
+void Enemy::Spawn(Math::Vector2 pos, Math::Vector2 move)
 {
 	m_pos = pos;
 	m_move = move;
+	m_radius = { 32,32 };			//半径	
 	m_bActive = true;
 	m_mat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	m_shotWait = 20;
+	m_shotWait = 3;					//敵が弾を撃つクールタイム
 }

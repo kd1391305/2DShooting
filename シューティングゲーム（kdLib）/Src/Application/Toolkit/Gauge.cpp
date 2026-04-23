@@ -1,6 +1,6 @@
 #include"Gauge.h"
 
-void C_Gauge::Init(const Math::Vector2& pos, const Math::Vector2& radius,const float* pPointMax, const float* pPoint, const float speed)
+void Gauge::Init(const Math::Vector2& pos, const Math::Vector2& radius,const float* pPointMax, const float* pPoint, const float speed)
 {
 	m_pos = pos;
 	m_radius = radius;
@@ -10,7 +10,7 @@ void C_Gauge::Init(const Math::Vector2& pos, const Math::Vector2& radius,const f
 	m_speed = speed;
 }
 
-void C_Gauge::Update()
+void Gauge::Update()
 {
 	if (*m_pPoint != m_formerPoint)
 	{
@@ -28,7 +28,7 @@ void C_Gauge::Update()
 	}
 }
 
-void C_Gauge::Draw()
+void Gauge::Draw()
 {
 	//変換行列をリセットする
 	SHADER.m_spriteShader.ClearMatrix();

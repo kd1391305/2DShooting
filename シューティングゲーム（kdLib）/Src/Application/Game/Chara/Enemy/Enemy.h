@@ -1,14 +1,16 @@
 #pragma once
 #include"../CharaBase.h"
 
-class C_Enemy :public C_CharaBase
+class BulletManager;
+
+class Enemy :public CharaBase
 {
 public:
 
-	C_Enemy();
+	Enemy();
 
 	//更新
-	void Update();
+	void Update(float deltaTime);
 
 	//この関数は呼び出さないように注意する
 	void Draw()override {}
@@ -22,7 +24,12 @@ public:
 
 	void Spawn(Math::Vector2 pos,Math::Vector2 move);
 
+	Math::Vector2 GetPos() { return m_pos; }
+
+	static void SetBulletManager(BulletManager* set) { s_pBulletManager = set; }
+
 private:
+	static BulletManager* s_pBulletManager;
 
 	bool m_bActive;			//敵の活性状態
 	INT8	m_shotWait;														//撃つまでのクールタイム

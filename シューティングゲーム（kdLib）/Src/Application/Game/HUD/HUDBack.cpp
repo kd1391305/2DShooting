@@ -1,12 +1,12 @@
 #include "HUDBack.h"
 #include"../../main.h"
 
-C_HUDBack::C_HUDBack()
+HUDBack::HUDBack()
 {
 	
 }
 
-void C_HUDBack::Draw()
+void HUDBack::Draw()
 {
 	SHADER.m_spriteShader.ClearMatrix();
 	Math::Vector2 radius = { 280,60 };

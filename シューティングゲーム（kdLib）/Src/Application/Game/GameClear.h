@@ -1,6 +1,6 @@
 #pragma once
 
-class C_GameClear
+class GameClear
 {
 public:
 

@@ -4,103 +4,92 @@
 #include"../Game/Game.h"
 #include"../Toolkit/KeyManager.h"
 #include"../Save/Save.h"
-#include"../Game/Fireworks/FireworksManager.h"
+#include"../Fireworks/FireworksManager.h"
 #include"../Mouse/Mouse.h"
+#include"../main.h"
+#include"../Background/Back.h"
+#include"../Timer/Timer.h"
+#include"../Toolkit/Button.h"
 
-C_Title::C_Title() :
-	//ゲームスタートボタンの初期化
-	m_start(
-		{ 0,0 },			//座標
-		{ 210,40 },	//半径
-		{ 1,1,1,1 },	//通常の色	
-		{ 1,1,0,1 }),	//選択時の色
-
-	m_bFirstMenu(true)		//最初の画面からスタートする
+void Title::Init()
 {
-	//レベルボタンの初期化
-	for (int i = 0; i < 3; i++)
+	if (!m_start)
 	{
-		float y = 200 - 200 * i;
-		m_levelButton[i].SetPos({ 0, y });
-		m_levelButton[i].SetRadius({ 210,40 });
-		m_levelButton[i].SetColor({ 1,1,1,1 });
-		m_levelButton[i].SetSelectColor({ 1,0,0,1 });
+		m_start = new Button();
+	}
+	m_start->SetPos({ 0,0 });					//座標
+	m_start->SetRadius({ 210,40 });			//半径
+	m_start->SetColor({ 1,1,1,1 });			//通常の色	
+	m_start->SetSelectColor({ 1,1,0,1 });	//選択時の色
+
+	if (!m_back)
+	{
+		m_back = new Back();
+		m_back->Init();
+	}
+
+	if (!m_fireworksManager)
+	{
+		m_fireworksManager = new FireworksManager();
 	}
 }
 
-void C_Title::Update()
+
+void Title::Update()
 {
+	//背景の更新
+	if(m_back)m_back->Update();
+
 	//デバッグ
 	if (KEY.IsDown(VK_LBUTTON))
-		FIREWORKS_MANAGER.Shot(MOUSE.GetPosf());
-	FIREWORKS_MANAGER.Update();
+		m_fireworksManager->Shot(MOUSE.GetPosf() - Math::Vector2{ 400,400 }, MOUSE.GetPosf());
+	m_fireworksManager->Update(Timer::Instance().GetDeltaTime());
 
-
-	//最初の画面のとき
-	if (m_bFirstMenu)
+	//スタートボタンの更新
+	m_start->Update();
+	if (m_start->IsSelect())
 	{
-		//スタートボタンの更新
-		m_start.Update();
-		if (m_start.IsSelect())
+		if (KEY.IsDown(VK_LBUTTON))
 		{
-			if (KEY.IsDown(VK_LBUTTON))
-				//レベル選択画面へ移行
-				m_bFirstMenu = false;
-		}
-	}
-	//レベル選択画面のとき
-	else
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			//レベル選択ボタンの更新
-			m_levelButton[i].Update();
-
-			//選択されていたら
-			if (m_levelButton[i].IsSelect())
-			{
-				if (KEY.IsDown(VK_LBUTTON))
-					//ゲーム画面へ移行
-					SCENE_MANAGER.ChangeState(new C_Game(i + 1));
-			}
+			//ゲーム画面へ移行
+			SceneManager::Instance().ChangeState(new Game(m_back,m_fireworksManager));
+			m_back = nullptr;
+			m_fireworksManager = nullptr;
 		}
 	}
 }
 
-void C_Title::Draw()
+void Title::Draw()
 {
-	//最初の画面のとき
-	if (m_bFirstMenu)
-	{
-		m_start.Draw();
-		Math::Vector2 radius = m_start.GetRadius();
-		if (m_start.IsSelect())radius *= m_start.GetSelectScale();
-		float left = m_start.GetPos().x - radius.x;
-		float top = m_start.GetPos().y + radius.y;
-		float fontSize = C_DrawString::GetInstance().GetFontSize();
-		if (m_start.IsSelect())
-		{
-			//文字サイズを変更して描画
-			DRAW_STRING.Draw("ゲームスタート", { left,top }, fontSize);
-		}
-		//文字サイズそのままで描画
-		else DRAW_STRING.Draw("ゲームスタート", { left,top });
-	}
-	//レベル選択画面のとき
-	else
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			m_levelButton[i].Draw();
-			
-			float left = m_levelButton[i].GetPos().x - m_levelButton[i].GetRadius().x;
-			float top = m_levelButton[i].GetPos().y + m_levelButton[i].GetRadius().y;
-			if		(i == 0)DRAW_STRING.Draw("Easy",	{ left,top }, { 0,0,0,1 });
-			else if (i == 1)DRAW_STRING.Draw("Normal",	{left,top}, {0,0,0,1});
-			else if (i == 2)DRAW_STRING.Draw("Hard",	{left,top}, {0,0,0,1});
-		}
-	}
+	if(m_back)m_back->Draw();
 
-	FIREWORKS_MANAGER.Draw();
+	m_start->Draw();
+	Math::Vector2 radius = m_start->GetRadius();
+	if (m_start->IsSelect())radius *= m_start->GetSelectScale();
+	float left = m_start->GetPos().x - radius.x;
+	float top = m_start->GetPos().y + radius.y;
+	float fontSize = DWriteCustom::Instance().GetFontSize() * m_start->GetSelectScale().x;
+	Math::Color fontColor = { 0.1f,0.1f,0.1f,1 };
+	if (m_start->IsSelect())
+	{
+		//文字サイズを変更して描画
+		DWriteCustom::Instance().Draw("開始", { left,top }, fontSize, fontColor);
+	}
+	//文字サイズそのままで描画
+	else DWriteCustom::Instance().Draw("開始", { left,top }, fontColor);
 
+
+	m_fireworksManager->Draw();
+
+	DWriteCustom::Instance().Draw("花火繚乱", { -150,300 }, fontSize);
+
+}
+
+void Title::Release()
+{
+	if (m_back)
+	{
+		delete m_back;
+		m_back = nullptr;
+	}
 }

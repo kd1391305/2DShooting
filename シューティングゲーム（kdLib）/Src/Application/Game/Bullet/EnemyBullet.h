@@ -1,12 +1,12 @@
 #pragma once
 #include"BulletBase.h"
 
-class C_EnemyBullet : public C_BulletBase
+class EnemyBullet : public BulletBase
 {
 public:
 
-	C_EnemyBullet() = delete;
-	C_EnemyBullet(KdTexture* tex) {}
+	EnemyBullet() = delete;
+	EnemyBullet(KdTexture* tex) {}
 
 	void Draw()override;
 };

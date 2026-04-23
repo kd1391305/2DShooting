@@ -4,17 +4,17 @@
 #include"HUDPlayer.h"
 #include"HUDTimer.h"
 
-class C_Player;
+class Player;
 
 //プレイヤーの体力やスコアを表示するクラス
 
 //HeadUpDisplay
-class C_HUD
+class HUD
 {
 public:
 
 	//初期化
-	void Init(C_Player* player , int level);
+	void Init(Player* player);
 
 	//更新
 	void Update();
@@ -29,7 +29,7 @@ public:
 
 
 private:
-	C_HUDBack m_back;		//HUDの背景
-	C_Score m_score;			//スコア
-	C_HUDPlayer m_player;
+	HUDBack m_back;		//HUDの背景
+	Score m_score;			//スコア
+	HUDPlayer m_player;
 };

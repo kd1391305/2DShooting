@@ -2,7 +2,7 @@
 #include"../Chara/Player/Player.h"
 
 //コンストラクタ
-void C_HUDPlayer::Init(C_Player*player)
+void HUDPlayer::Init(Player*player)
 {
 	//ゲージ構造体の初期化
 	m_gauge.Init(
@@ -14,13 +14,13 @@ void C_HUDPlayer::Init(C_Player*player)
 }
 
 //更新
-void C_HUDPlayer::Update()
+void HUDPlayer::Update()
 {
 	m_gauge.Update();
 }
 
 //描画
-void C_HUDPlayer::Draw()
+void HUDPlayer::Draw()
 {
 	//ゲージを描画
 	m_gauge.Draw();

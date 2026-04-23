@@ -1,12 +1,12 @@
 #pragma once
 #include"SceneBase.h"
 
-class C_SceneManager
+class SceneManager
 {
 public:
 
 	//シーン切り替え
-	void ChangeState(C_SceneBase* set)
+	void ChangeState(SceneBase* set)
 	{
 		if (m_pendingState)delete m_pendingState;
 		m_pendingState = set;
@@ -21,14 +21,23 @@ public:
 		//次のシーンが決まっていたら次のシーンに切り替える
 		if (m_pendingState)
 		{
-			if (m_currentState) delete m_currentState;
+			//解放＆削除
+			if (m_currentState)
+			{
+				m_currentState->Release();
+				delete m_currentState;
+			}
 			m_currentState = m_pendingState;
 			m_pendingState = nullptr;
+
+			//初期化
+			m_currentState->Init();
 		}
 	}
 
 	//描画
-	void Draw() {
+	void Draw()
+	{
 		if (m_currentState)
 		{
 			m_currentState->Draw();
@@ -37,18 +46,16 @@ public:
 
 private:
 
-	C_SceneBase* m_currentState = nullptr;			//現在のシーン
-	C_SceneBase* m_pendingState = nullptr;			//次のシーンを格納する用
+	SceneBase* m_currentState = nullptr;			//現在のシーン
+	SceneBase* m_pendingState = nullptr;			//次のシーンを格納する用
 
 	//シングルトン
 private:
-	C_SceneManager() {}
+	SceneManager() {}
 public:
-	static C_SceneManager& GetInstance()
+	static SceneManager& Instance()
 	{
-		static C_SceneManager instance;
+		static SceneManager instance;
 		return instance;
 	}
 };
-
-#define SCENE_MANAGER C_SceneManager::GetInstance()

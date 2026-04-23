@@ -2,16 +2,27 @@
 #include"../SceneManager.h"
 #include"../Toolkit/Font/DrawString.h"
 #include"../Title/Title.h"
+#include"../Fireworks/FireworksManager.h"
 
-void C_Result::Update()
+void Result::Init()
+{
+
+}
+
+void Result::Update()
 {
 	if (GetAsyncKeyState('Z') & 0x8000)
 	{
-		SCENE_MANAGER.ChangeState(new C_Title());
+		SceneManager::Instance().ChangeState(new Title());
 	}
 }
 
-void C_Result::Draw()
+void Result::Draw()
 {
-	DRAW_STRING.Draw("リザルト画面", Math::Vector2{ 0,0 });
+	DWriteCustom::Instance().Draw("リザルト画面", Math::Vector2{0,0});
+}
+
+void Result::Release()
+{
+
 }

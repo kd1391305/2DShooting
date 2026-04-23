@@ -2,24 +2,25 @@
 #include"../Game/Chara/Player/Player.h"
 #include"../Game//Chara/Enemy/EnemyManager.h"
 #include"../Game//Bullet/EnemyBullet.h"
-#include"../Game/Bullet/PlayerBullet.h"
-#include"../Game/GameTimer.h"
-#include"../Game/FadeEffect/FadeEffectManager.h"
+#include"../Timer/Timer.h"
 #include"../Game/HUD/HUD.h"
+#include"../Fireworks/FireworksManager.h"
 
 //ÉvÉåÉCÉÑÅ[Å@Ç∆Å@ìG
-bool Collision(C_Player* player, std::vector<C_Enemy>& enemyList)
+bool Collision(Player* player, std::vector<Enemy>& enemyList)
 {
+	//ÉvÉåÉCÉÑÅ[Ç™ñ≥ìGíÜÇÃèÍçá
+	if (player->IsInvincible())return true;
+
 	for (auto& e : enemyList)
 	{
 		if (!e.IsActive())continue;
 		if (IsCollision(player->GetPos(), player->GetRadius().x, e.GetPos(), e.GetRadius().x))
 		{
 			player->Damage(10);
-			player->Invincible(60);				//6ÇOÉtÉåÅ[ÉÄñ≥ìGÇ…Ç»ÇÈ
+			player->Invincible(1.0f);				//àÍïbä‘
 			e.SetActive(false);
-			FADE_EFFECT.Emit(e.GetPos(), e.GetRadius().x);
-			GAME_TIMER.Stop(200);		//0.2ïbí‚é~
+			Timer::Instance().Stop(0.2f);		//0.2ïbí‚é~
 			return true;
 		}
 	}
@@ -27,16 +28,19 @@ bool Collision(C_Player* player, std::vector<C_Enemy>& enemyList)
 }
 
 //ÉvÉåÉCÉÑÅ[Å@Ç∆Å@íe
-bool Collision(C_Player* player, std::vector<C_EnemyBullet>& bulletList)
+bool Collision(Player* player, std::vector<EnemyBullet>& bulletList)
 {
+	//ÉvÉåÉCÉÑÅ[Ç™ñ≥ìGíÜÇÃèÍçá
+	if (player->IsInvincible())return true;
+
 	for (auto &b : bulletList)
 	{
 		if (!b.IsActive())continue;
 		if (IsCollision(player->GetPos(), player->GetRadius().x, b.GetPos(),b.GetRadius()))
 		{
 			player->Damage(10);
+			Timer::Instance().Stop(0.2f);		//0.2ïbí‚é~
 			b.SetActive(false);
-			FADE_EFFECT.Emit(b.GetPos(), b.GetRadius());
 			return true;
 		}
 	}
@@ -44,7 +48,7 @@ bool Collision(C_Player* player, std::vector<C_EnemyBullet>& bulletList)
 }
 
 //íeÅ@Ç∆Å@íe
-//bool Collision(C_Bullets* b1, C_Bullets* b2)
+//bool Collision(Bullets* b1, Bullets* b2)
 //{
 //	for (auto& B1 : b1->GetBullets())
 //	{
@@ -52,7 +56,7 @@ bool Collision(C_Player* player, std::vector<C_EnemyBullet>& bulletList)
 //		for (auto& B2 : b2->GetBullets())
 //		{
 //			if (!B2.IsActive())continue;
-//			if (IsCollision(B1.GetPos(), C_Bullet::GetRadius(), B2.GetPos(), C_Bullet::GetRadius()))
+//			if (IsCollision(B1.GetPos(), Bullet::GetRadius(), B2.GetPos(), Bullet::GetRadius()))
 //			{
 //				B1.SetActive(false);
 //				B2.SetActive(false);
@@ -63,21 +67,25 @@ bool Collision(C_Player* player, std::vector<C_EnemyBullet>& bulletList)
 //	return false;
 //}
 
-//é©ã@ÇÃíeÅ@Ç∆Å@ìG
-bool Collision(std::vector< C_PlayerBullet>& bulletList, std::vector<C_Enemy>& enemyList, C_HUD* HUD)
+//é©ã@ÇÃíeÅiâ‘âŒÅjÅ@Ç∆Å@ìG
+bool Collision(std::vector<Fireworks>& fireworksList, std::vector<Enemy>& enemyList, HUD* HUD)
 {
-	for (auto& b : bulletList)
+	for (auto& f : fireworksList)
 	{
-		if (!b.IsActive())continue;
+		if (!f.IsActive())continue;
 		for (auto& e : enemyList)
 		{
 			if (!e.IsActive())continue;
-			if (IsCollision(b.GetPos(), b.GetRadius(), e.GetPos(), e.GetRadius().x))
+			if (IsCollision(f.GetPos(), f.GetRadius(), e.GetPos(), e.GetRadius().x))
 			{
-				b.SetActive(false);
+				//â‘âŒÇíeÇØÇ≥ÇπÇÈ
+				f.Explode();
+
+				//íeÇÕîÒäàê´èÛë‘Ç…
 				e.SetActive(false);
+
+				//ÉXÉRÉAÇâ¡éZÇ∑ÇÈ
 				HUD->AddScore(100);
-				FADE_EFFECT.Emit(e.GetPos(), e.GetRadius().x);
 			}
 		}
 	}

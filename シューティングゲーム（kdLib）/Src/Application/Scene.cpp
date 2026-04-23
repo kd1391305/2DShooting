@@ -5,25 +5,28 @@
 #include"Toolkit/Font/DrawString.h"
 #include"Mouse/Mouse.h"
 #include"Toolkit/KeyManager.h"
+#include"Timer/Timer.h"
 
 void Scene::Draw2D()
 {
-	SCENE_MANAGER.Draw();
+	SceneManager::Instance().Draw();
 	MOUSE.Draw();
 }
 
 void Scene::Update()
 {
+	Timer::Instance().Update();
 	KEY.Update();
 	MOUSE.Update();
-	SCENE_MANAGER.Update();
+	SceneManager::Instance().Update();
 }
 
 void Scene::Init()
 {
 	srand(timeGetTime());
-	C_DrawString::GetInstance().Init();
-	SCENE_MANAGER.ChangeState(new C_Title());
+	DWriteCustom::Instance().Init();
+	SceneManager::Instance().ChangeState(new Title());
+	Timer::Instance().Reset();
 }
 
 void Scene::Release()

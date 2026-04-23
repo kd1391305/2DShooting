@@ -1,16 +1,18 @@
 #pragma once
 
-class C_CharaBase
+class Game;
+
+class CharaBase
 {
 public:
 
-	C_CharaBase() :
+	CharaBase() :
 		m_radius(32,32)
 	{}
-	virtual ~C_CharaBase() {}
+	virtual ~CharaBase() {}
 
 	//XV
-	virtual void Update() = 0;
+	virtual void Update(float deltaTime) = 0;
 	//•`‰æ
 	virtual void Draw() = 0;
 

@@ -1,9 +1,9 @@
 #pragma once
 
-class C_HUDBack
+class HUDBack
 {
 public:
-	C_HUDBack();
+	HUDBack();
 
 	void Draw();
 private:

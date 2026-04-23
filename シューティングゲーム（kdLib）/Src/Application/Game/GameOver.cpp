@@ -2,13 +2,13 @@
 #include"../Toolkit/Font/DrawString.h"
 
 //çXêV
-void C_GameOver::Update()
+void GameOver::Update()
 {
 
 }
 
 //ï`âÊ
-void C_GameOver::Draw()
+void GameOver::Draw()
 {
-	DRAW_STRING.Draw("Game Over", { -50,30 });
+	DWriteCustom::Instance().Draw("Game Over", {-50,30});
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-class C_Mouse
+class Mouse
 {
 public:
 
@@ -22,17 +22,17 @@ private:
 
 	//ƒVƒ“ƒOƒ‹ƒgƒ“
 private:
-	C_Mouse() 
+	Mouse() 
 	{
 		m_tex.Load("Texture/Mouse.png");
 		ShowCursor(false);
 	}
 public:
-	static C_Mouse& GetInstance()
+	static Mouse& Instance()
 	{
-		static C_Mouse instance;
+		static Mouse instance;
 		return instance;
 	}
 };
 
-#define MOUSE C_Mouse::GetInstance()
+#define MOUSE Mouse::Instance()

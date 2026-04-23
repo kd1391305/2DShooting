@@ -33,11 +33,8 @@ public:
 	// FPS制御
 	int				m_fps = 0;						// 現在のFPS値
 	int				m_maxFps = 60;				// 最大FPS
-	double	GetDeltaTime() { return m_deltaTime; }	
 
 private:
-
-	double			m_deltaTime = 0;					//経過時間（単位は秒）
 
 	// アプリケーション初期化
 	bool Init(int w, int h);

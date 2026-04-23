@@ -1,12 +1,16 @@
 #pragma once
 #include"../SceneBase.h"
 
-class C_Result :public C_SceneBase
+class Result :public SceneBase
 {
 public:
-	C_Result() {}
-	~C_Result()override {}
+	Result() {}
+	~Result()override {}
+	void Init();
 	void Update();
 
 	void Draw();
+
+private:
+	void Release();
 };

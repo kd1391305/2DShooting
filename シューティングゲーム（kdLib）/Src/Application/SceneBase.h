@@ -1,10 +1,14 @@
 #pragma once
 
-class C_SceneBase
+class SceneBase
 {
 public:
-	C_SceneBase() {}
-	virtual ~C_SceneBase() {}
+	SceneBase() {}
+	virtual ~SceneBase() {}
+	virtual void Init() = 0;
 	virtual void Update() =0;
 	virtual void Draw() = 0;
+
+public:
+	virtual void Release() = 0;
 };

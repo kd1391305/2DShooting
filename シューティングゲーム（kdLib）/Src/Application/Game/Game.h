@@ -1,36 +1,43 @@
 #pragma once
 #include"../SceneBase.h"
-#include"Chara/Player/Player.h"
-#include"Back/Back.h"
-#include"HUD/HUD.h"
-#include"GameClear.h"
-#include"GameOver.h"
+
+class Back;
+class FireworksManager;
+class Player;
+class EnemyManager;
+class BulletManager;
+class HUD;
+class GameClear;
+class GameOver;
 
 //ゲームの状態
 enum GameState
 {
-	Game,				//ゲーム画面
-	GameClear,		//ゲームクリア画面
-	GameOver,		//ゲームオーバー画面
+	GameScene,			//ゲーム画面
+	GameClearScene,		//ゲームクリア画面
+	GameOverScene,		//ゲームオーバー画面
 };
 
-class C_Game :public C_SceneBase
+class Game :public SceneBase
 {
 public:
 
-	C_Game() = delete;
-	C_Game(int level);
-	~C_Game()override;
+	Game() = delete;
+	Game::Game(Back* back, FireworksManager* fireworksManager);
+	~Game()override { Release(); }
 
+	void Init();
 	void Update();
 	void Draw();
 
 	//ゲームの状態を変化させる
 	void ChangeState(GameState change) { m_state = change; }
 
-	int GetLevel() { return m_gameLevel; }
+	FireworksManager* GetFireworksManager() { return m_fireworksManager; }
 
 private:
+
+	void Release();
 
 	//ゲーム中の更新
 	void UpdateGame();
@@ -45,13 +52,15 @@ private:
 	//ゲームのオーバーの描画
 	void DrawGameOver();
 
-	C_Player m_player;					//プレイヤー
-	C_Back m_back;						//背景
-	C_HUD m_HUD;						//HeadUpDisplay(UI)
-	C_GameClear m_gameClear;		//ゲームクリア
-	C_GameOver m_gameOver;		//ゲームオーバー
+	FireworksManager* m_fireworksManager;
 
-	INT8 m_gameLevel;			//ゲームレベル（1からスタート）（levelと配列の添え字がずれないよう注意）
+	Player *m_player=nullptr;					//プレイヤー
+	EnemyManager* m_enemyManager;				//敵
+	BulletManager* m_bulletManager;				//弾
+	Back *m_back=nullptr;						//背景
+	HUD *m_HUD=nullptr;						//HeadUpDisplay(UI)
+	GameClear *m_gameClear=nullptr;		//ゲームクリア
+	GameOver *m_gameOver=nullptr;		//ゲームオーバー
 
 	GameState m_state;			//ゲームの状態
 };

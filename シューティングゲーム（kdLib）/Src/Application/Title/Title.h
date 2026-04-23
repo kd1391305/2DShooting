@@ -1,20 +1,29 @@
 #pragma once
 #include"../SceneBase.h"
-#include"../Toolkit/Button.h"
 
-class C_Title :public C_SceneBase
+class Back;
+class FireworksManager;
+
+class Button;
+
+class Title :public SceneBase
 {
 public:
-	C_Title();
-	~C_Title() override {}
+	Title() {}
+	~Title() override { Release(); }
 
+	void Init();
 	void Update();
 	void Draw();
 
 private:
-	C_Button m_start;
 
-	C_Button m_levelButton[3];
+	void Release();
 
-	bool m_bFirstMenu;			//最初の選択画面か次のレベル選択画面かどうかのフラグ			
+	Button* m_start = nullptr;
+
+	Back* m_back = nullptr;
+
+	FireworksManager* m_fireworksManager = nullptr;
+
 };

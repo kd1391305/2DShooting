@@ -1,16 +1,16 @@
 #include"HUD.h"
 
-void C_HUD::Init(C_Player* player, int level)
+void HUD::Init(Player* player)
 {
 	m_player.Init(player);
-	m_score.Init(level);
+	m_score.Init();
 }
-void C_HUD::Update()
+void HUD::Update()
 {
 	m_player.Update();
 }
 
-void C_HUD::Draw()
+void HUD::Draw()
 {
 	m_back.Draw();
 	m_player.Draw();

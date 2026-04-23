@@ -1,6 +1,6 @@
 #include "EnemyBullet.h"
 
-void C_EnemyBullet::Draw()
+void EnemyBullet::Draw()
 {
 	SHADER.m_spriteShader.ClearMatrix();
 	D3D.SetBlendState(BlendMode::Add);

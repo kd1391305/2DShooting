@@ -33,19 +33,21 @@ namespace FontList
 {
 	const std::wstring FontPath[] =
 	{
-		L"Font\\craftmincho.otf",
+		/*L"Font\\craftmincho.otf",
 		L"Font\\851MkPOP_101.ttf",
-		L"Font\\WDXLLubrifontJPN-Regular.ttf"
+		L"Font\\WDXLLubrifontJPN-Regular.ttf",*/
+		L"Fon\\KouzanMouhituFontOTF.ttf"
 	};
 }
 
 //フォント名
-// ※（DrawString.hのChangeFont()）で使用する
+// ※（DWriteCustom.hのChangeFont()）で使用する
 enum FontName
 {
 	craftmincho,
 	_851MkPOP,			//数字からフォント名が始まるため「＿」を付けてエラーが出ないようにしている
-	WDXLLubrifontJPN_Regular
+	WDXLLubrifontJPN_Regular,
+	KouzanMouhituFontOTF
 };
 
 

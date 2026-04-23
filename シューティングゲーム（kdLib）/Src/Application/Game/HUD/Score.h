@@ -1,35 +1,33 @@
 #pragma once
 
-class C_Score
+class Score
 {
 public:
 
 	//コンストラクタ
-	C_Score():m_score(0),m_highScore(0)
+	Score():m_score(0),m_highScore(0)
 	{
+		LoadHighScore();
 	}
 
 	//デストラクタ
-	~C_Score();
+	~Score();
 
-	void Init(int level);
+	void Init();
 	
 	void Draw();
 
 	//スコアを追加する
 	void Add(int addScore) { m_score += addScore; }
-
-	//現在のスコアを獲得する
-	long GetScore() { return m_score; }
-	//最大スコアを獲得する
-	long GetHighScore() { return m_highScore; }
-
-	//最大スコアをセットする（セーブデータ読み込み等）
-	void SetHighScore(long set) { m_highScore = set; }
-
+	
 private:
+
+	//ハイスコアを読み込む(ハイスコアを返す)
+	void LoadHighScore();
+
+	//ハイスコアをセーブする
+	bool SaveHighScore();
 
 	long m_score;			//現在のスコア
 	long m_highScore;		//最大スコア
-	int m_level;				//現在挑戦中のレベル
 };

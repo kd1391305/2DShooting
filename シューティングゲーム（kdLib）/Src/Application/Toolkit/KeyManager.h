@@ -1,6 +1,6 @@
 #pragma once
 
-class C_KeyManager
+class KeyManager
 {
 public:
 
@@ -86,16 +86,16 @@ private:
 
 	//ƒVƒ“ƒOƒ‹ƒgƒ“
 private:
-	C_KeyManager()
+	KeyManager()
 	{
 		RegisterKeys();
 	}
 public:
-	static C_KeyManager& GetInstance()
+	static KeyManager& Instance()
 	{
-		static C_KeyManager instance;
+		static KeyManager instance;
 		return instance;
 	}
 };
 
-#define KEY C_KeyManager::GetInstance()
+#define KEY KeyManager::Instance()

@@ -1,7 +1,7 @@
 #include "Button.h"
 #include"../Mouse/Mouse.h"
 
-void C_Button::Update()
+void Button::Update()
 {
 	Math::Matrix scaleMat, transMat;
 		
@@ -20,7 +20,7 @@ void C_Button::Update()
 	m_mat = scaleMat * transMat;
 }
 
-void C_Button::Draw()
+void Button::Draw()
 {
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	if (m_bSelect )		SHADER.m_spriteShader.DrawBox(0, 0, m_radius.x, m_radius.y, & m_selectColor, true);

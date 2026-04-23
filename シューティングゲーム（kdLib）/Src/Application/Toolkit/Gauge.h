@@ -4,15 +4,15 @@
 
 //ゲージは段々と減っていく（）
 //四角形描画を使用する
-class C_Gauge
+class Gauge
 {
 public:
 	
 	//コンストラクタ
-	C_Gauge() {}
+	Gauge() {}
 
 	//デストラクタ
-	~C_Gauge() {}
+	~Gauge() {}
 
 	//初期化
 	void Init(	const Math::Vector2& pos,			//中心座標

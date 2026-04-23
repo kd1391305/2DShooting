@@ -1,16 +1,16 @@
 #pragma once
 
-class C_Button
+class Button
 {
 public:
 
-	C_Button() :
+	Button() :
 		m_pos(0, 0), m_radius(10, 10), m_color(1, 1, 1, 1), m_bSelect(false), m_selectScale(1.2f,1.2f)
 	{
 		m_mat = Math::Matrix::CreateTranslation(0, 0, 0);
 	}
 
-	C_Button(Math::Vector2 pos,Math::Vector2 radius,Math::Color color,Math::Color selectingColor) :
+	Button(Math::Vector2 pos,Math::Vector2 radius,Math::Color color,Math::Color selectingColor) :
 		m_pos(pos), m_radius(radius), m_color(color),m_selectColor(selectingColor), m_bSelect(false),m_selectScale(1.2f,1.2f)
 	{
 		m_mat = Math::Matrix::CreateTranslation(0, 0, 0);

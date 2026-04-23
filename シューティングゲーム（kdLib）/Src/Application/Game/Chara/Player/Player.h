@@ -1,20 +1,24 @@
 #pragma once
 #include"../CharaBase.h"
 
-class C_Player:public C_CharaBase
+class FireworksManager;
+
+class Player :public CharaBase
 {
 public:
 
-	C_Player();
+	Player();
+
+	void Init(FireworksManager* set);
 
 	//更新
-	void Update();
+	void Update(float deltaTime);
 
 	//描画
 	void Draw();
 
 	//行動
-	void Action();
+	void Action(float deltaTime);
 
 	//ダメージ
 	void Damage(float damage) {
@@ -35,11 +39,11 @@ public:
 		if (m_hp > m_hpMax)m_hp = m_hpMax;
 	}
 
-	//プレイヤーを無敵にする(引数が何フレーム間)
-	void Invincible(int frame)
+	//プレイヤーを無敵にする(引数が何秒間無敵にするか)
+	void Invincible(float time)
 	{
 		m_bInvincible = true;
-		m_invincibleTime = frame;
+		m_invincibleTime = time;
 		m_color = { 1,1,1,0.2f };
 	}
 
@@ -59,7 +63,7 @@ public:
 
 private:
 
-	static constexpr float s_speedMax = 6.0f;
+	static constexpr float s_speedMax = 200.0f;
 
 	float m_hp;
 	float m_hpMax;
@@ -67,9 +71,13 @@ private:
 	KdTexture m_tex;
 	float m_scale;
 
-	INT8 m_shotWait;									//弾を撃つ待機時間
+	float m_shotWait;					//弾を撃つ待機時間
 
-	bool m_bInvincible;								//無敵かどうかのフラグ
-	int m_invincibleTime;								//無敵時間
+	bool m_bInvincible;					//無敵かどうかのフラグ
+	float m_invincibleTime;				//無敵時間
 	Math::Color m_color;
+
+	FireworksManager *m_pFireworksManager;
+
+	float m_sumDeltaTime;				//経過した時間を足していく(無敵状態のときの透明度を切り替える処理で使用)
 };

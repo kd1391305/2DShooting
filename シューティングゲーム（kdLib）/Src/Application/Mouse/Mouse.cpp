@@ -1,7 +1,7 @@
 #include"Mouse.h"
 #include"../main.h"
 
-void C_Mouse::Update()
+void Mouse::Update()
 {
 	//ディスプレイ上のマウス座標取得
 	GetCursorPos(&m_pos);
@@ -19,13 +19,13 @@ void C_Mouse::Update()
 	m_mat = scale * trans;
 }
 
-void C_Mouse::Draw()
+void Mouse::Draw()
 {
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex_Src(&m_tex);
 }
 
-bool C_Mouse::Hit(Math::Vector2 pos, Math::Vector2 radius)
+bool Mouse::Hit(Math::Vector2 pos, Math::Vector2 radius)
 {
 	float left = pos.x - radius.x;
 	float right = pos.x + radius.x;

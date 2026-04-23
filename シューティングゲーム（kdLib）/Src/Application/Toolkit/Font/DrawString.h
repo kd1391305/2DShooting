@@ -1,16 +1,16 @@
 #pragma once
 #include"DirectWriteCustomFont.h"
 
-//C_DrawStringクラスの利用手順
+//DWriteクラスの利用手順
 //①読み込むファイル情報を入力（DirectWriteCustomFont.hの36行目のファイルパスを変更する）
 //②その下の列挙型(enum)にフォント名を入力（プログラム実行中にフォントを変更する場合のみに使用。）
 //③KdDirect3D.cppの52行目（第四引数）　"createFlg" → "D3D11_CREATE_DEVICE_BGRA_SUPPORT"　に変更
 //④Init()で書いているフォントデータの改変を自分好みにカスタマイズする。
 //⑤プログラム中でInit()を呼び出す。（SwapChainが作られた後に呼び出す）
-//⑥DrawString()で描画を行う。（このファイルの一番下にマクロを書いています）
+//⑥Draw()で描画を行う。
 
 //文字列描画用の関数
-class C_DrawString
+class DWriteCustom
 {
 public:
 	//初期化
@@ -146,7 +146,7 @@ public:
 
 private:
 	
-	DirectWriteCustomFont* m_pWrite;		//描画用のクラス
+	DirectWriteCustomFont* m_pWrite;					//描画用のクラス
 	FontData m_data;									//フォントデータ用の構造体
 
 private:
@@ -160,14 +160,11 @@ private:
 	}
 
 //シングルトン
-	C_DrawString() {}
+	DWriteCustom() {}
 public:
-	static C_DrawString& GetInstance()
+	static DWriteCustom& Instance()
 	{
-		static C_DrawString instance;
+		static DWriteCustom instance;
 		return instance;
 	}
 };
-
-#define DRAW_STRING C_DrawString::GetInstance()
-

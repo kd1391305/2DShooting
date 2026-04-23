@@ -1,11 +1,11 @@
 #pragma once
 #include"../../main.h"
 
-class C_BulletBase
+class BulletBase
 {
 public:
 
-	C_BulletBase() :
+	BulletBase() :
 		m_pTex(nullptr),
 		m_pos(0, 0),
 		m_move(0, 0),
@@ -15,7 +15,7 @@ public:
 	}
 	
 	//çXêV
-	virtual void Update();
+	virtual void Update(float deltaTime);
 
 	//ï`âÊ
 	virtual void Draw();
