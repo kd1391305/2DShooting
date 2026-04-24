@@ -1,10 +1,10 @@
 #include "main.h"
 #include "Scene.h"
-#include"SceneManager.h"
-#include"Title/Title.h"
-#include"Toolkit/Font/DrawString.h"
+#include"Scene/SceneManager.h"
+#include"Scene/TitleScene/TitleScene.h"
+#include"Font/DrawString.h"
 #include"Mouse/Mouse.h"
-#include"Toolkit/KeyManager.h"
+#include"Key/KeyManager.h"
 #include"Timer/Timer.h"
 
 void Scene::Draw2D()
@@ -25,7 +25,7 @@ void Scene::Init()
 {
 	srand(timeGetTime());
 	DWriteCustom::Instance().Init();
-	SceneManager::Instance().ChangeState(new Title());
+	SceneManager::Instance().ChangeState(new TitleScene());
 	Timer::Instance().Reset();
 }
 

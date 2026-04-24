@@ -43,38 +43,8 @@
     <Filter Include="Src\System\Audio">
       <UniqueIdentifier>{667d1cb1-5ae5-476f-acd5-14b7d294a95a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Title">
-      <UniqueIdentifier>{f8cd0f13-744d-4692-a520-4b4fc98de080}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Game">
-      <UniqueIdentifier>{a5bc0c64-7680-4efc-9487-d141c7eb383e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Result">
-      <UniqueIdentifier>{bd1b8fbf-e4a3-4c0e-8950-66c50271d81a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\Mouse">
       <UniqueIdentifier>{4b5f4ae8-b2f5-44b8-a386-27107573b211}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Game\Bullet">
-      <UniqueIdentifier>{b672861c-bb3a-4c8c-b9db-4a67ea25b87f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Game\Chara">
-      <UniqueIdentifier>{3c18393d-b5eb-40c5-b114-264fc0689e82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Game\Chara\Enemy">
-      <UniqueIdentifier>{9c00bd3d-c867-408d-affe-b0ef186fa55a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Game\Chara\Player">
-      <UniqueIdentifier>{268e9d47-c424-49ef-8f91-787eea019eaa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Toolkit">
-      <UniqueIdentifier>{82cbd4d3-8eba-4aff-ac2a-79c2630ede97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Toolkit\Font">
-      <UniqueIdentifier>{84ab8820-fe34-4f23-aabc-a354f5aa80a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Game\HUD">
-      <UniqueIdentifier>{2b7c41f8-8eec-4fee-93d3-e119e67b4eef}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Application\Background">
       <UniqueIdentifier>{3fb7303b-90c1-4db3-a0c4-3f2ea8e7cc86}</UniqueIdentifier>
@@ -84,6 +54,60 @@
     </Filter>
     <Filter Include="Src\Application\Fireworks">
       <UniqueIdentifier>{7075964d-3780-451c-8b80-784f0bbb65fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Scene">
+      <UniqueIdentifier>{2f4e528f-6176-4c76-af0e-1c60797edd16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Scene\GameScene">
+      <UniqueIdentifier>{ec55b31d-0e6a-4c34-ad55-48f64cdd0767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Scene\TitleScene">
+      <UniqueIdentifier>{2c87b33a-28b9-4463-bfd2-f6b8f9c98984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Scene\ResultScene">
+      <UniqueIdentifier>{63e8d072-2086-4c75-abc6-ca3fa07f9501}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\UI">
+      <UniqueIdentifier>{fa05bd49-c4f7-487e-8c1a-1db0f72271bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Tools">
+      <UniqueIdentifier>{82cbd4d3-8eba-4aff-ac2a-79c2630ede97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Font">
+      <UniqueIdentifier>{2c6406f1-5b96-4499-8134-39500154d1c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Tools\Button">
+      <UniqueIdentifier>{8ad89706-f9fc-4a2e-b31b-edd1f8db191e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Tools\Collision">
+      <UniqueIdentifier>{0e957f80-e087-4100-bbd2-6d0b8bea934d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Tools\RandEx">
+      <UniqueIdentifier>{ff3680da-0f20-47d0-ae44-e6f9e8dfd9e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Tools\Gauge">
+      <UniqueIdentifier>{f6a37536-7ba5-4ae3-9a0a-9d93bb861e69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Scene\BaseScene">
+      <UniqueIdentifier>{2d2da1a7-c1f6-48d2-a207-b610dbebbaad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\UI\Score">
+      <UniqueIdentifier>{618ad616-130c-44eb-aac7-0fb6138f3080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Bullet">
+      <UniqueIdentifier>{ab12ab2b-9b62-48d7-9f2c-ebb0b23edde3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara">
+      <UniqueIdentifier>{2fd917a0-497b-4550-9830-858c3433f369}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Player">
+      <UniqueIdentifier>{9879a9dd-0aa3-40cc-80de-66aec72a73de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Enemy">
+      <UniqueIdentifier>{66fbf0a9-f30c-4354-a45f-fba4e3dc6091}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\BaseChara">
+      <UniqueIdentifier>{42a79b72-87dc-4e42-ad3a-1af006abc9d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -180,86 +204,8 @@
     <ClInclude Include="Src\Application\Scene.h">
       <Filter>Src\Application</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\SceneManager.h">
-      <Filter>Src\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\SceneBase.h">
-      <Filter>Src\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Game.h">
-      <Filter>Src\Application\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Result\Result.h">
-      <Filter>Src\Application\Result</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Title\Title.h">
-      <Filter>Src\Application\Title</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\Mouse\Mouse.h">
       <Filter>Src\Application\Mouse</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Bullet\BulletBase.h">
-      <Filter>Src\Application\Game\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Bullet\BulletManager.h">
-      <Filter>Src\Application\Game\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Chara\CharaBase.h">
-      <Filter>Src\Application\Game\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Chara\Player\Player.h">
-      <Filter>Src\Application\Game\Chara\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Chara\Enemy\Enemy.h">
-      <Filter>Src\Application\Game\Chara\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Chara\Enemy\EnemyManager.h">
-      <Filter>Src\Application\Game\Chara\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Toolkit\Font\DirectWriteCustomFont.h">
-      <Filter>Src\Application\Toolkit\Font</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Toolkit\Font\DrawString.h">
-      <Filter>Src\Application\Toolkit\Font</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Toolkit\RandEx.h">
-      <Filter>Src\Application\Toolkit</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Toolkit\Collision.h">
-      <Filter>Src\Application\Toolkit</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Toolkit\KeyManager.h">
-      <Filter>Src\Application\Toolkit</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Toolkit\Button.h">
-      <Filter>Src\Application\Toolkit</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\HUD\Score.h">
-      <Filter>Src\Application\Game\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\HUD\HUD.h">
-      <Filter>Src\Application\Game\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\HUD\HUDBack.h">
-      <Filter>Src\Application\Game\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\HUD\HUDPlayer.h">
-      <Filter>Src\Application\Game\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Toolkit\Gauge.h">
-      <Filter>Src\Application\Toolkit</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\HUD\HUDTimer.h">
-      <Filter>Src\Application\Game\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\Bullet\EnemyBullet.h">
-      <Filter>Src\Application\Game\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\GameClear.h">
-      <Filter>Src\Application\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Game\GameOver.h">
-      <Filter>Src\Application\Game</Filter>
     </ClInclude>
     <ClInclude Include="Src\Application\Fireworks\Fireworks.h">
       <Filter>Src\Application\Fireworks</Filter>
@@ -270,11 +216,71 @@
     <ClInclude Include="Src\Application\Background\Back.h">
       <Filter>Src\Application\Background</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Background\Sky.h">
-      <Filter>Src\Application\Background</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\Timer\Timer.h">
       <Filter>Src\Application\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\GameScene\GameScene.h">
+      <Filter>Src\Application\Scene\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\ResultScene\ResultScene.h">
+      <Filter>Src\Application\Scene\ResultScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Font\DirectWriteCustomFont.h">
+      <Filter>Src\Application\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Font\DrawString.h">
+      <Filter>Src\Application\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Tools\Button\Button.h">
+      <Filter>Src\Application\Tools\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Tools\Collision\Collision.h">
+      <Filter>Src\Application\Tools\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Tools\Gauge\Gauge.h">
+      <Filter>Src\Application\Tools\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Tools\RandEx\RandEx.h">
+      <Filter>Src\Application\Tools\RandEx</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\UI\UI.h">
+      <Filter>Src\Application\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\UI\Score\Score.h">
+      <Filter>Src\Application\UI\Score</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\SceneManager.h">
+      <Filter>Src\Application\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\TitleScene\TitleScene.h">
+      <Filter>Src\Application\Scene\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Bullet\BulletBase.h">
+      <Filter>Src\Application\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Bullet\BulletManager.h">
+      <Filter>Src\Application\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Bullet\EnemyBullet.h">
+      <Filter>Src\Application\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Player\Player.h">
+      <Filter>Src\Application\Chara\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\BaseEnemy.h">
+      <Filter>Src\Application\Chara\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\EnemyManager.h">
+      <Filter>Src\Application\Chara\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\BaseScene\BaseScene.h">
+      <Filter>Src\Application\Scene\BaseScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\BaseChara\BaseChara.h">
+      <Filter>Src\Application\Chara\BaseChara</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\Enemy1.h">
+      <Filter>Src\Application\Chara\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,71 +347,8 @@
     <ClCompile Include="Src\Application\Scene.cpp">
       <Filter>Src\Application</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Game\Game.cpp">
-      <Filter>Src\Application\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Result\Result.cpp">
-      <Filter>Src\Application\Result</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Title\Title.cpp">
-      <Filter>Src\Application\Title</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Mouse\Mouse.cpp">
       <Filter>Src\Application\Mouse</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\Bullet\BulletBase.cpp">
-      <Filter>Src\Application\Game\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\Chara\Player\Player.cpp">
-      <Filter>Src\Application\Game\Chara\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\Chara\Enemy\Enemy.cpp">
-      <Filter>Src\Application\Game\Chara\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Toolkit\Font\DirectWriteCustomFont.cpp">
-      <Filter>Src\Application\Toolkit\Font</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\Chara\Enemy\EnemyManager.cpp">
-      <Filter>Src\Application\Game\Chara\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\ToolKit\RandEx.cpp">
-      <Filter>Src\Application\Toolkit</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Toolkit\Collision.cpp">
-      <Filter>Src\Application\Toolkit</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Toolkit\Button.cpp">
-      <Filter>Src\Application\Toolkit</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\HUD\Score.cpp">
-      <Filter>Src\Application\Game\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\HUD\HUD.cpp">
-      <Filter>Src\Application\Game\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\HUD\HUDBack.cpp">
-      <Filter>Src\Application\Game\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\HUD\HUDPlayer.cpp">
-      <Filter>Src\Application\Game\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Toolkit\Gauge.cpp">
-      <Filter>Src\Application\Toolkit</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\HUD\HUDTimer.cpp">
-      <Filter>Src\Application\Game\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\Bullet\BulletManager.cpp">
-      <Filter>Src\Application\Game\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\Bullet\EnemyBullet.cpp">
-      <Filter>Src\Application\Game\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\GameClear.cpp">
-      <Filter>Src\Application\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Game\GameOver.cpp">
-      <Filter>Src\Application\Game</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Fireworks\Fireworks.cpp">
       <Filter>Src\Application\Fireworks</Filter>
@@ -416,11 +359,59 @@
     <ClCompile Include="Src\Application\Background\Back.cpp">
       <Filter>Src\Application\Background</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Background\Sky.cpp">
-      <Filter>Src\Application\Background</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Timer\Timer.cpp">
       <Filter>Src\Application\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\GameScene\GameScene.cpp">
+      <Filter>Src\Application\Scene\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\ResultScene\ResultScene.cpp">
+      <Filter>Src\Application\Scene\ResultScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Font\DirectWriteCustomFont.cpp">
+      <Filter>Src\Application\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Tools\Button\Button.cpp">
+      <Filter>Src\Application\Tools\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Tools\Collision\Collision.cpp">
+      <Filter>Src\Application\Tools\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Tools\Gauge\Gauge.cpp">
+      <Filter>Src\Application\Tools\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Tools\RandEx\RandEx.cpp">
+      <Filter>Src\Application\Tools\RandEx</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\UI\UI.cpp">
+      <Filter>Src\Application\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\UI\Score\Score.cpp">
+      <Filter>Src\Application\UI\Score</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\TitleScene\TitleScene.cpp">
+      <Filter>Src\Application\Scene\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Bullet\BulletBase.cpp">
+      <Filter>Src\Application\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Bullet\BulletManager.cpp">
+      <Filter>Src\Application\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Bullet\EnemyBullet.cpp">
+      <Filter>Src\Application\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Player\Player.cpp">
+      <Filter>Src\Application\Chara\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\BaseEnemy.cpp">
+      <Filter>Src\Application\Chara\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\EnemyManager.cpp">
+      <Filter>Src\Application\Chara\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\Enemy1.cpp">
+      <Filter>Src\Application\Chara\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

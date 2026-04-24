@@ -34,8 +34,6 @@ void Back::Update()
 		transMat = Math::Matrix::CreateTranslation(m_pos[i].x, m_pos[i].y, 0);
 		m_mat[i] = scaleMat * transMat;
 	}
-
-	m_sky.Update();
 }
 
 //•`‰æ
@@ -44,7 +42,9 @@ void Back::Draw()
 	for (int i = 0; i < 2; i++)
 	{
 		SHADER.m_spriteShader.SetMatrix(m_mat[i]);
-		SHADER.m_spriteShader.DrawTex_Src(&m_tex, Math::Color{ 0.95f,0.95f,0.95f,1.0f });
+		D3D.SetBlendState(BlendMode::Add);
+		SHADER.m_spriteShader.DrawTex_Src(&m_tex, Math::Color{ 1.0f,1.0f,1.0f,1.0f });
+		D3D.SetBlendState(BlendMode::Alpha);
+		SHADER.m_spriteShader.DrawTex_Src(&m_tex, Math::Color{ 1.0f,1.0f,1.0f,0.5f });
 	}
-	m_sky.Draw();
 }

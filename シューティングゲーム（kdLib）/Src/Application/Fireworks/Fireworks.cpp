@@ -1,6 +1,7 @@
 #include"Fireworks.h"
-#include"../Toolkit/RandEx.h"
-#include"../Toolkit/Collision.h"
+#include"../Tools/RandEx/RandEx.h"
+#include"../Tools/Collision/Collision.h"
+#include"../main.h"
 
 //コンストラクタ
 Fireworks::Fireworks()
@@ -26,6 +27,20 @@ void Fireworks::Update(float deltaTime)
 	{
 		//座標更新
 		m_pos += m_move * deltaTime;
+	}
+
+	//画面外にいったら
+	float left = m_pos.x - m_radius;
+	float right = m_pos.x + m_radius;
+	float top = m_pos.y + m_radius;
+	float bottom = m_pos.y - m_radius;
+	if (left < SCREEN_LEFT || right > SCREEN_RIGHT || top > SCREEN_TOP || bottom < SCREEN_BOTTOM)
+	{
+		m_circleList.clear();
+		m_lineList.clear();
+		m_bActive = false;
+		m_bExploded = false;
+		return;
 	}
 
 	//花火の火の更新
@@ -208,17 +223,17 @@ void Fireworks2::Update(float deltaTime)
 	{
 		//座標更新
 		m_pos += m_move * deltaTime;
-	}
 
-	//ここだけ変更
+		//ここだけ変更
 	// ========================================================
 	// targetPosに近づいたら花火を弾けさせる
-	if (IsCollision(m_pos, m_radius, m_targetPos, m_radius))
-	{
-		Explode();
-		m_bExploded = true;
+		if (IsCollision(m_pos, m_radius, m_targetPos, m_radius))
+		{
+			Explode();
+			m_bExploded = true;
+		}
+		//========================================================
 	}
-	//========================================================
 
 	//花火の火の更新
 	for (int i = m_circleList.size() - 1; i >= 0; i--)
@@ -260,14 +275,15 @@ void Fireworks2::Shot(Math::Vector2 startP, Math::Vector2 targetP)
 {
 	//ここだけ違う=============
 	m_targetPos = targetP; 
+	m_radius = 10;
 	//========================= 
 
-	while (m_circleList.size() >= 30)
+	while (m_circleList.size() < 30)
 	{
 		m_circleList.emplace_back();
 	}
 
-	while (m_lineList.size() > 180)
+	while (m_lineList.size() < 180)
 	{
 		m_lineList.emplace_back();
 	}
@@ -278,8 +294,6 @@ void Fireworks2::Shot(Math::Vector2 startP, Math::Vector2 targetP)
 	//花火の中心（軸）の初期化
 	//この値を元に、花火の火の部分を作成する
 	m_pos = startP;
-
-	
 
 	//打ち上げる角度を求める
 	float radian = atan2f(targetP.y - startP.y, targetP.x - startP.x);

@@ -1,0 +1,39 @@
+#pragma once
+#include"../BaseScene/BaseScene.h"
+
+class Back;
+class FireworksManager;
+class Player;
+class EnemyManager;
+class BulletManager;
+class UI;
+
+class Game :public BaseScene
+{
+public:
+
+	Game() = delete;
+	Game::Game(std::shared_ptr<Back> back, std::shared_ptr<FireworksManager> fireworksManager);
+	~Game()override { Release(); }
+
+	void Init();
+	void Update();
+	void Draw();
+
+	std::shared_ptr<FireworksManager> GetFireworksManager() { return m_fireworksManager; }
+
+private:
+
+	void Release();
+
+	std::shared_ptr<FireworksManager> m_fireworksManager;
+
+	std::shared_ptr<Player> m_player = nullptr;					//ÉvÉåÉCÉÑÅ[
+	std::shared_ptr<EnemyManager> m_enemyManager;				//ìG
+	std::shared_ptr<BulletManager> m_bulletManager;				//íe
+	std::shared_ptr<Back> m_back = nullptr;						//îwåi
+	std::shared_ptr<UI> m_UI = nullptr;						//HeadUpDisplay(UI)
+
+	bool m_bGameClearFlg;
+	bool m_bGameOverFlg;
+};
