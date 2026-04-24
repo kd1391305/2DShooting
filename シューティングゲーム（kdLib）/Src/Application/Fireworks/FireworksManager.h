@@ -26,8 +26,10 @@ public:
 
 private:
 
+	//初期化
 	void Init();
 
+	//解放
 	void Release();
 
 	//当たり判定ありの花火（当たったら弾ける）
@@ -35,7 +37,9 @@ private:
 
 	//当たり判定なし（指定した場所で弾ける）
 	std::vector<Fireworks2>	m_fireworksList2;
-	const int m_poolSize = 20;
+
+	//オブジェクトプールサイズ
+	const int m_poolSize = 40;
 
 	KdTexture m_tex;				 //Particle2用画像
 };

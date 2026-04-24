@@ -30,11 +30,11 @@ struct Particle
 struct Particle2
 {
 	Math::Vector2 m_pos;		//座標
-	Math::Vector2 m_move;			//移動量	
-	Math::Color m_color;				//色	
-	float m_life;						//生存時間
+	Math::Vector2 m_move;		//移動量	
+	Math::Color m_color;		//色	
+	float m_life;				//生存時間
 	Math::Matrix m_mat;			//行列
-	float m_radian;					//角度
+	float m_radian;				//角度
 
 	//コンストラクタ
 	Particle2() {}
@@ -68,14 +68,17 @@ class Fireworks
 {
 public:
 
-	Fireworks();
+	Fireworks() {}
 
-	~Fireworks()
+	virtual ~Fireworks()
 	{
 		//解放処理
 		m_circleList.clear();
 		m_lineList.clear();
 	}
+
+	//初期化関数
+	virtual void Init();
 
 	//更新
 	virtual void Update(float deltaTime);
@@ -113,12 +116,20 @@ protected:
 	bool m_bExploded = false;				//弾けたか
 	bool m_bActive = false;					//活性化状態か
 
+	//花火クラスはKdTextureに描画してからKdtextureをBuckbufferに描画する
+	//そのための変数
+	std::shared_ptr<KdTexture> m_tex;		//画像	
+	float m_texRadius;		//画像半径
+	Math::Matrix m_mat;		//画像を描画するための行列
+	Math::Vector2 m_scale;			//画像を描画するときの拡縮
 };
 
 //花火クラス2
 class Fireworks2 :public Fireworks
 {
 public:
+
+	Fireworks2() {}
 
 	//更新　
 	void Update(float deltaTime)override;

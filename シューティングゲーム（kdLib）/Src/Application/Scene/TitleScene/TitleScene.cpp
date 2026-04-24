@@ -44,12 +44,15 @@ void TitleScene::Update()
 	float deltaTime = Timer::Instance().GetDeltaTime();
 	m_fireworksManager->Update(deltaTime);
 
-	if (HitGacha(30 * deltaTime))
+	if (HitGacha(300 * deltaTime))
 	{
-		float x = randRange(SCREEN_LEFT, SCREEN_RIGHT);
-		float startY = randRange(-300, 0);
-		float endY = randRange(0, 360);
-		m_fireworksManager->Shot2({ x,startY }, { x,endY });
+		for (int i = 0; i < 10; i++)
+		{
+			float x = randRange(SCREEN_LEFT, SCREEN_RIGHT);
+			float startY = randRange(-300, 0);
+			float endY = randRange(0, 360);
+			m_fireworksManager->Shot2({ x,startY }, { x,endY });
+		}
 	}
 
 	//スタートボタンの更新

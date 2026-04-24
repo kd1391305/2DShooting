@@ -1,4 +1,5 @@
 #include"FireworksManager.h"
+#include"../Font/DrawString.h"
 
 //更新
 void FireworksManager::Update(float deltaTime)
@@ -53,6 +54,10 @@ void FireworksManager::Draw()
 	}
 
 	D3D.SetBlendState(BlendMode::Alpha);
+
+	char str[100];
+	sprintf_s(str, sizeof(str), "%d", m_fireworksList.size() + m_fireworksList2.size());
+	DWriteCustom::Instance().Draw(str, { 0,0 });
 }
 
 //花火を打ち上げる
@@ -65,6 +70,8 @@ void FireworksManager::Shot(Math::Vector2 pos,Math::Vector2 targetP)
 		{
 			if (!f.IsActive())
 			{
+				//初期化
+				f.Init();
 				//花火を打ち上げる
 				f.Shot(pos,targetP);
 				//処理を終わる
@@ -74,6 +81,7 @@ void FireworksManager::Shot(Math::Vector2 pos,Math::Vector2 targetP)
 	}
 	//新しく花火オブジェクトを作成
 	m_fireworksList.emplace_back();
+	m_fireworksList.back().Init();
 	m_fireworksList.back().Shot(pos, targetP);
 }
 
@@ -86,6 +94,8 @@ void FireworksManager::Shot2(Math::Vector2 pos, Math::Vector2 targetP)
 		{
 			if (!f.IsActive())
 			{
+				//初期化
+				f.Init();
 				//花火を打ち上げる
 				f.Shot(pos, targetP);
 				//処理を終わる
@@ -95,6 +105,7 @@ void FireworksManager::Shot2(Math::Vector2 pos, Math::Vector2 targetP)
 	}
 	//新しく花火オブジェクトを作成
 	m_fireworksList2.emplace_back();
+	m_fireworksList2.back().Init();
 	m_fireworksList2.back().Shot(pos, targetP);
 }
 
@@ -105,10 +116,12 @@ void FireworksManager::Init()
 	for (int i = 0; i < m_poolSize; i++)
 	{
 		m_fireworksList.emplace_back();
+		m_fireworksList.back().Init();
 	}
 	for (int i = 0; i < m_poolSize; i++)
 	{
 		m_fireworksList2.emplace_back();
+		m_fireworksList2.back().Init();
 	}
 
 	//画像の読み込み

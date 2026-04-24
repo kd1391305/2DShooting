@@ -150,7 +150,7 @@ void Player::Action(float deltaTime)
 		//’e”­ŽË
 		m_pFireworksManager->Shot(m_pos, MOUSE.GetPosf());
 		//Œ‚‚Â‘Ò‹@ŽžŠÔ‚ðÝ‚¯‚é
-		m_shotWait = 0.1f;				//0.3•b
+		m_shotWait = 0.3f;				//0.3•b
 	}
 }
 
