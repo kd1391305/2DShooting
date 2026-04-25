@@ -109,6 +109,12 @@
     <Filter Include="Src\Application\Chara\BaseChara">
       <UniqueIdentifier>{42a79b72-87dc-4e42-ad3a-1af006abc9d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Fireworks\BaseFireworks">
+      <UniqueIdentifier>{1d6a2b2e-4368-4756-9b26-f8f98539a7d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\DropExp">
+      <UniqueIdentifier>{df72d968-9a52-4073-9df3-9e99cfd7b15c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -282,6 +288,12 @@
     <ClInclude Include="Src\Application\Chara\Enemy\Enemy1.h">
       <Filter>Src\Application\Chara\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Fireworks\BaseFireworks\BaseFireworks.h">
+      <Filter>Src\Application\Fireworks\BaseFireworks</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\DropExp\DropExp.h">
+      <Filter>Src\Application\DropExp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -412,6 +424,12 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\Enemy1.cpp">
       <Filter>Src\Application\Chara\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Fireworks\BaseFireworks\BaseFireworks.cpp">
+      <Filter>Src\Application\Fireworks\BaseFireworks</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\DropExp\DropExp.cpp">
+      <Filter>Src\Application\DropExp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

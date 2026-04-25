@@ -14,7 +14,7 @@ void Mouse::Update()
 	m_pos.y += SCREEN_BOTTOM;
 	m_pos.y *= -1;
 
-	Math::Matrix scale = Math::Matrix::CreateScale(0.3f, 0.3f, 0);
+	Math::Matrix scale = Math::Matrix::CreateScale(0.38f, 0.38f, 0);
 	Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scale * trans;
 }
@@ -22,7 +22,7 @@ void Mouse::Update()
 void Mouse::Draw()
 {
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex_Src(&m_tex);
+	SHADER.m_spriteShader.DrawTex_Src(&m_tex, Math::Color{ 0.9f,0.9f,0.9f,0.95f });
 }
 
 bool Mouse::Hit(Math::Vector2 pos, Math::Vector2 radius)

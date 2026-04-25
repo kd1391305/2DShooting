@@ -1,5 +1,6 @@
 #pragma once
-#include"Fireworks.h"
+
+class BaseFireworks;
 
 //花火を管理するクラス
 class FireworksManager
@@ -17,12 +18,11 @@ public:
 
 	void Draw();
 
-	void Shot(Math::Vector2 pos,Math::Vector2 targetP); 
+	//花火を撃つ
+	void Shot(Math::Vector2 pos,Math::Vector2 targetP,Math::Vector2 scale,const bool bTarget=false); 
 
-	//花火を指定した場所で爆発させる
-	void Shot2(Math::Vector2 pos, Math::Vector2 targetP);
-
-	std::vector<Fireworks>& GetFireworksList() { return m_fireworksList; }
+	//プレイヤーが撃った花火配列を返す
+	std::vector<std::shared_ptr<BaseFireworks>>& GetList() { return m_list; }
 
 private:
 
@@ -32,14 +32,8 @@ private:
 	//解放
 	void Release();
 
-	//当たり判定ありの花火（当たったら弾ける）
-	std::vector<Fireworks>	m_fireworksList;
-
-	//当たり判定なし（指定した場所で弾ける）
-	std::vector<Fireworks2>	m_fireworksList2;
-
-	//オブジェクトプールサイズ
-	const int m_poolSize = 40;
+	//当たり判定ありの花火（当たったら弾ける）= プレイヤーが撃った花火
+	std::vector<std::shared_ptr<BaseFireworks>>	m_list;
 
 	KdTexture m_tex;				 //Particle2用画像
 };

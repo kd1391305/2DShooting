@@ -13,6 +13,12 @@
 
 void TitleScene::Init()
 {
+	m_nameTex.Load("Texture/Title.png");
+	m_namePos = { 0,200 };
+	Math::Matrix scale = Math::Matrix::CreateScale(2.0, 2.0f, 0);
+	Math::Matrix trans = Math::Matrix::CreateTranslation(m_namePos.x, m_namePos.y, 0);
+	m_nameMat = scale * trans;
+
 	if (!m_start)
 	{
 		m_start = std::make_shared<Button>();
@@ -44,14 +50,14 @@ void TitleScene::Update()
 	float deltaTime = Timer::Instance().GetDeltaTime();
 	m_fireworksManager->Update(deltaTime);
 
-	if (HitGacha(300 * deltaTime))
+	if (HitGacha(3 * deltaTime))
 	{
 		for (int i = 0; i < 10; i++)
 		{
 			float x = randRange(SCREEN_LEFT, SCREEN_RIGHT);
 			float startY = randRange(-300, 0);
-			float endY = randRange(0, 360);
-			m_fireworksManager->Shot2({ x,startY }, { x,endY });
+			float endY = randRange(0, 320);
+			m_fireworksManager->Shot({ x,startY }, { x,endY }, { 1,1 }, true);
 		}
 	}
 
@@ -91,7 +97,11 @@ void TitleScene::Draw()
 
 	m_fireworksManager->Draw();
 
-	DWriteCustom::Instance().Draw("â‘âŒ„áóê", { -150,300 }, fontSize);
+	/*DWriteCustom::Instance().Draw("â‘ âŒ „á óê", { -150 + 5,300 + 5 }, fontSize, Math::Color{ 0,0,0,1 });
+	DWriteCustom::Instance().Draw("â‘ âŒ „á óê", { -150 - 5,300 - 5 }, fontSize, Math::Color{ 1,0.2f,0.2f,1.0f });
+	DWriteCustom::Instance().Draw("â‘ âŒ „á óê", { -150,300 }, fontSize, Math::Color{ 0.9f,0.9f,0.9f,1.0f });*/
+	SHADER.m_spriteShader.SetMatrix(m_nameMat);
+	SHADER.m_spriteShader.DrawTex_Src(&m_nameTex);
 
 }
 

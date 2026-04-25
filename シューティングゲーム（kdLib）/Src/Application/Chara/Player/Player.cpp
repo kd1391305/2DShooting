@@ -24,11 +24,18 @@ void Player::Init(FireworksManager* set)
 	m_bInvincible = false;
 	m_invincibleTime = 0;
 	m_sumDeltaTime = 0;
-	m_tex.Load("Texture/Player.png");
+	m_animCnt = 0;
+	m_animSpeed = 4.0f;
 
+	for (int i = 0; i < 10; i++)
+	{
+		char filePath[100];
+		sprintf_s(filePath, sizeof(filePath), "Texture/Player/Player%d.png", i);
+		m_tex[i].Load(filePath);
+	}
 	//プレイヤーの大きさを求める（半径）
-	m_radius.x = (m_tex.GetInfo().Width / 2.0f) * m_scale;
-	m_radius.y = (m_tex.GetInfo().Height / 2.0f) * m_scale;
+	m_radius.x = (m_tex[0].GetInfo().Width / 2.0f) * m_scale;
+	m_radius.y = (m_tex[0].GetInfo().Height / 2.0f) * m_scale;
 
 	//行列作成
 	Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale, m_scale, 0);
@@ -72,6 +79,13 @@ void Player::Update(float deltaTime)
 		}
 	}
 
+	//アニメーションの更新
+	m_animCnt += deltaTime * m_animSpeed;
+	if (m_animCnt >= 10)
+	{
+		m_animCnt = 0;
+	}
+
 	//座標更新
 	m_pos += m_move * deltaTime;
 
@@ -81,6 +95,7 @@ void Player::Update(float deltaTime)
 	float right = m_pos.x + m_radius.x;
 	float top = m_pos.y + m_radius.y;
 	float bottom = m_pos.y - m_radius.y;
+
 	if (left < SCREEN_LEFT)
 	{
 		m_pos.x = SCREEN_LEFT + m_radius.x;
@@ -89,18 +104,19 @@ void Player::Update(float deltaTime)
 	{
 		m_pos.x = SCREEN_RIGHT - m_radius.x;
 	}
-	else if (top > SCREEN_TOP)
+	
+	if (top > SCREEN_TOP)
 	{
-		m_pos.y = SCREEN_TOP - m_radius.x;
+		m_pos.y = SCREEN_TOP - m_radius.y;
 	}
 	else if (bottom < SCREEN_BOTTOM)
 	{
-		m_pos.y = SCREEN_BOTTOM + m_radius.x;
+		m_pos.y = SCREEN_BOTTOM + m_radius.y;
 	}
 
 
 	//減速処理
-	m_move *= 1.0f - (2.0f * deltaTime);		//2.0の値はちょうどよい減速率にするため(毎フレーム0.98くらい？になりそう)
+	m_move *= 1.0f - (4.0f * deltaTime);		//2.0の値はちょうどよい減速率にするため(毎フレーム0.98くらい？になりそう)
 
 	//行列作成
 	Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale, m_scale, 0);
@@ -112,10 +128,7 @@ void Player::Update(float deltaTime)
 void Player::Draw()
 {
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex_Src(&m_tex, m_color);
-	float fontSize = 8;
-	float interval = 8;				//プレイヤーと文字との間隔
-	DWriteCustom::Instance().Draw("Player", { m_pos.x- m_radius.x,m_pos.y + m_radius.y + fontSize + interval },fontSize);
+	SHADER.m_spriteShader.DrawTex_Src(&m_tex[(int)m_animCnt], m_color);
 }
 
 //行動
@@ -148,7 +161,7 @@ void Player::Action(float deltaTime)
 	if (m_shotWait == 0)
 	{
 		//弾発射
-		m_pFireworksManager->Shot(m_pos, MOUSE.GetPosf());
+		m_pFireworksManager->Shot(m_pos, MOUSE.GetPosf(), { 0.3f,0.3f });
 		//撃つ待機時間を設ける
 		m_shotWait = 0.3f;				//0.3秒
 	}

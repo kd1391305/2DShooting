@@ -25,4 +25,9 @@ private:
 
 	std:: shared_ptr<FireworksManager> m_fireworksManager = nullptr;
 
+
+	//ƒ^ƒCƒgƒ‹–¼‚Ì‰æ‘œ
+	KdTexture m_nameTex;
+	Math::Vector2 m_namePos;
+	Math::Matrix m_nameMat;
 };

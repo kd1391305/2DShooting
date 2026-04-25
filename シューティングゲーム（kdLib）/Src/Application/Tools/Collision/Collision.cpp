@@ -3,7 +3,7 @@
 #include"../../Bullet/EnemyBullet.h"
 #include"../../Timer/Timer.h"
 #include"../../UI/Score/Score.h"
-#include"../../Fireworks/FireworksManager.h"
+#include"../../Fireworks/Fireworks.h"
 #include"../../Chara/Enemy/BaseEnemy.h"
 
 //プレイヤー　と　敵
@@ -48,32 +48,6 @@ bool CollisionPlayer_EBullet(std::shared_ptr<Player> player, std::vector<EnemyBu
 	return false;
 }
 
-//自機の弾（花火）　と　敵
-bool CollisionFireworks_EBullet(std::vector<Fireworks>& fireworksList, std::vector<std::shared_ptr<BaseEnemy>>& enemyList, std::shared_ptr<Score>& score)
-{
-	for (auto& f : fireworksList)
-	{
-		if (!f.IsActive())continue;
-		for (auto& e : enemyList)
-		{
-			if (!e->IsActive())continue;
-			if (IsCollision(f.GetPos(), f.GetRadius(), e->GetPos(), e->GetRadius().x))
-			{
-				//花火を弾けさせる
-				f.Explode();
-
-				//ダメージ
-				e->Damage(10);
-
-				//スコアを加算する
-				score->Add(100);
-			}
-		}
-	}
-
-	return false;
-}
-
 //弾　と　弾
 //bool Collision(Bullets* b1, Bullets* b2)
 //{
@@ -94,6 +68,31 @@ bool CollisionFireworks_EBullet(std::vector<Fireworks>& fireworksList, std::vect
 //	return false;
 //}
 
+//自機の弾（花火）　と　敵
+bool CollisionFireworks_EBullet(std::vector<std::shared_ptr<BaseFireworks>> &playerList, std::vector<std::shared_ptr<BaseEnemy>>& enemyList, std::shared_ptr<Score>& score)
+{
+	for (auto& f : playerList)
+	{
+		if (!f->IsActive())continue;
+		for (auto& e : enemyList)
+		{
+			if (!e->IsActive())continue;
+			if (IsCollision(f->GetPos(), f->GetRadius(), e->GetPos(), e->GetRadius().x))
+			{
+				//花火を弾けさせる
+				f->Explode();
+
+				//ダメージ
+				e->Damage(10);
+
+				//スコアを加算する
+				score->Add(100);
+			}
+		}
+	}
+
+	return false;
+}
 
 //円形当たり判定
 bool IsCollision(Math::Vector2 pos1,float radius1, Math::Vector2 pos2, float radius2)

@@ -54,4 +54,6 @@ protected:
 	Math::Color m_color;		//色
 	float m_hp;					//体力
 	float m_hpMax;				//最大体力
+	float m_animCnt;			//アニメーションカウンター
+	float m_animSpeed;			//アニメーションスピード
 };

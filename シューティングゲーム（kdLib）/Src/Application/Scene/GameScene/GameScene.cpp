@@ -53,7 +53,7 @@ void Game::Update()
 	CollisionPlayer_EBullet(m_player, m_bulletManager->GetEnemyList());
 
 	//ƒvƒŒƒCƒ„[‚Ì’e@‚Æ@“G
-	CollisionFireworks_EBullet(m_fireworksManager->GetFireworksList(), m_enemyManager->GetEnemyList(), m_UI->GetScoreInst());
+	CollisionFireworks_EBullet(m_fireworksManager->GetList(), m_enemyManager->GetEnemyList(), m_UI->GetScoreInst());
 
 	//”wŒi‚ÌXV
 	m_back->Update();

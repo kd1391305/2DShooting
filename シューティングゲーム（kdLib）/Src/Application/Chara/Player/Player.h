@@ -39,15 +39,14 @@ public:
 	float* GetHPMaxAddress() { return &m_hpMax; }
 	Math::Vector2* GetPosAddress() { return &m_pos; }
 
-	KdTexture* GetTex() { return &m_tex; }
 
 
 private:
 
 	static constexpr float s_speedMax = 200.0f;
 
-
-	KdTexture m_tex;
+	KdTexture m_tex[10];
+	
 
 	float m_shotWait;					//’e‚ðŒ‚‚Â‘Ò‹@ŽžŠÔ
 
