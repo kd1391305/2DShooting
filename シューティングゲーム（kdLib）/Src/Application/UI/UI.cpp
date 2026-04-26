@@ -47,9 +47,4 @@ void UI::Draw()
 	//ゲージの描画
 	m_gauge->Draw();
 
-	//プレイヤーからマウスカーソルを線でつなぐ
-	Math::Vector2 mouse = MOUSE.GetPosf();
-	SHADER.m_spriteShader.DrawLine(mouse.x, mouse.y, m_pPlayerPos->x, m_pPlayerPos->y, &Math::Color{ 1,0.5f,0.5f,0.5f });
-
-
 }

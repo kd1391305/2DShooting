@@ -49,13 +49,13 @@ void Fireworks1::Update(float deltaTime)
 	}
 
 	//画面外にいったら
-	if(IsScreenOut())
+	/*if(IsScreenOut())
 	{
 		m_circleList.clear();
 		m_bActive = false;
 		m_bExploded = false;
 		return;
-	}
+	}*/
 
 	//花火の火の更新
 	for (int i = m_circleList.size() - 1; i >= 0; i--)
@@ -105,7 +105,14 @@ void Fireworks1::Draw(KdTexture* tex)
 
 	//行列作成
 	Math::Matrix scale, rotation, trans, mat;
-	scale = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
+	if (!m_bExploded)
+	{
+		scale = Math::Matrix::CreateScale(m_beforeScale.x, m_beforeScale.y, 0);
+	}
+	else
+	{
+		scale = Math::Matrix::CreateScale(m_afterScale.x, m_afterScale.y, 0);
+	}
 	trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 
 	//360°を10個に割り、回転させて描画
@@ -118,11 +125,14 @@ void Fireworks1::Draw(KdTexture* tex)
 }
 
 //花火を撃つ
-void Fireworks1::Shot(Math::Vector2 startPos, Math::Vector2 targetPos, Math::Vector2 scale, const bool bTarget)
+void Fireworks1::Shot(Math::Vector2 startPos, Math::Vector2 targetPos, float speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget)
 {
 	m_pos = startPos;
 	m_targetPos = targetPos;
-	m_scale = scale;
+	m_speed = speed;
+	m_beforeScale = beforeScale;
+	m_afterScale = afterScale;
+	m_color = color;
 	m_bTarget = bTarget;
 
 	//花火を活性状態にする
@@ -133,7 +143,6 @@ void Fireworks1::Shot(Math::Vector2 startPos, Math::Vector2 targetPos, Math::Vec
 	//角度を元に移動量を求める
 	m_move.x = cosf(radian) * m_speed;
 	m_move.y = sinf(radian) * m_speed;
-	m_color = { randRange(0, 0.6f), randRange(0, 0.6f), randRange(0, 0.6f), randRange(0.4f, 0.6f) };
 	m_bExploded = false;
 
 	//パーティクルを描画する先の中心座標を求める
@@ -162,9 +171,10 @@ void Fireworks1::Shot(Math::Vector2 startPos, Math::Vector2 targetPos, Math::Vec
 		p.m_color = { r,g,b,a };
 
 		//寿命は途中（爆発するまでに）で尽きることの無いように
-		p.m_life = 999;
+		p.m_life = 10;
 	}
 }
+
 
 //花火を弾けさせる
 void Fireworks1::Explode()
@@ -251,13 +261,13 @@ void Fireworks2::Update(float deltaTime)
 	}
 
 	//画面外にいったら
-	if(IsScreenOut())
+	/*if(IsScreenOut())
 	{
 		m_circleList.clear();
 		m_bActive = false;
 		m_bExploded = false;
 		return;
-	}
+	}*/
 
 	//花火の火の更新
 	//円形
@@ -343,7 +353,14 @@ void Fireworks2::Draw(KdTexture* tex)
 
 	//行列作成
 	Math::Matrix scale, rotation, trans, mat;
-	scale = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
+	if (!m_bExploded)
+	{
+		scale = Math::Matrix::CreateScale(m_beforeScale.x, m_beforeScale.y, 0);
+	}
+	else
+	{
+		scale = Math::Matrix::CreateScale(m_afterScale.x, m_afterScale.y, 0);
+	}
 	trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 
 	//360°を10個に割り、回転させて描画
@@ -356,11 +373,15 @@ void Fireworks2::Draw(KdTexture* tex)
 }
 
 //花火を撃つ
-void Fireworks2::Shot(Math::Vector2 startPos, Math::Vector2 targetPos, Math::Vector2 scale,const bool bTarget)
+void Fireworks2::Shot(Math::Vector2 startPos, Math::Vector2 targetPos, float speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget)
+
 {
 	m_pos = startPos;
 	m_targetPos = targetPos;
-	m_scale = scale;
+	m_speed = speed;
+	m_beforeScale = beforeScale;
+	m_afterScale = afterScale;
+	m_color = color;
 	m_bTarget = bTarget;
 
 	//花火を活性状態にする
@@ -371,7 +392,6 @@ void Fireworks2::Shot(Math::Vector2 startPos, Math::Vector2 targetPos, Math::Vec
 	//角度を元に移動量を求める
 	m_move.x = cosf(radian) * m_speed;
 	m_move.y = sinf(radian) * m_speed;
-	m_color = { randRange(0, 0.6f), randRange(0, 0.6f), randRange(0, 0.6f), randRange(0.4f, 0.6f) };
 	m_bExploded = false;
 
 	//================================================
@@ -404,7 +424,7 @@ void Fireworks2::Shot(Math::Vector2 startPos, Math::Vector2 targetPos, Math::Vec
 		p.m_color = { r,g,b,a };
 
 		//寿命は途中（爆発するまでに）で尽きることの無いように
-		p.m_life = 999;
+		p.m_life = 10;
 	}
 	//================================================
 }
@@ -470,4 +490,92 @@ void Fireworks2::Release()
 }
 
 //===================================================
+
+void Fireworks3::Init()
+{
+
+	for (int i = 0; i < m_power; i++)
+	{
+		if (rand() % 2)
+		{
+			m_fireworksList.push_back(std::make_shared<Fireworks1>());
+			m_fireworksList.back()->Init();
+		}
+		else
+		{
+			m_fireworksList.push_back(std::make_shared<Fireworks2>());
+			m_fireworksList.back()->Init();
+		}
+	}
+}
+
+void Fireworks3::Update(float deltaTime)
+{
+	for (auto& f : m_fireworksList)
+	{
+		f->Update(deltaTime);
+	}
+}
+
+void Fireworks3::Draw(KdTexture* tex)
+{
+	for (auto& f : m_fireworksList)
+	{
+		f->Draw(tex);
+	}
+}
+
+void Fireworks3::Shot(Math::Vector2 startPos, Math::Vector2 targetPos, float speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget)
+{
+	m_pos = startPos;
+	m_targetPos = targetPos;
+	m_speed = speed;
+	m_beforeScale = beforeScale;
+	m_afterScale = afterScale;
+	m_color = color;
+	m_bTarget = bTarget;
+
+	//花火を活性状態にする
+	m_bActive = true;
+
+	//打ち上げる角度を求める
+	float radian = atan2f(targetPos.y - startPos.y, targetPos.x - startPos.x);
+	//角度を元に移動量を求める
+	m_move.x = cosf(radian) * m_speed;
+	m_move.y = sinf(radian) * m_speed;
+	m_bExploded = false;
+
+	//================================================
+	//花火の火の部分を作成
+	//================================================
+
+	//パーティクルを描画する先の中心座標を求める
+	Math::Vector2 texPos;
+	texPos = { SCREEN_LEFT + m_texRadius,SCREEN_TOP - m_texRadius };
+
+	//円(火)の初期化
+	for (auto& p : m_fireworksList)
+	{
+		p->Init();
+		p->Shot(startPos, targetPos, speed, beforeScale, afterScale, color, bTarget);
+	}
+	//================================================
+}
+
+
+void Fireworks3::Explode()
+{
+}
+
+void Fireworks3::Pierce(Math::Vector2 pos)
+{
+	//パワーを減らす
+	m_power--;
+	if (m_power < 0)m_power = 0;
+}
+
+void Fireworks3::Release()
+{
+	m_fireworksList.clear();
+}
 

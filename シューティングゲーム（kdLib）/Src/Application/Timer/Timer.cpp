@@ -22,10 +22,16 @@ void Timer::Update()
 		 m_stopTime = 0;
 	 }
 
-	 //もし、経過時間がマイナスになったら、その時は経過時間0として進める(49日に一回あるtimeGetTime()で帰ってくる値が０からスタートするため)
+	 //もし、経過時間がマイナスになったら、その時は60fpsでの経過時間にする(49日に一回あるtimeGetTime()で帰ってくる値が０からスタートするため)
 	 if (m_deltaTime < 0)
 	 {
-		 m_deltaTime = 0;
+		 m_deltaTime = 1 / 60.0f;
+	 }
+
+	 //もし、経過時間が0.3秒以上かかったのなら,60fpsでの経過時間にする
+	 if (m_deltaTime >= 0.3)
+	 {
+		 m_deltaTime = 1 / 60.0f;
 	 }
 
 	 //遅くなる処理

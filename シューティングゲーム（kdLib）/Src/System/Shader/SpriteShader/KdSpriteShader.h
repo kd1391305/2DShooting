@@ -53,6 +53,12 @@ public:
 		m_cb0.Work().mTransform = m;
 	}
 
+	//À•W‚ğŒ³‚É•ÏŠ·s—ñì¬
+	void SetMatrix_Pos(const Math::Vector2& pos)
+	{
+		m_cb0.Work().mTransform = Math::Matrix::CreateTranslation(pos.x, pos.y, 0);
+	}
+
 	void ClearMatrix()
 	{
 		static const Math::Matrix clear = Math::Matrix::CreateTranslation(0, 0, 0);

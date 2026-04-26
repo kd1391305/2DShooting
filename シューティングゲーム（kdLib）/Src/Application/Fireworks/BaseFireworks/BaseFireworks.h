@@ -84,7 +84,7 @@ public:
 	virtual void Draw(KdTexture* tex) = 0;
 
 	//‰Ô‰Î‚ğ‘Å‚¿ã‚°‚é
-	virtual void Shot(Math::Vector2 startPos, Math::Vector2 targetPos, Math::Vector2 scale, const bool bTarget = false) = 0;
+	virtual void Shot(Math::Vector2 startPos, Math::Vector2 targetPos, float speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget = false) = 0;
 
 	//‰Ô‰Î‚ğ’e‚¯‚³‚¹‚é
 	virtual void Explode() = 0;
@@ -104,6 +104,17 @@ public:
 	//“–‚½‚è”»’è—p‚Ì”¼Œa‚ğ•Ô‚·
 	float GetRadius() { return m_radius; }
 
+	void SetPos(Math::Vector2 set) { m_pos = set; }
+	void SetBeforeScale(Math::Vector2 set) { m_beforeScale = set; }
+	void SetAfterScale(Math::Vector2 set) { m_afterScale = set; }
+	void SetColor(Math::Color set) { m_color = set; }
+
+	Math::Vector2 GetTargetPos() { return m_targetPos; }
+	float GetSpeed() { return m_speed; }
+	Math::Vector2 GetBeforeScale() { return m_beforeScale; }
+	Math::Vector2 GetAfterScale() { return m_afterScale; }
+	Math::Color GetColor() { return m_color; }
+
 protected:
 
 	//‰ğ•ú‚·‚é
@@ -114,7 +125,7 @@ protected:
 
 	Math::Vector2 m_pos;					//À•W
 	Math::Vector2 m_move;					//ˆÚ“®—Ê
-	static constexpr float m_speed = 400;	//‰Ô‰Î‚ÌˆÚ“®—Ê
+	float m_speed;							//ˆÚ“®‚·‚éÛ‚ÌƒXƒs[ƒhi‚P•b“–‚½‚èj
 	Math::Color m_color;					//F
 	float m_radius;							//“–‚½‚è”»’è—p”¼Œa
 
@@ -128,7 +139,9 @@ protected:
 	//‚»‚Ì‚½‚ß‚Ì•Ï”
 	std::shared_ptr<KdTexture> m_tex;		//‰æ‘œ	
 	float m_texRadius;						//‰æ‘œ”¼Œa
-	Math::Vector2 m_scale;					//‰æ‘œ‚ğ•`‰æ‚·‚é‚Æ‚«‚ÌŠgk
+
+	Math::Vector2 m_beforeScale;			//‰Ô‰Î‚ª’e‚¯‚é‚Ü‚Å‚ÌŠgk
+	Math::Vector2 m_afterScale;				//‰Ô‰Î‚ª’e‚¯‚½Œã‚ÌŠgk
 };
 
 

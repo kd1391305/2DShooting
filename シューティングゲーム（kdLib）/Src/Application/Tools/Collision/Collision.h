@@ -19,7 +19,9 @@ bool CollisionPlayer_EBullet(std::shared_ptr<Player> player, std::vector<EnemyBu
 //bool Collision(Bullets* b1,Bullets*b2);
 
 //’e@‚Æ@“G
-bool CollisionFireworks_EBullet(std::vector<std::shared_ptr<BaseFireworks>>& playerList, std::vector<std::shared_ptr<BaseEnemy>> &enemyList, std::shared_ptr<Score>& score);
+bool CollisionFireworks_Enemy(std::vector<std::shared_ptr<BaseFireworks>>& playerList, std::vector<std::shared_ptr<BaseEnemy>> &enemyList, std::shared_ptr<Score>& score);
+
+
 
 //‰~Œ`“–‚½‚è”»’è
 bool IsCollision(Math::Vector2 pos1,float radius1, Math::Vector2 pos2,float radius2);

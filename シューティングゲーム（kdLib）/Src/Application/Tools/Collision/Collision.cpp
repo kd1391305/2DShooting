@@ -5,13 +5,13 @@
 #include"../../UI/Score/Score.h"
 #include"../../Fireworks/Fireworks.h"
 #include"../../Chara/Enemy/BaseEnemy.h"
+#include"../RandEx/RandEx.h"
 
 //ÉvÉåÉCÉÑÅ[Å@Ç∆Å@ìG
 bool CollisionPlayer_Enemy(std::shared_ptr<Player> player, std::vector<std::shared_ptr<BaseEnemy>>& enemyList)
 {
-
 	//ÉvÉåÉCÉÑÅ[Ç™ñ≥ìGíÜÇÃèÍçá
-	if (player->IsInvincible())return true;
+	if (player->IsInvincible())return false;
 
 	for (auto& e : enemyList)
 	{
@@ -19,9 +19,9 @@ bool CollisionPlayer_Enemy(std::shared_ptr<Player> player, std::vector<std::shar
 		if (IsCollision(player->GetPos(), player->GetRadius().x, e->GetPos(), e->GetRadius().x))
 		{
 			player->Damage(10);
-			player->Invincible(1.0f);				//àÍïbä‘
+			player->Invincible(1.5f);			//1.5ïbä‘ñ≥ìG
 			e->Damage(10);
-			Timer::Instance().Stop(0.2f);		//0.2ïbí‚é~
+			Timer::Instance().Stop(0.2f);		//0.3ïbí‚é~
 			return true;
 		}
 	}
@@ -32,7 +32,7 @@ bool CollisionPlayer_Enemy(std::shared_ptr<Player> player, std::vector<std::shar
 bool CollisionPlayer_EBullet(std::shared_ptr<Player> player, std::vector<EnemyBullet>& bulletList)
 {
 	//ÉvÉåÉCÉÑÅ[Ç™ñ≥ìGíÜÇÃèÍçá
-	if (player->IsInvincible())return true;
+	if (player->IsInvincible())return false;
 
 	for (auto& b : bulletList)
 	{
@@ -40,8 +40,9 @@ bool CollisionPlayer_EBullet(std::shared_ptr<Player> player, std::vector<EnemyBu
 		if (IsCollision(player->GetPos(), player->GetRadius().x, b.GetPos(), b.GetRadius()))
 		{
 			player->Damage(10);
-			Timer::Instance().Stop(0.2f);		//0.2ïbí‚é~
+			player->Invincible(1.5f);			//1.5ïbä‘ñ≥ìG
 			b.SetActive(false);
+			Timer::Instance().Stop(0.2f);		//0.3ïbí‚é~
 			return true;
 		}
 	}
@@ -68,8 +69,7 @@ bool CollisionPlayer_EBullet(std::shared_ptr<Player> player, std::vector<EnemyBu
 //	return false;
 //}
 
-//é©ã@ÇÃíeÅiâ‘âŒÅjÅ@Ç∆Å@ìG
-bool CollisionFireworks_EBullet(std::vector<std::shared_ptr<BaseFireworks>> &playerList, std::vector<std::shared_ptr<BaseEnemy>>& enemyList, std::shared_ptr<Score>& score)
+bool CollisionFireworks_Enemy(std::vector<std::shared_ptr<BaseFireworks>>& playerList, std::vector<std::shared_ptr<BaseEnemy>>& enemyList, std::shared_ptr<Score>& score)
 {
 	for (auto& f : playerList)
 	{

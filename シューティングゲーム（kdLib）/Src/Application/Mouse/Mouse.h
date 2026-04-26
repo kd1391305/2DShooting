@@ -15,10 +15,16 @@ public:
 	POINT GetPos() { return m_pos; }
 	Math::Vector2 GetPosf() { return Math::Vector2(m_pos.x, m_pos.y); }
 
+	void ShowCursor(bool show)
+	{
+		m_bShow = show;
+	}
+
 private:
 	POINT m_pos;				//座標
 	Math::Matrix m_mat;		//行列
 	KdTexture m_tex;			//画像
+	bool m_bShow;
 
 	//シングルトン
 private:

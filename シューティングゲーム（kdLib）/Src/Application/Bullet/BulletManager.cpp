@@ -37,7 +37,13 @@ void BulletManager::Update(float deltaTime)
 void BulletManager::Draw()
 {
 	//“G‚Ì’e
-	for (auto& b : m_enemyList)if (b.IsActive())b.Draw();
+	for (auto& b : m_enemyList)
+	{
+		if (b.IsActive())
+		{
+			b.Draw();
+		}
+	}
 }
 
 void BulletManager::Shot(Math::Vector2 pos, Math::Vector2 move)

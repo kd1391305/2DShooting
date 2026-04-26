@@ -112,8 +112,11 @@
     <Filter Include="Src\Application\Fireworks\BaseFireworks">
       <UniqueIdentifier>{1d6a2b2e-4368-4756-9b26-f8f98539a7d3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\DropExp">
-      <UniqueIdentifier>{df72d968-9a52-4073-9df3-9e99cfd7b15c}</UniqueIdentifier>
+    <Filter Include="Src\Application\Light">
+      <UniqueIdentifier>{f6f4445b-55d4-474c-9f1d-09e4194b92fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Scene\GameOverScene">
+      <UniqueIdentifier>{6a7524f4-2769-44dc-8921-36c2ef5cfd81}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -291,8 +294,11 @@
     <ClInclude Include="Src\Application\Fireworks\BaseFireworks\BaseFireworks.h">
       <Filter>Src\Application\Fireworks\BaseFireworks</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\DropExp\DropExp.h">
-      <Filter>Src\Application\DropExp</Filter>
+    <ClInclude Include="Src\Application\Light\Light.h">
+      <Filter>Src\Application\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\GameOverScene\GameOverScene.h">
+      <Filter>Src\Application\Scene\GameOverScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -428,8 +434,11 @@
     <ClCompile Include="Src\Application\Fireworks\BaseFireworks\BaseFireworks.cpp">
       <Filter>Src\Application\Fireworks\BaseFireworks</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\DropExp\DropExp.cpp">
-      <Filter>Src\Application\DropExp</Filter>
+    <ClCompile Include="Src\Application\Light\Light.cpp">
+      <Filter>Src\Application\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\GameOverScene\GameOverScene.cpp">
+      <Filter>Src\Application\Scene\GameOverScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

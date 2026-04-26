@@ -19,6 +19,21 @@ void FireworksManager::Update(float deltaTime)
 			m_list.erase(m_list.begin() + i);
 		}
 	}
+
+	//チャージ弾
+	for (int i = m_chargeBullet.size() - 1; i >= 0; i--)
+	{
+		//活性状態だったら
+		if (m_chargeBullet[i]->IsActive())
+		{
+			m_chargeBullet[i]->Update(deltaTime);
+		}
+		//非活性状態だったら
+		else
+		{
+			m_chargeBullet.erase(m_chargeBullet.begin() + i);
+		}
+	}
 }
 
 //描画
@@ -35,16 +50,38 @@ void FireworksManager::Draw()
 		}
 	}
 
+	for (auto& c : m_chargeBullet)
+	{
+		if (c->IsActive())
+		{
+			c->Draw(&m_tex);
+		}
+	}
+
 	D3D.SetBlendState(BlendMode::Alpha);
 }
 
 //花火を打ち上げる
-void FireworksManager::Shot(Math::Vector2 pos, Math::Vector2 targetP, Math::Vector2 scale, const bool bTarget)
+void FireworksManager::Shot(FireworksManager::Type name,Math::Vector2 pos, Math::Vector2 targetPos, float speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget)
 {
 	//新しく花火オブジェクトを作成
-	m_list.push_back(std::make_shared<Fireworks2>());
+	switch (name)
+	{
+	case FireworksManager::Type::Circle:
+		m_list.push_back(std::make_shared<Fireworks1>());
+		break;
+	case FireworksManager::Type::Circle_Line:
+		m_list.push_back(std::make_shared<Fireworks2>());
+		break;
+	}
 	m_list.back()->Init();
-	m_list.back()->Shot(pos, targetP, scale, bTarget);
+	m_list.back()->Shot(pos, targetPos, speed, beforeScale, afterScale, color, bTarget);
+}
+
+void FireworksManager::Shot(std::shared_ptr<Fireworks3> fireworks)
+{
+	m_chargeBullet.push_back(fireworks);
+	m_chargeBullet.back()->Shot(fireworks->GetPos(), fireworks->GetTargetPos(), fireworks->GetSpeed(), fireworks->GetBeforeScale(), fireworks->GetAfterScale(), fireworks->GetColor(), true);
 }
 
 //初期化（１回しか呼ばれない）

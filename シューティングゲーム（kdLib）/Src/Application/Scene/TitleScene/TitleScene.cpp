@@ -43,22 +43,26 @@ void TitleScene::Init()
 
 void TitleScene::Update()
 {
+	float deltaTime = Timer::Instance().GetDeltaTime();
+
 	//背景の更新
-	if(m_back)m_back->Update();
+	if(m_back)m_back->Update(deltaTime);
 
 	//花火を打ち上げるランダムで
-	float deltaTime = Timer::Instance().GetDeltaTime();
+	
 	m_fireworksManager->Update(deltaTime);
 
-	if (HitGacha(3 * deltaTime))
+	if (HitGacha(10 * deltaTime))
 	{
-		for (int i = 0; i < 10; i++)
-		{
-			float x = randRange(SCREEN_LEFT, SCREEN_RIGHT);
-			float startY = randRange(-300, 0);
-			float endY = randRange(0, 320);
-			m_fireworksManager->Shot({ x,startY }, { x,endY }, { 1,1 }, true);
-		}
+		float startX = randRange(SCREEN_LEFT, SCREEN_RIGHT);
+		Math::Vector2 startPos = {  startX,SCREEN_BOTTOM - 30 };
+		Math::Vector2 targetPos = { startX,randRange(100,SCREEN_TOP) };
+		float speed = 400;
+		Math::Vector2 beforeScale = { 0.7f,0.7f };
+		Math::Vector2 afterScale = { randRange(0.5f,1.5f),randRange(0.5f,1.5f) };
+		Math::Color color = { randRange(0.0f,0.5f),randRange(0.0f,0.5f),randRange(0.0f,0.5f),randRange(0.3f,0.5f) };
+		int type = randRange(0,2);
+		m_fireworksManager->Shot((FireworksManager::Type)type, startPos, targetPos, speed, beforeScale, afterScale, color, true);
 	}
 
 	//スタートボタンの更新
@@ -102,7 +106,6 @@ void TitleScene::Draw()
 	DWriteCustom::Instance().Draw("花 火 繚 乱", { -150,300 }, fontSize, Math::Color{ 0.9f,0.9f,0.9f,1.0f });*/
 	SHADER.m_spriteShader.SetMatrix(m_nameMat);
 	SHADER.m_spriteShader.DrawTex_Src(&m_nameTex);
-
 }
 
 void TitleScene::Release()

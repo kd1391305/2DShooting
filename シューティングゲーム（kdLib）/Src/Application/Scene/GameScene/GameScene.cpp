@@ -11,6 +11,10 @@
 #include"GameClear.h"
 #include"GameOver.h"
 #include"../../Chara/Enemy/BaseEnemy.h"
+#include"../SceneManager.h"
+#include"../GameOverScene/GameOverScene.h"
+#include"../../Font/DrawString.h"
+#include"../../Mouse/Mouse.h"
 
 //コンストラクタ
 Game::Game(std::shared_ptr<Back> back, std::shared_ptr<FireworksManager> fireworksManager)
@@ -24,11 +28,13 @@ Game::Game(std::shared_ptr<Back> back, std::shared_ptr<FireworksManager> firewor
 	m_UI = std::make_shared<UI>();
 
 	BaseEnemy::SetBulletManager(m_bulletManager.get());
+
+	MOUSE.ShowCursor(false);
 }
 
 void Game::Init()
 {
-	m_player->Init(m_fireworksManager.get());
+	m_player->Init(this, m_fireworksManager.get());
 
 	//UIの初期化
 	m_UI->Init(m_player.get());
@@ -53,10 +59,10 @@ void Game::Update()
 	CollisionPlayer_EBullet(m_player, m_bulletManager->GetEnemyList());
 
 	//プレイヤーの弾　と　敵
-	CollisionFireworks_EBullet(m_fireworksManager->GetList(), m_enemyManager->GetEnemyList(), m_UI->GetScoreInst());
+	CollisionFireworks_Enemy(m_fireworksManager->GetList(), m_enemyManager->GetEnemyList(), m_UI->GetScoreInst());
 
 	//背景の更新
-	m_back->Update();
+	m_back->Update(deltaTime);
 
 	//プレイヤーの更新
 	m_player->Update(deltaTime);
@@ -87,7 +93,27 @@ void Game::Draw()
 	m_UI->Draw();
 }
 
+//ゲームオーバーにする
+void Game::GameOver()
+{
+	SceneManager::Instance().ChangeState(new GameOverScene(
+		m_player,
+		m_enemyManager,
+		m_fireworksManager,
+		m_bulletManager,
+		m_back));
+
+	
+}
+
 void Game::Release()
 {
+	m_player = nullptr;
+	m_enemyManager = nullptr;
+	m_fireworksManager = nullptr;
+	m_bulletManager = nullptr;
+	m_back = nullptr;
+
+	MOUSE.ShowCursor(true);
 }
 

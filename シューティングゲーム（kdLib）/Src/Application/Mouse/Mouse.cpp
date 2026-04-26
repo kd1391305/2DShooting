@@ -21,8 +21,11 @@ void Mouse::Update()
 
 void Mouse::Draw()
 {
-	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex_Src(&m_tex, Math::Color{ 0.9f,0.9f,0.9f,0.95f });
+	if (m_bShow)
+	{
+		SHADER.m_spriteShader.SetMatrix(m_mat);
+		SHADER.m_spriteShader.DrawTex_Src(&m_tex, Math::Color{ 0.9f,0.9f,0.9f,0.95f });
+	}
 }
 
 bool Mouse::Hit(Math::Vector2 pos, Math::Vector2 radius)
