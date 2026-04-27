@@ -94,6 +94,38 @@ bool CollisionFireworks_Enemy(std::vector<std::shared_ptr<BaseFireworks>>& playe
 	return false;
 }
 
+bool CollisionChargeBullet_Enemy(std::vector<std::shared_ptr<Fireworks3>> &chargeBullet, std::vector<std::shared_ptr<BaseEnemy>>& enemyList,std::shared_ptr<Score>& score)
+{
+	for (auto& c : chargeBullet)
+	{
+		if (c->GetActiveFlg() && !c->GetExplodedFlg())
+		{
+			for (auto& e : enemyList)
+			{
+				if (IsCollision(c->GetPos(), c->GetRadius(), e->GetPos(), e->GetRadius().x))
+				{
+					if (c->GetPower())
+					{
+						//“G‚ÉŠÑ’Ê‚·‚é
+						c->Pierce(e->GetPos());
+					}
+					else
+					{
+						//‰Ô‰Î‚ð’e‚¯‚³‚¹‚é
+						c->Explode();
+					}
+					//ƒ_ƒ[ƒW
+					e->Damage(10);
+
+					//ƒXƒRƒA‚ð‰ÁŽZ‚·‚é
+					score->Add(100);
+				}
+			}
+		}
+	}
+	return false;
+}
+
 //‰~Œ`“–‚½‚è”»’è
 bool IsCollision(Math::Vector2 pos1,float radius1, Math::Vector2 pos2, float radius2)
 {
@@ -101,8 +133,10 @@ bool IsCollision(Math::Vector2 pos1,float radius1, Math::Vector2 pos2, float rad
 	float b = pos1.y - pos2.y;
 	float c = sqrt(a * a + b * b);
 
-	if (c < radius1 + radius2)return true;
-
+	if (c < radius1 + radius2)
+	{
+		return true;
+	}
 	return false;
 }
 

@@ -61,6 +61,8 @@ void Game::Update()
 	//ƒvƒŒƒCƒ„[‚Ì’e@‚Æ@“G
 	CollisionFireworks_Enemy(m_fireworksManager->GetList(), m_enemyManager->GetEnemyList(), m_UI->GetScoreInst());
 
+	CollisionChargeBullet_Enemy(m_fireworksManager->GetChargeBullet(), m_enemyManager->GetEnemyList(), m_UI->GetScoreInst());
+
 	//”wŒi‚ÌXV
 	m_back->Update(deltaTime);
 

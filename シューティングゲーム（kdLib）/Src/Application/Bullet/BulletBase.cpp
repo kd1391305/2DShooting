@@ -19,8 +19,3 @@ void BulletBase::Update(float deltaTime)
 	m_mat = scaleMat * transMat;
 }
 
-void BulletBase::Draw()
-{
-	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex_Src(m_pTex,Math::Color{1,0,0,1});
-}

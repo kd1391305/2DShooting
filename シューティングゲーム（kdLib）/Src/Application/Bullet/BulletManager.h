@@ -20,7 +20,6 @@ public:
 
 private:
 
-	KdTexture m_enemyTex;						//敵の弾画像
 	std::vector<EnemyBullet> m_enemyList;		//敵の弾
 	const int m_enemyPoolSize = 200;			//敵のオブジェクトプールサイズ
 

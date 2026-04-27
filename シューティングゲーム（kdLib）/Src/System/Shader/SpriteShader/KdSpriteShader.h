@@ -98,7 +98,15 @@ public:
 	}
 
 	//ソース（元）のまま描画を行う
-	void DrawTex_Src(const KdTexture* tex , const Math::Color& color = {1,1,1,1})
+	void DrawTex_Src(const std::shared_ptr<KdTexture> tex , const Math::Color& color = {1,1,1,1})
+	{
+		if (tex == nullptr)return;
+		Math::Rectangle srcRect = { 0,0,(long)tex.get()->GetInfo().Width,(long)tex.get()->GetInfo().Height };
+		const Math::Vector2 pivot = { 0.5, 0.5f };
+		DrawTex(tex.get(), 0, 0, srcRect.width, srcRect.height, &srcRect, &color, pivot);
+	}
+
+	void DrawTex_Src(KdTexture *tex , const Math::Color& color = {1,1,1,1})
 	{
 		if (tex == nullptr)return;
 		Math::Rectangle srcRect = { 0,0,(long)tex->GetInfo().Width,(long)tex->GetInfo().Height };

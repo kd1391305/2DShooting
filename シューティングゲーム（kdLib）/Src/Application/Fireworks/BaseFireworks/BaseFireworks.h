@@ -81,7 +81,7 @@ public:
 	virtual void Update(float deltaTime) = 0;
 
 	//ï`âÊ
-	virtual void Draw(KdTexture* tex) = 0;
+	virtual void Draw() = 0;
 
 	//â‘âŒÇë≈Çøè„Ç∞ÇÈ
 	virtual void Shot(Math::Vector2 startPos, Math::Vector2 targetPos, float speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget = false) = 0;
@@ -105,9 +105,11 @@ public:
 	float GetRadius() { return m_radius; }
 
 	void SetPos(Math::Vector2 set) { m_pos = set; }
+	void SetTargetPos(Math::Vector2 set) { m_targetPos = set; }
 	void SetBeforeScale(Math::Vector2 set) { m_beforeScale = set; }
 	void SetAfterScale(Math::Vector2 set) { m_afterScale = set; }
 	void SetColor(Math::Color set) { m_color = set; }
+	void SetSpeed(float set) { m_speed = set; }
 
 	Math::Vector2 GetTargetPos() { return m_targetPos; }
 	float GetSpeed() { return m_speed; }

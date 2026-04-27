@@ -23,13 +23,13 @@ void FireworksManager::Update(float deltaTime)
 	//チャージ弾
 	for (int i = m_chargeBullet.size() - 1; i >= 0; i--)
 	{
-		//活性状態だったら
-		if (m_chargeBullet[i]->IsActive())
+		//チャージ中でなかったら
+		if (!m_chargeBullet[i]->GetChargeFlg())
 		{
 			m_chargeBullet[i]->Update(deltaTime);
 		}
 		//非活性状態だったら
-		else
+		if (!m_chargeBullet[i]->GetActiveFlg())
 		{
 			m_chargeBullet.erase(m_chargeBullet.begin() + i);
 		}
@@ -46,15 +46,15 @@ void FireworksManager::Draw()
 	{
 		if (f->IsActive())
 		{
-			f->Draw(&m_tex);
+			f->Draw();
 		}
 	}
 
 	for (auto& c : m_chargeBullet)
 	{
-		if (c->IsActive())
+		if (c->GetActiveFlg())
 		{
-			c->Draw(&m_tex);
+			c->Draw();
 		}
 	}
 
@@ -78,17 +78,15 @@ void FireworksManager::Shot(FireworksManager::Type name,Math::Vector2 pos, Math:
 	m_list.back()->Shot(pos, targetPos, speed, beforeScale, afterScale, color, bTarget);
 }
 
-void FireworksManager::Shot(std::shared_ptr<Fireworks3> fireworks)
+void FireworksManager::Wait(std::shared_ptr<Fireworks3> fireworks)
 {
 	m_chargeBullet.push_back(fireworks);
-	m_chargeBullet.back()->Shot(fireworks->GetPos(), fireworks->GetTargetPos(), fireworks->GetSpeed(), fireworks->GetBeforeScale(), fireworks->GetAfterScale(), fireworks->GetColor(), true);
 }
 
 //初期化（１回しか呼ばれない）
 void FireworksManager::Init()
 {
-	//画像の読み込み
-	m_tex.Load("Texture/Bullet3.png");
+	
 }
 
 //解放（１回しか呼ばれない）

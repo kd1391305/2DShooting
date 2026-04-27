@@ -20,7 +20,6 @@ private:
 	//スポーンする
 	void SpawnPutturn(float deltaTime);
 
-	KdTexture m_tex;
 
 	std::vector<std::shared_ptr<BaseEnemy>> m_enemyList;		//敵
 	float m_spawnProbability;									//敵発生確率（毎秒あたり）

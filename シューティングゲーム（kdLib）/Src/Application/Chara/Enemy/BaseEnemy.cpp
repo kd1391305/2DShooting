@@ -4,6 +4,7 @@
 #include"../../Tools/RandEx/RandEx.h"
 #include"../../main.h"
 #include"../../Bullet/BulletManager.h"
+#include"../../TextureCache/TextureCache.h"
 
 //静的変数の初期化
 BulletManager* BaseEnemy::s_pBulletManager = nullptr;
@@ -58,10 +59,10 @@ void BaseEnemy::Update(float deltaTime)
 }
 
 //描画
-void BaseEnemy::Draw(KdTexture* tex)
+void BaseEnemy::Draw()
 {
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex_Src(tex, m_color);
+	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Enemy.png"), m_color);
 }
 
 //敵をスポーンさせる（画面右端からランダムで出現、敵はまっすぐに動く）

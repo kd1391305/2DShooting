@@ -1,5 +1,6 @@
 #include"Mouse.h"
 #include"../main.h"
+#include"../TextureCache/TextureCache.h"
 
 void Mouse::Update()
 {
@@ -24,7 +25,7 @@ void Mouse::Draw()
 	if (m_bShow)
 	{
 		SHADER.m_spriteShader.SetMatrix(m_mat);
-		SHADER.m_spriteShader.DrawTex_Src(&m_tex, Math::Color{ 0.9f,0.9f,0.9f,0.95f });
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Mouse.png"), Math::Color{0.9f,0.9f,0.9f,0.95f});
 	}
 }
 

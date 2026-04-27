@@ -31,7 +31,7 @@ public:
 	void Update(float deltaTime);
 
 	//•`‰æ
-	virtual void Draw(KdTexture* tex);
+	virtual void Draw();
 
 	bool IsActive() { return m_bActive; }
 

@@ -23,14 +23,12 @@ public:
 private:
 	POINT m_pos;				//座標
 	Math::Matrix m_mat;		//行列
-	KdTexture m_tex;			//画像
 	bool m_bShow;
 
 	//シングルトン
 private:
 	Mouse() 
 	{
-		m_tex.Load("Texture/Mouse.png");
 		ShowCursor(false);
 	}
 public:

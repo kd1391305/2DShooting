@@ -46,11 +46,8 @@ private:
 	Game* m_pGame;
 	FireworksManager* m_pFireworksManager;
 
+	const float m_moveSpeed = 100;
 
-	static constexpr float s_speedMax = 200.0f;
-
-	KdTexture m_tex[10];
-	
 	float m_shotWait;					//’e‚ðŒ‚‚Â‘Ò‹@ŽžŠÔ
 
 	bool m_bInvincible;					//–³“G‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO

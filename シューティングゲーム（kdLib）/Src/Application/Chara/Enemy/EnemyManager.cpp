@@ -8,9 +8,6 @@
 //コンストラクタ
 EnemyManager::EnemyManager()
 {
-	//画像の読み込み
-	m_tex.Load("Texture/Enemy.png");
-
 	m_spawnProbability = 10.0f;			//毎秒のスポーン確率		
 
 	m_spawnCnt = 0;
@@ -48,7 +45,7 @@ void EnemyManager::Update(float deltaTime)
 //描画
 void EnemyManager::Draw()
 {
-	for (auto& b : m_enemyList)if (b->IsActive())b->Draw(&m_tex);
+	for (auto& b : m_enemyList)if (b->IsActive())b->Draw();
 }
 
 

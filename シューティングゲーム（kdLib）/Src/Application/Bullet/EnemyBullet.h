@@ -5,8 +5,7 @@ class EnemyBullet : public BulletBase
 {
 public:
 
-	EnemyBullet() = delete;
-	EnemyBullet(KdTexture* tex) {}
+	EnemyBullet() {}
 
 	void Draw()override;
 };

@@ -1,14 +1,13 @@
 #include"BulletManager.h"
+#include"../TextureCache/TextureCache.h"
 
 //コンストラクタ
 BulletManager::BulletManager()
 {
-	//画像の読み込み
-	m_enemyTex.Load("Texture/Bullet.png");
 
 	//オブジェクトプールサイズの弾を作成しておく
 	for (int i = 0; i < m_enemyPoolSize; i++)
-		m_enemyList.push_back(EnemyBullet(&m_enemyTex));
+		m_enemyList.push_back(EnemyBullet());
 }
 
 //更新
@@ -60,7 +59,7 @@ void BulletManager::Shot(Math::Vector2 pos, Math::Vector2 move)
 	}
 	//もし見つからなかったら
 	//オブジェクト作成（このオブジェクトは非活性状態になったらこのクラス（BulletManager）のUpdate()で削除される）
-	m_enemyList.push_back(EnemyBullet(&m_enemyTex));
+	m_enemyList.push_back(EnemyBullet());
 	m_enemyList.back().Shot(pos, move);
 }
 

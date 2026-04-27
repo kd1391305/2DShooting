@@ -118,6 +118,9 @@
     <Filter Include="Src\Application\Scene\GameOverScene">
       <UniqueIdentifier>{6a7524f4-2769-44dc-8921-36c2ef5cfd81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\TextureCache">
+      <UniqueIdentifier>{5921333c-c76c-4154-93eb-744ad5306298}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -299,6 +302,9 @@
     </ClInclude>
     <ClInclude Include="Src\Application\Scene\GameOverScene\GameOverScene.h">
       <Filter>Src\Application\Scene\GameOverScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\TextureCache\TextureCache.h">
+      <Filter>Src\Application\TextureCache</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

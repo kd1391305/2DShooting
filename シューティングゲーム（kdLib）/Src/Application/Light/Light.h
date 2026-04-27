@@ -6,16 +6,13 @@ class Light
 {
 public:
 
-	void Draw(Math::Vector2 pos, Math::Vector2 radius,Math::Color&color);
+	void Draw(Math::Vector2 pos, Math::Vector2 radius, Math::Color& color);
 
 private:
 
-	KdTexture m_tex;
 
-	Light()
-	{
-		m_tex.Load("Texture/Light.png");
-	}
+	Light() {}
+	
 
 public:
 

@@ -1,11 +1,13 @@
 #include "Light.h"
-
+#include"../TextureCache/TextureCache.h"
 void Light::Draw(Math::Vector2 pos, Math::Vector2 radius,Math::Color&color)
 {
 	//ï`âÊÇ∑ÇÈÇ∆Ç´ÇÃägèkÇãÅÇﬂÇÈ
 	Math::Vector2 scale;
-	scale.x = radius.x / (m_tex.GetInfo().Width / 2.0f);
-	scale.y = radius.y / (m_tex.GetInfo().Height / 2.0f);
+	KdTexture* tex = TextureCache::Instance().Get("Texture/Light.png").get();
+
+	scale.x = radius.x / (tex->GetInfo().Width / 2.0f);
+	scale.y = radius.y / (tex->GetInfo().Height / 2.0f);
 
 	//çsóÒçÏê¨
 	Math::Matrix scaleMat, transMat, mat;
@@ -15,5 +17,5 @@ void Light::Draw(Math::Vector2 pos, Math::Vector2 radius,Math::Color&color)
 
 	//ï`âÊ
 	SHADER.m_spriteShader.SetMatrix(mat);
-	SHADER.m_spriteShader.DrawTex_Src(&m_tex, color);
+	SHADER.m_spriteShader.DrawTex_Src(tex, color);
 }
