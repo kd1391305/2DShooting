@@ -33,6 +33,7 @@ struct Particle2
 {
 	Math::Vector2 m_pos;		//座標
 	Math::Vector2 m_move;		//移動量	
+	Math::Vector2 m_scale;		//拡縮
 	Math::Color m_color;		//色	
 	float m_life;				//生存時間
 	Math::Matrix m_mat;			//行列
@@ -54,7 +55,7 @@ struct Particle2
 		m_pos += m_move * deltaTime;
 
 		//行列作成
-		Math::Matrix scale = Math::Matrix::CreateScale(0.5f, 0.5f, 0);
+		Math::Matrix scale = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
 		Math::Matrix rotation = Math::Matrix::CreateRotationZ(m_radian);
 		Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 		m_mat = scale * rotation * trans;

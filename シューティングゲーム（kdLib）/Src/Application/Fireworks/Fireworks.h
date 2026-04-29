@@ -67,6 +67,8 @@ protected:
 
 	std::vector<Particle> m_circleList;		//花火の火（丸形）
 	std::vector<Particle2> m_lineList;		//花火の火（棒形）
+
+	Math::Vector2 m_lineBaseScale;
 };
 //===================================================
 

@@ -3,6 +3,7 @@
 class Player;
 class Score;
 class Gauge;
+class Explan;
 
 class UI
 {
@@ -12,7 +13,7 @@ public:
 	void Init(Player* player);
 
 	//更新
-	void Update();
+	void Update(float deltaTime);
 
 	//描画
 	void Draw();
@@ -25,7 +26,8 @@ private:
 
 	std::shared_ptr<Gauge> m_gauge;
 
+	std::shared_ptr<Explan>m_explan;
+
 	Math::Vector2* m_pPlayerPos;		//プレイヤーの座標アドレス
 
-	
 };

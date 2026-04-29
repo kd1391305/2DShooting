@@ -4,6 +4,7 @@
 #include"../Tools/Gauge/Gauge.h"
 #include"../Chara/Player/Player.h"
 #include"../Mouse/Mouse.h"
+#include"Explan/Explan.h"
 
 //初期化
 void UI::Init(Player* player)
@@ -22,13 +23,25 @@ void UI::Init(Player* player)
 		1);								//ゲージが減るスピード
 
 	m_pPlayerPos = player->GetPosAddress();
+
+	m_explan = std::make_shared<Explan>();
+	m_explan->Init(m_pPlayerPos);
 }
 
 //更新
-void UI::Update()
+void UI::Update(float deltaTime)
 {
 	//ゲージの更新
 	m_gauge->Update();
+
+	if (m_explan)
+	{
+		m_explan->Update(deltaTime);
+		if (m_explan->IsEnd())
+		{
+			m_explan = nullptr;
+		}
+	}
 }
 
 //初期化
@@ -46,5 +59,7 @@ void UI::Draw()
 
 	//ゲージの描画
 	m_gauge->Draw();
+
+	if (m_explan)m_explan->Draw();
 
 }

@@ -27,6 +27,11 @@ public:
 	// ‰æ‘œî•ñæ“¾
 	const D3D11_TEXTURE2D_DESC& GetInfo() const { return m_desc; }
 
+	const Math::Vector2& GetRadius()const {
+		Math::Vector2 radius{ m_desc.Width / 2.0f,m_desc.Height / 2.0f };
+		return radius;
+	}
+
 	//====================================================
 	//
 	// “Ç‚İ‚İEì¬

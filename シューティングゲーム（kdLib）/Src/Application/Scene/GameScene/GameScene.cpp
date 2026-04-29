@@ -90,7 +90,7 @@ void Game::Update()
 	m_bulletManager->Update(deltaTime);
 
 	//HeadUpDisplay（UI）の更新
-	m_UI->Update();
+	m_UI->Update(deltaTime);
 
 	m_fireworksManager->Update(deltaTime);
 }

@@ -240,7 +240,7 @@ void Fireworks2::Init()
 	}
 
 	//棒形
-	while (m_lineList.size() < 30)
+	while (m_lineList.size() < 5)
 	{
 		m_lineList.emplace_back();
 	}
@@ -250,6 +250,8 @@ void Fireworks2::Init()
 
 	//花火の当たり判定
 	m_radius = 10;
+
+	m_lineBaseScale = { 0.1f,0.1f };
 }
 
 //更新
@@ -498,6 +500,9 @@ void Fireworks2::Explode()
 		float b = m_color.B() + randRange(-0.1f, 0.1f);
 		float a = m_color.A() + randRange(-0.1f, 0.1f);
 		p.m_color = { r,g,b,a };
+
+		p.m_scale.x = m_lineBaseScale.x + randRange(-0.05f, 0.05f);
+		p.m_scale.y = m_lineBaseScale.y + randRange(-0.05f, 0.05f);
 
 		//寿命
 		p.m_life = randRange(0.5f, 0.8f);		//0.5秒～0.8秒

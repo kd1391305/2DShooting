@@ -192,6 +192,7 @@
     <ClInclude Include="Src\Application\Tools\Collision\Collision.h" />
     <ClInclude Include="Src\Application\Tools\Gauge\Gauge.h" />
     <ClInclude Include="Src\Application\Tools\RandEx\RandEx.h" />
+    <ClInclude Include="Src\Application\UI\Explan\Explan.h" />
     <ClInclude Include="Src\Application\UI\Score\Score.h" />
     <ClInclude Include="Src\Application\UI\UI.h" />
     <ClInclude Include="Src\System\Audio\KdAudio.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="Src\Application\Tools\Collision\Collision.cpp" />
     <ClCompile Include="Src\Application\Tools\Gauge\Gauge.cpp" />
     <ClCompile Include="Src\Application\Tools\RandEx\RandEx.cpp" />
+    <ClCompile Include="Src\Application\UI\Explan\Explan.cpp" />
     <ClCompile Include="Src\Application\UI\Score\Score.cpp" />
     <ClCompile Include="Src\Application\UI\UI.cpp" />
     <ClCompile Include="Src\System\Audio\KdAudio.cpp" />
