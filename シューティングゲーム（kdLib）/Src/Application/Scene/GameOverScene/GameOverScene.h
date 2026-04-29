@@ -8,6 +8,7 @@ class EnemyManager;
 class BulletManager;
 class UI;
 class DropExp;
+class Button;
 
 class GameOverScene :public BaseScene
 {
@@ -39,4 +40,6 @@ private:
 	std::shared_ptr<Back> m_back = nullptr;						//背景
 	std::shared_ptr<UI> m_UI = nullptr;							//UI
 
+	std::shared_ptr<Button> m_titleButton;		//タイトルへ行くボタン
+	std::shared_ptr<Button> m_gameButton;		//ゲームへ戻るボタン
 };

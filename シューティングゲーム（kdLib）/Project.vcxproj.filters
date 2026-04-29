@@ -70,23 +70,8 @@
     <Filter Include="Src\Application\UI">
       <UniqueIdentifier>{fa05bd49-c4f7-487e-8c1a-1db0f72271bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Tools">
-      <UniqueIdentifier>{82cbd4d3-8eba-4aff-ac2a-79c2630ede97}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\Font">
       <UniqueIdentifier>{2c6406f1-5b96-4499-8134-39500154d1c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Tools\Button">
-      <UniqueIdentifier>{8ad89706-f9fc-4a2e-b31b-edd1f8db191e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Tools\Collision">
-      <UniqueIdentifier>{0e957f80-e087-4100-bbd2-6d0b8bea934d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Tools\RandEx">
-      <UniqueIdentifier>{ff3680da-0f20-47d0-ae44-e6f9e8dfd9e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Tools\Gauge">
-      <UniqueIdentifier>{f6a37536-7ba5-4ae3-9a0a-9d93bb861e69}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Application\Scene\BaseScene">
       <UniqueIdentifier>{2d2da1a7-c1f6-48d2-a207-b610dbebbaad}</UniqueIdentifier>
@@ -120,6 +105,36 @@
     </Filter>
     <Filter Include="Src\Application\TextureCache">
       <UniqueIdentifier>{5921333c-c76c-4154-93eb-744ad5306298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Boss">
+      <UniqueIdentifier>{c6594bdf-15b5-479e-8a40-7e6aec25d532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Enemy\BaseEnemy">
+      <UniqueIdentifier>{f07f15fa-dc90-439d-83ed-c4f1abe65787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Enemy\Enemies">
+      <UniqueIdentifier>{9bc01bf4-2b64-44c4-b557-a14cee1112e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Animtion">
+      <UniqueIdentifier>{28fc3c64-e873-4528-b63c-bcaa05d3512d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Animtion\ChargeAnim">
+      <UniqueIdentifier>{0cc973c7-bced-411e-9656-03e17dab575f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Tools">
+      <UniqueIdentifier>{82cbd4d3-8eba-4aff-ac2a-79c2630ede97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Tools\Button">
+      <UniqueIdentifier>{8ad89706-f9fc-4a2e-b31b-edd1f8db191e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Tools\Collision">
+      <UniqueIdentifier>{0e957f80-e087-4100-bbd2-6d0b8bea934d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Tools\RandEx">
+      <UniqueIdentifier>{ff3680da-0f20-47d0-ae44-e6f9e8dfd9e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Tools\Gauge">
+      <UniqueIdentifier>{f6a37536-7ba5-4ae3-9a0a-9d93bb861e69}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -279,9 +294,6 @@
     <ClInclude Include="Src\Application\Chara\Player\Player.h">
       <Filter>Src\Application\Chara\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Chara\Enemy\BaseEnemy.h">
-      <Filter>Src\Application\Chara\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\Chara\Enemy\EnemyManager.h">
       <Filter>Src\Application\Chara\Enemy</Filter>
     </ClInclude>
@@ -290,9 +302,6 @@
     </ClInclude>
     <ClInclude Include="Src\Application\Chara\BaseChara\BaseChara.h">
       <Filter>Src\Application\Chara\BaseChara</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Chara\Enemy\Enemy1.h">
-      <Filter>Src\Application\Chara\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Src\Application\Fireworks\BaseFireworks\BaseFireworks.h">
       <Filter>Src\Application\Fireworks\BaseFireworks</Filter>
@@ -305,6 +314,21 @@
     </ClInclude>
     <ClInclude Include="Src\Application\TextureCache\TextureCache.h">
       <Filter>Src\Application\TextureCache</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Boss\Boss.h">
+      <Filter>Src\Application\Chara\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy1.h">
+      <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.h">
+      <Filter>Src\Application\Chara\Enemy\BaseEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy2.h">
+      <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Animtion\ChargeAnim\ChargeAnim.h">
+      <Filter>Src\Application\Animtion\ChargeAnim</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -428,13 +452,7 @@
     <ClCompile Include="Src\Application\Chara\Player\Player.cpp">
       <Filter>Src\Application\Chara\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Chara\Enemy\BaseEnemy.cpp">
-      <Filter>Src\Application\Chara\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\EnemyManager.cpp">
-      <Filter>Src\Application\Chara\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Chara\Enemy\Enemy1.cpp">
       <Filter>Src\Application\Chara\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Fireworks\BaseFireworks\BaseFireworks.cpp">
@@ -445,6 +463,21 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Scene\GameOverScene\GameOverScene.cpp">
       <Filter>Src\Application\Scene\GameOverScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Boss\Boss.cpp">
+      <Filter>Src\Application\Chara\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy1.cpp">
+      <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.cpp">
+      <Filter>Src\Application\Chara\Enemy\BaseEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy2.cpp">
+      <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Animtion\ChargeAnim\ChargeAnim.cpp">
+      <Filter>Src\Application\Animtion\ChargeAnim</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

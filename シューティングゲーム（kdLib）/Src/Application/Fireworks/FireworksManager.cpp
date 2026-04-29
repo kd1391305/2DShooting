@@ -72,6 +72,9 @@ void FireworksManager::Shot(FireworksManager::Type name,Math::Vector2 pos, Math:
 		break;
 	case FireworksManager::Type::Circle_Line:
 		m_list.push_back(std::make_shared<Fireworks2>());
+		break; 
+	case FireworksManager::Type::Petal:
+		m_list.push_back(std::make_shared<Fireworks4>());
 		break;
 	}
 	m_list.back()->Init();

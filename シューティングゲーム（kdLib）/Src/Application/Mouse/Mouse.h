@@ -15,7 +15,7 @@ public:
 	POINT GetPos() { return m_pos; }
 	Math::Vector2 GetPosf() { return Math::Vector2(m_pos.x, m_pos.y); }
 
-	void ShowCursor(bool show)
+	void ShowCursorTex(bool show)
 	{
 		m_bShow = show;
 	}
@@ -30,6 +30,7 @@ private:
 	Mouse() 
 	{
 		ShowCursor(false);
+		m_bShow = true;
 	}
 public:
 	static Mouse& Instance()

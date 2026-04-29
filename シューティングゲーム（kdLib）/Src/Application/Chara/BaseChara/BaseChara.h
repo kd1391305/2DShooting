@@ -14,16 +14,20 @@ public:
 	//=============================================
 	// 純粋仮想関数
 	//=============================================
+	//初期化
+	virtual void Init() = 0;
 	//更新
 	virtual void Update(float deltaTime) = 0;
+	//描画
+	virtual void Draw() = 0;
 	//倒れたときの処理
 	virtual void Dead() = 0;
+private:
+	//解放
+	virtual void Release() = 0;
 	//=============================================
 	
-	//描画(EnemyとCharaで描画への引数が異なるため不要)
-	//virtual void Draw();
-	
-
+public:
 	//ダメージ
 	void Damage(float damage) {
 		m_hp -= damage;
@@ -48,6 +52,7 @@ protected:
 
 	Math::Vector2 m_pos;		//座標
 	Math::Vector2 m_move;		//移動量
+	float m_moveSpeed;			//移動スピード
 	Math::Vector2 m_radius;		//半径（当たり判定、画面端判定）
 	float m_scale;				//画像の拡縮
 	Math::Matrix m_mat;			//行列
@@ -55,5 +60,9 @@ protected:
 	float m_hp;					//体力
 	float m_hpMax;				//最大体力
 	float m_animCnt;			//アニメーションカウンター
+	float m_animCntMax;			//アニメーションの終わり（何コマか？）
 	float m_animSpeed;			//アニメーションスピード
+
+	float	m_shotWaitTimer;	//撃つまでのクールタイムを測る
+	float   m_shotWait;			//クールタイム
 };

@@ -182,3 +182,37 @@ private:
 };
 //===================================================
 
+//===================================================
+//‰Ô‰Î4i‰Ô•Ù‰æ‘œ‚¾‚¯‚Å•`‰æj
+//===================================================
+class Fireworks4 :public BaseFireworks
+{
+public:
+
+	Fireworks4() {}
+	~Fireworks4() { Release(); }
+
+	//‰Šú‰»
+	void Init()override;
+
+	//XV
+	void Update(float deltaTime)override;
+
+	//•`‰æ
+	void Draw()override;
+
+	//‰Ô‰Î‚ğ‘Å‚¿ã‚°‚é
+	void Shot(Math::Vector2 startPos, Math::Vector2 targetPos, float speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget = false);
+
+	//‰Ô‰Î‚ğ’e‚¯‚³‚¹‚é
+	void Explode()override;
+
+protected:
+
+	//‰ğ•ú‚·‚é
+	void Release()override;
+
+	std::vector<Particle> m_petal;		//‰Ô‚Ñ‚ç
+};
+//===================================================
+

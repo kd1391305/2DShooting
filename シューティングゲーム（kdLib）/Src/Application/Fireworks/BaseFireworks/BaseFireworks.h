@@ -144,6 +144,8 @@ protected:
 
 	Math::Vector2 m_beforeScale;			//花火が弾けるまでの拡縮
 	Math::Vector2 m_afterScale;				//花火が弾けた後の拡縮
+
+	bool m_bDead_ScreenOut = false;					//スクリーンアウトしたら消えるか？
 };
 
 

@@ -9,30 +9,43 @@
 #include"../../Scene/GameScene/GameScene.h"
 #include"../../Fireworks/Fireworks.h"
 #include"../../TextureCache/TextureCache.h"
+#include"../../Light/Light.h"
+#include"../../Animtion/ChargeAnim/ChargeAnim.h"
 
-//コンストラクタ
-Player::Player()
+//初期化
+void Player::Init()
 {
-	
-}
-
-void Player::Init(Game* g,FireworksManager* f)
-{
-	m_pGame = g;
-	m_pFireworksManager = f;
 	m_pos = { -300,50 };
 	m_move = { 0,0 };
+	m_moveSpeed = 300;
 	m_hpMax = 100;
 	m_hp = m_hpMax;
 	m_scale = 0.5f;
 	m_color = { 1,1,1,1 };
+
+	//無敵時間の初期化
 	m_bInvincible = false;
 	m_invincibleTime = 0;
 	m_sumDeltaTime = 0;
+	
+
+	m_shotWait = 0.4f;
+	m_chargeShotWait = 0.7f;		//チャージショットのクールタイム
+	//次の弾を撃つまでに一秒経ってから（シーン切り替え後すぐに弾を撃つのは少しおかしいから）
+	m_shotWaitTimer = 1.0f;
+
+	//アニメーションの初期化
 	m_animCnt = 0;
 	m_animSpeed = 4.0f;
+	m_animCntMax = 10;
 
-	
+	//プレイヤーの明るさを変化させる用
+	m_deg = 0;
+	m_deltaDeg = 20;
+	m_alphaMax = 0.2f;
+
+	m_gapPos_chargeBullet=50;		//チャージ弾との距離
+
 	//プレイヤーの大きさを求める（半径）
 	KdTexture* tex = TextureCache::Instance().Get("Texture/Player/Player0.png").get();
 	m_radius.x = tex->GetInfo().Width / 2.0f * m_scale;
@@ -43,7 +56,6 @@ void Player::Init(Game* g,FireworksManager* f)
 	Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scaleMat * transMat;
 }
-
 
 //更新
 void Player::Update(float deltaTime)
@@ -84,7 +96,7 @@ void Player::Update(float deltaTime)
 	if (m_hp > 0)
 	{
 		m_animCnt += deltaTime * m_animSpeed;
-		if (m_animCnt >= 10)
+		if (m_animCnt >= m_animCntMax)
 		{
 			m_animCnt = 0;
 		}
@@ -100,6 +112,13 @@ void Player::Update(float deltaTime)
 			m_pGame->GameOver();
 		}
 	}
+
+	//チャージアニメーションの更新
+	if (m_chargeAnim)
+		m_chargeAnim->Update(deltaTime);
+
+	m_deg += m_deltaDeg * deltaTime;
+	if (m_deg >= 180 || m_bInvincible)m_deg = 0;
 
 	//座標更新
 	m_pos += m_move * deltaTime;
@@ -145,10 +164,18 @@ void Player::Draw()
 	//生きているとき
 	if (m_hp > 0)
 	{
+		if (m_chargeAnim)
+			m_chargeAnim->Draw();
+
 		SHADER.m_spriteShader.SetMatrix(m_mat);
 		char path[100];
 		sprintf_s(path, sizeof(path), "Texture/Player/Player%d.png", (int)m_animCnt);
 		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get(path), m_color);
+		if (!m_bInvincible)
+		{
+			float alpha = 0.2f + fabs(sinf(DirectX::XMConvertToRadians(m_deg) * m_alphaMax));
+			Light::Instance().Draw(m_pos, m_radius, Math::Color{ 1.0f,1.0f,1.0f,alpha });
+		}
 	}
 	//倒れているとき
 	else
@@ -162,41 +189,50 @@ void Player::Action(float deltaTime)
 {
 	if (m_hp <= 0)return;
 
-	Math::Vector2 vec;
+	//移動方向を決める
+	{
+		Math::Vector2 vec;
+		//キー判定
+		if (KEY.IsHeld(VK_LEFT) || KEY.IsHeld('A'))
+		{
+			vec.x = -1;
+		}
+		else if (KEY.IsHeld(VK_RIGHT) || KEY.IsHeld('D'))
+		{
+			vec.x = 1;
+		}
+		else
+		{
+			m_move.x = 0;
+		}
 
-	if (KEY.IsHeld(VK_LEFT) || KEY.IsHeld('A'))
-	{
-		vec.x = -1;
-	}
-	else if (KEY.IsHeld(VK_RIGHT) || KEY.IsHeld('D'))
-	{
-		vec.x = 1;
-	}
-	else
-	{
-		m_move.x = 0;
-	}
+		if (KEY.IsHeld(VK_UP) || KEY.IsHeld('W'))
+		{
+			vec.y = 1;
+		}
+		else if (KEY.IsHeld(VK_DOWN) || KEY.IsHeld('S'))
+		{
+			vec.y = -1;
+		}
+		else
+		{
+			m_move.y = 0;
+		}
 
-	if (KEY.IsHeld(VK_UP) || KEY.IsHeld('W'))
-	{
-		vec.y = 1;
+		//移動量を決める
+		vec.Normalize();
+		m_move = vec * m_moveSpeed;
 	}
-	else if (KEY.IsHeld(VK_DOWN) || KEY.IsHeld('S'))
+	//チャージ中は移動量0.7f
+	if (m_chargeBullet)
 	{
-		vec.y =- 1;
+		m_move *= 0.7f;
 	}
-	else
-	{
-		m_move.y = 0;
-	}
-
-	vec.Normalize();
-	m_move = vec * m_moveSpeed;
 
 	//弾
-	m_shotWait -= deltaTime;
-	if (m_shotWait < 0)m_shotWait = 0;
-	if (m_shotWait == 0)
+	m_shotWaitTimer -= deltaTime;
+	if (m_shotWaitTimer < 0)m_shotWaitTimer = 0;
+	if (m_shotWaitTimer == 0)
 	{
 		//クリックしていないとき
 		if (!KEY.IsHeld(VK_LBUTTON))
@@ -205,28 +241,33 @@ void Player::Action(float deltaTime)
 			{
 				//速射弾を発射
 				Math::Vector2 startPos = { m_pos.x + m_radius.x, m_pos.y };
-				Math::Vector2 targetPos = { m_pos.x + 800 ,m_pos.y };
-				float speed = 400;
+				Math::Vector2 targetPos = { m_pos.x + SCREEN_WIDTH,m_pos.y };
 				Math::Vector2 beforeScale = { 0.7f,0.7f };
 				Math::Vector2 afterScale = { 0.4f,0.4f };
 				Math::Color color = { randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.3f,0.4f) };
-				m_pFireworksManager->Shot((FireworksManager::Type)1, startPos, targetPos, speed, beforeScale, afterScale, color);
+				m_pFireworksManager->Shot((FireworksManager::Type)1, startPos, targetPos, m_bulletSpeed, beforeScale, afterScale, color);
 				
-				//クールタイム（0.3秒）
-				m_shotWait = 0.3f;				
+				//クールタイム
+				m_shotWaitTimer = m_shotWait;				
 			}
 			else
 			{
 				//チャージしたものを発射
-				m_chargeBullet->SetSpeed(600);
-				float power = m_chargeTime / 2.0f;
+				m_chargeBullet->SetSpeed(m_chargeSpeedMax);
+				float power = (m_chargeTime / 2.0f) * 10;
+				
+				//パワーが５を超えたら
+				if (power > m_chargePowerMax)
+				{
+					power = m_chargePowerMax;
+				}
 				m_chargeBullet->SetPower(power);
 				m_chargeBullet->Shot();
-
-				//クールタイム（0.5秒）
-				m_shotWait = 0.5f;				
+				//クールタイム
+				m_shotWaitTimer = m_chargeShotWait;				
 				//プレイヤークラスではチャージした弾の情報は保有しない（花火管理クラスに譲渡）
 				m_chargeBullet = nullptr;
+				m_chargeAnim = nullptr;
 				
 			}
 		}
@@ -237,27 +278,25 @@ void Player::Action(float deltaTime)
 			if (m_chargeBullet)
 			{
 				m_chargeTime += deltaTime;
-				
-				m_chargeBullet->SetPos({ m_pos.x + m_radius.x * m_chargeBullet->GetBeforeScale().x, m_pos.y });
-				m_chargeBullet->SetTargetPos({ m_pos.x + 800, m_pos.y });
-				m_chargeBullet->SetBeforeScale(m_chargeBullet->GetBeforeScale() * (1.0 + deltaTime));
-				m_chargeBullet->SetAfterScale(m_chargeBullet->GetAfterScale() * (1.0 + deltaTime));
-				Math::Color color = m_chargeBullet->GetColor();
 
-				if (m_chargeTime < 1.1f)
+				m_chargeBullet->SetPos({ m_pos.x + m_gapPos_chargeBullet, m_pos.y });
+				m_chargeBullet->SetTargetPos({ m_pos.x + 800, m_pos.y });
+
+				if (m_chargeTime < m_chargeTimeMax)
 				{
+					m_chargeBullet->SetBeforeScale(m_chargeBullet->GetBeforeScale() * (1.0 + deltaTime));
+					m_chargeBullet->SetAfterScale(m_chargeBullet->GetAfterScale() * (1.0 + deltaTime));
+					//透明度が小さかったら、透明度を上げる
+					Math::Color color = m_chargeBullet->GetColor();
 					if (color.A() < 0.5f)
 					{
 						color.A(color.A() + deltaTime * 0.1f);
 					}
+					m_chargeBullet->SetColor(color);
 				}
-				else
-				{
-					color *= (0.2f - deltaTime);
-					color.A(color.A() - 0.05f);
-				}
-				m_chargeBullet->SetColor(color);
 
+				//チャージアニメーションの中心座標をプレイヤーの動きに追従させる
+				m_chargeAnim->SetPos({ m_pos.x + m_gapPos_chargeBullet, m_pos.y });
 			}
 			//なかったら新しく作る
 			else
@@ -276,6 +315,10 @@ void Player::Action(float deltaTime)
 
 				//花火管理クラスに情報を登録（チャージ中はプレイヤーが値を変更、管理クラスが描画、更新処理を行う）
 				m_pFireworksManager->Wait(m_chargeBullet);
+
+				m_chargeAnim = std::make_shared<ChargeAnim>();
+				m_chargeAnim->Init();
+				m_chargeAnim->Start({ m_pos.x + m_gapPos_chargeBullet, m_pos.y }, { 70,70 }, 200, 350);
 			}
 		}
 	}
@@ -325,7 +368,7 @@ void Player::DrawDeadAnim()
 			//ランダムで破壊する(描画させなくする)
 			if (m_bDraw[h][w])
 			{
-				if (HitGacha(m_deadTimer / 20.0f))
+				if (HitGacha(m_deadTimer / 5.0f))
 				{
 					m_bDraw[h][w] = false;
 				}

@@ -23,7 +23,7 @@ bool CollisionPlayer_EBullet(std::shared_ptr<Player> player, std::vector<EnemyBu
 bool CollisionFireworks_Enemy(std::vector<std::shared_ptr<BaseFireworks>>& playerList, std::vector<std::shared_ptr<BaseEnemy>> &enemyList, std::shared_ptr<Score>& score);
 
 //チャージ弾　と　敵
-bool CollisionChargeBullet_Enemy(std::vector<std::shared_ptr<Fireworks3>>& chargeBullet, std::vector<std::shared_ptr<BaseEnemy>>& enemyList, std::shared_ptr<Score>& score);
+bool CollisionChargeBullet_Enemy(std::vector<std::shared_ptr<Fireworks3>>& chargeBullet, std::vector<std::shared_ptr<BaseEnemy>>& enemyList,std::shared_ptr<Score>& score);
 
 //円形当たり判定
 bool IsCollision(Math::Vector2 pos1,float radius1, Math::Vector2 pos2,float radius2);

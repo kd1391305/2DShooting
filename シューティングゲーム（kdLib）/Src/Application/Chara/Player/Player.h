@@ -4,20 +4,21 @@
 class FireworksManager;
 class Fireworks3;
 class Game;
+class ChargeAnim;
 
 class Player :public BaseChara
 {
 public:
 
-	Player();
+	Player() {}
 
-	void Init(Game*g,FireworksManager* f);
+	void Init()override;
 
 	//更新
-	void Update(float deltaTime);
+	void Update(float deltaTime)override;
 
 	//描画
-	void Draw();
+	void Draw()override;
 
 	void Dead();
 
@@ -41,31 +42,45 @@ public:
 	float* GetHPMaxAddress() { return &m_hpMax; }
 	Math::Vector2* GetPosAddress() { return &m_pos; }
 
+	void SetGameInst(Game* set) { m_pGame = set; }
+	void SetFireworksManagerInst(FireworksManager* set) { m_pFireworksManager = set; }
+
 private:
-
-	Game* m_pGame;
-	FireworksManager* m_pFireworksManager;
-
-	const float m_moveSpeed = 100;
-
-	float m_shotWait;					//弾を撃つ待機時間
-
-	bool m_bInvincible;					//無敵かどうかのフラグ
-	float m_invincibleTime;				//無敵時間
-
-
-	float m_sumDeltaTime;				//経過した時間を足していく(無敵状態のときの透明度を切り替える処理で使用)
 
 	//倒れた時のアニメーション用の値を初期化
 	void InitDeadAnim();
 
 	//倒れた時のアニメーションを描画
 	void DrawDeadAnim();
+	
+	//解放
+	void Release()override {}
 
+	Game* m_pGame;
+	FireworksManager* m_pFireworksManager;
+
+	bool m_bInvincible;					//無敵かどうかのフラグ
+	float m_invincibleTime;				//無敵時間
+
+	float m_sumDeltaTime;				//経過した時間を足していく(無敵状態のときの透明度を切り替える処理で使用)
+
+	const float m_bulletSpeed = 400;				//弾速
 
 	std::shared_ptr<Fireworks3> m_chargeBullet;		//チャージ用の弾
-	float m_chargeTime;									//チャージ時間
+	float m_chargeTime;								//チャージ時間
+	const float m_chargeTimeMax = 1.0f;				//チャージ最大時間
+	const float m_chargeSpeedMax = 800.0f;			//チャージ最大スピード
+	const float m_chargePowerMax = 5;				//チャージ最大パワー（敵を倒せる量）
+	float m_chargeShotWait;							//チャージショットのクールタイム
+	std::shared_ptr<ChargeAnim> m_chargeAnim=nullptr;		//チャージショットのアニメーション
+	float m_gapPos_chargeBullet;					//チャージ弾との距離
 
-	float m_deadTimer;									//倒れ初めからの時間を測る
-	std::vector<std::vector<bool>> m_bDraw;				//プレイヤーのビットごとに描画するかどうかのフラグ
+	float m_deadTimer;								//倒れ初めからの時間を測る
+	std::vector<std::vector<bool>> m_bDraw;			//プレイヤーのビットごとに描画するかどうかのフラグ
+
+	//プレイヤーの明るさを変化させ用
+	float m_deg;			//アルファ値をサインカーブで表現する用
+	float m_deltaDeg;
+	float m_alphaMax;
+
 };

@@ -31,6 +31,7 @@ bool KdDirect3D::Init(HWND hWnd, int w, int h, bool deviceDebug, std::string& er
 	if (deviceDebug) {
 		// Direct3Dのデバッグを有効にする(すごく重いが細かいエラーがわかる)
 		creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
+		creationFlags |= D3D11_CREATE_DEVICE_BGRA_SUPPORT;						//変更後（DWriteCustome用）
 	}
 
 	D3D_FEATURE_LEVEL featureLevels[] = 
@@ -50,7 +51,7 @@ bool KdDirect3D::Init(HWND hWnd, int w, int h, bool deviceDebug, std::string& er
 				D3D_DRIVER_TYPE_HARDWARE,
 				nullptr,
 				//creationFlags,												//変更前（DWriteCustom用）
-				D3D11_CREATE_DEVICE_BGRA_SUPPORT,		//変更後（DWriteCustome用）
+				creationFlags,													//変更後（DWriteCustome用）
 				featureLevels,
 				_countof(featureLevels),
 				D3D11_SDK_VERSION,

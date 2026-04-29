@@ -1,6 +1,6 @@
 #pragma once
 
-#include"BaseEnemy.h"
+#include"../BaseEnemy/BaseEnemy.h"
 
 class Enemy1 :public BaseEnemy
 {
@@ -19,5 +19,5 @@ public:
 	void Spawn()override;
 private:
 	//敵の行動パターン通りに動く
-	void ActionPutturn()override;
+	void Action(float deltaTime)override;
 };

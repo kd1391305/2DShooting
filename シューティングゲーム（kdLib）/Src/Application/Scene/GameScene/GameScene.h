@@ -7,6 +7,7 @@ class Player;
 class EnemyManager;
 class BulletManager;
 class UI;
+class Boss;
 
 class Game :public BaseScene
 {
@@ -34,5 +35,6 @@ private:
 	std::shared_ptr<BulletManager> m_bulletManager=nullptr;		//íe
 	std::shared_ptr<Back> m_back = nullptr;						//îwåi
 	std::shared_ptr<UI> m_UI = nullptr;							//UI
+	std::shared_ptr<Boss>m_boss = nullptr;
 
 };

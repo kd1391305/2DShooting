@@ -48,10 +48,10 @@ void TitleScene::Update()
 	//背景の更新
 	if(m_back)m_back->Update(deltaTime);
 
-	//花火を打ち上げるランダムで
-	
+	//花火の更新
 	m_fireworksManager->Update(deltaTime);
 
+	//花火を打ち上げるランダムで
 	if (HitGacha(10 * deltaTime))
 	{
 		float startX = randRange(SCREEN_LEFT, SCREEN_RIGHT);
@@ -62,7 +62,8 @@ void TitleScene::Update()
 		Math::Vector2 afterScale = { randRange(0.5f,1.5f),randRange(0.5f,1.5f) };
 		Math::Color color = { randRange(0.0f,0.5f),randRange(0.0f,0.5f),randRange(0.0f,0.5f),randRange(0.3f,0.5f) };
 		int type = randRange(0,2);
-		m_fireworksManager->Shot((FireworksManager::Type)type, startPos, targetPos, speed, beforeScale, afterScale, color, true);
+		int kind = FireworksManager::Type::Kind;
+		m_fireworksManager->Shot((FireworksManager::Type)(rand() % kind), startPos, targetPos, speed, beforeScale, afterScale, color, true);
 	}
 
 	//スタートボタンの更新
@@ -73,8 +74,6 @@ void TitleScene::Update()
 		{
 			//ゲーム画面へ移行
 			SceneManager::Instance().ChangeState(new Game(m_back, m_fireworksManager));
-			m_back = nullptr;
-			m_fireworksManager = nullptr;
 		}
 	}
 }

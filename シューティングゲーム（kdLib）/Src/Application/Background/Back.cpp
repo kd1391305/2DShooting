@@ -2,9 +2,42 @@
 #include"../main.h"
 #include"../Light/Light.h"
 #include"../TextureCache/TextureCache.h"
+#include"../Tools/RandEx/RandEx.h"
+
+void LightParticle::Update(float deltaTime)
+{
+	//透明度が０かつ生存時間が０なら処理を行わない
+	if (m_color.A() < 0 && m_life < 0)return;
+
+	m_pos += m_move * deltaTime;
+
+	m_life -= deltaTime;
+
+	m_degree += m_deltaDegree * deltaTime;
+
+	if (m_life <= 0)
+	{
+		m_color.A(m_color.A() - 0.1f * deltaTime);
+	}
+	else
+	{
+		float alpha = m_alphaMin + sinf(DirectX::XMConvertToRadians(m_degree) * (m_alphaMax - m_alphaMin));
+		m_color.A(alpha);
+	}
+}
+
+void LightParticle::Draw()
+{
+	Light::Instance().Draw(m_pos, m_radius, m_color);
+}
+
+
 
 void Back::Init()
 {
+	//フェンスの横幅
+	m_fanceWidth = 110.5f;
+
 	//データの初期化
 	for (int i = 0; i < s_drawNum; i++)
 	{
@@ -15,19 +48,23 @@ void Back::Init()
 	}
 
 	//背景オブジェクトの初期化
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		m_lantern[i].m_pos = { 0,-300 };
+		m_lantern[i].m_pos = { SCREEN_LEFT + m_fanceWidth * 4 * i,-300 };
 		m_lantern[i].m_scale = 0.2f;
 		m_lantern[i].m_color = { 0.8f,0.8f,0.8f,0.5f };
 	}
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 13; i++)
 	{
-		m_fance[i].m_pos = {147.5f * i,-300};
-		m_fance[i].m_scale = 0.2f;
+		m_fance[i].m_pos = { SCREEN_LEFT + m_fanceWidth * i,-300 };
+		m_fance[i].m_scale = 1.0f;
 		m_fance[i].m_color = { 0.8f,0.8f,0.8f,0.5f };
 	}
 
+	for (int i = 0; i < 30; i++)
+	{
+		Respawn(&m_lightParticleList[i]);
+	}
 }
 
 //更新
@@ -53,13 +90,30 @@ void Back::Update(float deltaTime)
 	}
 	for (auto& l : m_lantern)
 	{
+		if (l.m_pos.x < SCREEN_LEFT - m_fanceWidth / 2.0f)
+		{
+			l.m_pos.x = SCREEN_LEFT + m_fanceWidth * 12;
+		}
 		l.Update(scrollX);
 	}
 
 
 	for (auto& f : m_fance)
 	{
+		if (f.m_pos.x < SCREEN_LEFT - m_fanceWidth / 2.0f)
+		{
+			f.m_pos.x = SCREEN_LEFT + m_fanceWidth * 12;
+		}
 		f.Update(scrollX);
+	}
+
+	for (auto& l : m_lightParticleList)
+	{
+		l.Update(deltaTime);
+		if (l.m_color.A() < 0 && l.m_life < 0)
+		{
+			Respawn(&l);
+		}
 	}
 
 }
@@ -78,18 +132,36 @@ void Back::Draw()
 	}
 
 	std::shared_ptr<KdTexture>fanceTex = TextureCache::Instance().Get("Texture/Fance.png");
-	std::shared_ptr<KdTexture>lanternTex = TextureCache::Instance().Get("Texture/Lantern.png");
 	for (auto& f : m_fance)
 	{
 		f.Draw(fanceTex);
 	}
 
-
+	std::shared_ptr<KdTexture>lanternTex = TextureCache::Instance().Get("Texture/Lantern.png");
 	for (auto& l : m_lantern)
 	{
 		l.Draw(lanternTex);
-		Light::Instance().Draw(l.m_pos, { 30, 30 },Math::Color{0.9f,0.9f,0.9f,0.01f});
+		Light::Instance().Draw(l.m_pos, { 25, 25 },Math::Color{0.9f,0.9f,0.9f,0.2f});
 	}
+
+	for (auto& l : m_lightParticleList)
+	{
+		l.Draw();
+	}
+}
+
+void Back::Respawn(LightParticle* light)
+{
+	light->m_pos = { randRange(SCREEN_LEFT,SCREEN_RIGHT),randRange(SCREEN_BOTTOM,SCREEN_TOP) };
+	light->m_move = { randRange(-5.0f,5.0f),randRange(-5.0f,5.0f) };
+	float r = randRange(1.5, 3);
+	light->m_radius = { r,r };
+	light->m_degree = randRange(0, 180);
+	light->m_deltaDegree = randRange(0.1f, 2.0f);
+	light->m_alphaMin = randRange(0.1f, 0.15f);
+	light->m_alphaMax = randRange(0.2f, 0.6f);
+	light->m_color = { 0.7f,0.7f,0.7f,randRange(light->m_alphaMin,light->m_alphaMax) };
+	light->m_life = randRange(5, 20);
 }
 
 
