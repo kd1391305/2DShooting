@@ -19,6 +19,8 @@ public:
 
 	//ƒXƒRƒA‚ğ’Ç‰Á‚·‚é
 	void Add(int addScore) { m_score += addScore; }
+
+	long Get() { return m_score; }
 	
 private:
 

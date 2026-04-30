@@ -159,11 +159,13 @@
     <ClInclude Include="..\Library\tinygltf\stb_image.h" />
     <ClInclude Include="..\Library\tinygltf\stb_image_write.h" />
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
+    <ClInclude Include="SoundCache.h" />
     <ClInclude Include="Src\Application\Animtion\ChargeAnim\ChargeAnim.h" />
     <ClInclude Include="Src\Application\Background\Back.h" />
-    <ClInclude Include="Src\Application\Bullet\BulletBase.h" />
+    <ClInclude Include="Src\Application\Bullet\BaseBullet\BaseBullet.h" />
     <ClInclude Include="Src\Application\Bullet\BulletManager.h" />
-    <ClInclude Include="Src\Application\Bullet\EnemyBullet.h" />
+    <ClInclude Include="Src\Application\Bullet\EnemyBullet\EnemyBullet.h" />
+    <ClInclude Include="Src\Application\Bullet\PlayerBullet\PlayerBullet.h" />
     <ClInclude Include="Src\Application\Chara\BaseChara\BaseChara.h" />
     <ClInclude Include="Src\Application\Chara\Boss\Boss.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.h" />
@@ -175,7 +177,7 @@
     <ClInclude Include="Src\Application\Fireworks\Fireworks.h" />
     <ClInclude Include="Src\Application\Fireworks\FireworksManager.h" />
     <ClInclude Include="Src\Application\Font\DirectWriteCustomFont.h" />
-    <ClInclude Include="Src\Application\Font\DrawString.h" />
+    <ClInclude Include="Src\Application\Font\DWriteCustom.h" />
     <ClInclude Include="Src\Application\Light\Light.h" />
     <ClInclude Include="Src\Application\Mouse\Mouse.h" />
     <ClInclude Include="Src\Application\Scene.h" />
@@ -220,9 +222,10 @@
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Application\Animtion\ChargeAnim\ChargeAnim.cpp" />
     <ClCompile Include="Src\Application\Background\Back.cpp" />
-    <ClCompile Include="Src\Application\Bullet\BulletBase.cpp" />
+    <ClCompile Include="Src\Application\Bullet\BaseBullet\BaseBullet.cpp" />
     <ClCompile Include="Src\Application\Bullet\BulletManager.cpp" />
-    <ClCompile Include="Src\Application\Bullet\EnemyBullet.cpp" />
+    <ClCompile Include="Src\Application\Bullet\EnemyBullet\EnemyBullet.cpp" />
+    <ClCompile Include="Src\Application\Bullet\PlayerBullet\PlayerBullet.cpp" />
     <ClCompile Include="Src\Application\Chara\Boss\Boss.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy1.cpp" />

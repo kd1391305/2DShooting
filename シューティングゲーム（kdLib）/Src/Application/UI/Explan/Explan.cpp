@@ -1,25 +1,25 @@
 #include"Explan.h"
 #include"../../TextureCache/TextureCache.h"
-#include"../../Font/DrawString.h"
+#include"../../Font/DWriteCustom.h"
 void Explan::Init(Math::Vector2* pPlayerPos)
 {
 	m_pPlayerPos = pPlayerPos;
 
 	m_timer = 0;
-	m_endTime = 6.0f;
+	m_endTime = 8.0f;
 
 	
 
-	m_deltaAlpha = 3;
+	m_deltaAlpha = 4;
 
 	m_color = { 0.9f,0.9f,0.9f,0.8f };
 
 
-	fontSize = 20;
+	fontSize = 15;
 
 	{
 		std::shared_ptr<KdTexture>tex = TextureCache::Instance().Get("Texture/UI/Back.png");
-		m_moveExplan.m_playerOffset = { -150,100 };
+		m_moveExplan.m_playerOffset = { -150,80 };
 		m_moveExplan.m_pos = *m_pPlayerPos + m_moveExplan.m_playerOffset;
 		m_chargeExplan.m_backPos =m_moveExplan.m_pos;
 		m_chargeExplan.m_backPos.y -= fontSize;
@@ -33,7 +33,7 @@ void Explan::Init(Math::Vector2* pPlayerPos)
 		m_moveExplan.m_backScale.x = m_moveExplan.m_backRadius.x / tex->GetRadius().x;
 		m_moveExplan.m_backScale.y = m_moveExplan.m_backRadius.y / tex->GetRadius().y;
 
-		m_chargeExplan.m_playerOffset = { -150,-100 };
+		m_chargeExplan.m_playerOffset = { -150,-80 };
 		m_chargeExplan.m_pos = *m_pPlayerPos + m_chargeExplan.m_playerOffset;
 		m_chargeExplan.m_backPos = m_chargeExplan.m_pos;
 		m_chargeExplan.m_backPos.y -= fontSize;
@@ -110,7 +110,7 @@ void Explan::Draw()
 	SHADER.m_spriteShader.SetMatrix(m_moveExplan.m_mat);
 	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/Key.png"), m_color);
 	Math::Vector2 pos;
-	pos.x = m_moveExplan.m_pos.x;
+	pos.x = m_moveExplan.m_pos.x - 20;
 	pos.y = m_moveExplan.m_pos.y - m_moveExplan.m_radius.y;
 	DWriteCustom::Instance().Draw("à⁄ìÆ", pos, fontSize);
 
@@ -122,7 +122,7 @@ void Explan::Draw()
 	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/Mouse.png"), m_color);
 
 	pos;
-	pos.x = m_chargeExplan.m_pos.x;
+	pos.x = m_chargeExplan.m_pos.x - 61;
 	pos.y = m_chargeExplan.m_pos.y - m_chargeExplan.m_radius.y;
 	DWriteCustom::Instance().Draw("í∑âüÇµ : É`ÉÉÅ[ÉW", pos, fontSize);
 }

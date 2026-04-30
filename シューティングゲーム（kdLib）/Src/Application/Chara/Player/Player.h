@@ -1,10 +1,10 @@
 #pragma once
 #include"../BaseChara/BaseChara.h"
 
-class FireworksManager;
-class Fireworks3;
 class Game;
 class ChargeAnim;
+class PlayerBullet;
+class BulletManager;
 
 class Player :public BaseChara
 {
@@ -42,9 +42,8 @@ public:
 	float* GetHPMaxAddress() { return &m_hpMax; }
 	Math::Vector2* GetPosAddress() { return &m_pos; }
 
-	void SetGameInst(Game* set) { m_pGame = set; }
-	void SetFireworksManagerInst(FireworksManager* set) { m_pFireworksManager = set; }
-
+	void SetGame(Game* set) { m_pGame = set; }
+	void SetBulletManager(std::shared_ptr<BulletManager>set) { m_pBulletManager = set; }
 private:
 
 	//倒れた時のアニメーション用の値を初期化
@@ -57,7 +56,8 @@ private:
 	void Release()override {}
 
 	Game* m_pGame;
-	FireworksManager* m_pFireworksManager;
+
+	std::shared_ptr<BulletManager> m_pBulletManager;
 
 	bool m_bInvincible;					//無敵かどうかのフラグ
 	float m_invincibleTime;				//無敵時間
@@ -66,14 +66,14 @@ private:
 
 	const float m_bulletSpeed = 400;				//弾速
 
-	std::shared_ptr<Fireworks3> m_chargeBullet;		//チャージ用の弾
+	std::shared_ptr<PlayerBullet> m_bullet;			//弾
 	float m_chargeTime;								//チャージ時間
 	const float m_chargeTimeMax = 1.0f;				//チャージ最大時間
 	const float m_chargeSpeedMax = 800.0f;			//チャージ最大スピード
 	const float m_chargePowerMax = 5;				//チャージ最大パワー（敵を倒せる量）
 	float m_chargeShotWait;							//チャージショットのクールタイム
 	std::shared_ptr<ChargeAnim> m_chargeAnim=nullptr;		//チャージショットのアニメーション
-	float m_gapPos_chargeBullet;					//チャージ弾との距離
+	Math::Vector2 m_shotPosOffset;						//チャージ弾との距離
 
 	float m_deadTimer;								//倒れ初めからの時間を測る
 	std::vector<std::vector<bool>> m_bDraw;			//プレイヤーのビットごとに描画するかどうかのフラグ
@@ -82,5 +82,4 @@ private:
 	float m_deg;			//アルファ値をサインカーブで表現する用
 	float m_deltaDeg;
 	float m_alphaMax;
-
 };

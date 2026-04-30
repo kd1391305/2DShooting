@@ -13,9 +13,11 @@
 #include"../../Chara/Enemy/BaseEnemy/BaseEnemy.h"
 #include"../SceneManager.h"
 #include"../GameOverScene/GameOverScene.h"
-#include"../../Font/DrawString.h"
+#include"../../Font/DWriteCustom.h"
 #include"../../Mouse/Mouse.h"
 #include"../../Chara/Boss/Boss.h"
+#include"../../main.h"
+#include"../../UI/Score/Score.h"
 
 //コンストラクタ
 Game::Game(std::shared_ptr<Back> back, std::shared_ptr<FireworksManager> fireworksManager)
@@ -27,7 +29,6 @@ Game::Game(std::shared_ptr<Back> back, std::shared_ptr<FireworksManager> firewor
 	m_enemyManager = std::make_shared<EnemyManager>();
 	m_bulletManager = std::make_shared<BulletManager>();
 	m_UI = std::make_shared<UI>();
-	m_boss = std::make_shared<Boss>();
 
 	BaseEnemy::SetBulletManager(m_bulletManager.get());
 	BaseEnemy::SetPlayerPos(m_player->GetPosAddress());
@@ -38,17 +39,12 @@ Game::Game(std::shared_ptr<Back> back, std::shared_ptr<FireworksManager> firewor
 void Game::Init()
 {
 	//プレイヤーの初期化
-	m_player->SetGameInst(this);
-	m_player->SetFireworksManagerInst(m_fireworksManager.get());
+	m_player->SetGame(this);
+	m_player->SetBulletManager(m_bulletManager);
 	m_player->Init();
 
 	//UIの初期化
 	m_UI->Init(m_player.get());
-
-	//ボスの初期化
-	Boss::SetBulletManager(m_bulletManager);
-	m_boss->Init();
-	m_boss->Spawn({ SCREEN_RIGHT,0 }, { -10,0 });
 
 	//タイマークラスをリセット
 	Timer::Instance().Reset();
@@ -69,11 +65,8 @@ void Game::Update()
 	//プレイヤー　と　敵の弾
 	CollisionPlayer_EBullet(m_player, m_bulletManager->GetEnemyList());
 
-	//プレイヤーの弾　と　敵
-	CollisionFireworks_Enemy(m_fireworksManager->GetList(), m_enemyManager->GetEnemyList(), m_UI->GetScoreInst());
-
-	//プレイヤーのチャージ弾
-	CollisionChargeBullet_Enemy(m_fireworksManager->GetChargeBullet(), m_enemyManager->GetEnemyList(), m_UI->GetScoreInst());
+	//プレイヤの弾　と　敵
+	CollisionPlayerBullet_Enemy(m_bulletManager->GetPlayerList(), m_enemyManager->GetEnemyList(), m_fireworksManager->GetList(), m_UI->GetScoreInst());
 
 	//背景の更新
 	m_back->Update(deltaTime);
@@ -84,8 +77,22 @@ void Game::Update()
 	//すべての敵の更新
 	m_enemyManager->Update(deltaTime);
 
-	if(m_boss)m_boss->Update(deltaTime);
-
+	//ボスの更新
+	if (m_boss)
+	{
+		m_boss->Update(deltaTime);
+	}
+	else
+	{
+		//ボスの出現条件
+		if (m_UI->GetScoreInst()->Get() > 10000)
+		{
+			//ボス出現
+			m_boss = std::make_shared<Boss>(m_bulletManager, m_player->GetPosAddress());
+			m_boss->Init();
+			m_boss->Spawn({ SCREEN_RIGHT * m_boss->GetRadius().x , 0 }, { -50,0 });
+		}
+	}
 	//全ての弾の更新
 	m_bulletManager->Update(deltaTime);
 

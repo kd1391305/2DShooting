@@ -20,6 +20,8 @@ public:
 
 	std::shared_ptr<Score>& GetScoreInst() { return m_score; }
 
+	
+
 private:
 
 	std::shared_ptr<Score> m_score;

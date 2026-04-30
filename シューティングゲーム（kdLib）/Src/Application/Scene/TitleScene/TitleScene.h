@@ -3,7 +3,7 @@
 
 class Back;
 class FireworksManager;
-class Button;
+class ButtonEx;
 
 class TitleScene :public BaseScene
 {
@@ -19,7 +19,7 @@ private:
 
 	void Release();
 
-	std::shared_ptr<Button> m_start = nullptr;
+	std::shared_ptr<ButtonEx> m_start = nullptr;
 
 	std::shared_ptr<Back> m_back = nullptr;
 
@@ -27,7 +27,6 @@ private:
 
 
 	//ƒ^ƒCƒgƒ‹–¼‚Ì‰æ‘œ
-	KdTexture m_nameTex;
 	Math::Vector2 m_namePos;
 	Math::Matrix m_nameMat;
 };

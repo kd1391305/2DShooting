@@ -9,7 +9,7 @@
 
 #include <d2d1.h>						// Direct2D
 #include <DWrite.h>						// DirectWrite
-//#include <D3DX10math.h>					// 数学系ライブラリ
+//#include <D3DX10math.h>				// 数学系ライブラリ
 
 #pragma warning(pop)
 
@@ -26,17 +26,14 @@ class CustomFontCollectionLoader;
 
 //※注意※（角谷より）
 //フォントを追加する際にフォント名が正しくロードできているかを確認すること！
-// FontNameListのサイズがロードファイル数と一致しているかを確認。（なぜか、バグるフォントファイルがあるので注意）
 //正しくロードできていないと切り替えられるフォント数が減ったり、一つのフォントでしか描画できなくなる
 
 namespace FontList
 {
 	const std::wstring FontPath[] =
 	{
-		/*L"Font\\craftmincho.otf",
-		L"Font\\851MkPOP_101.ttf",
-		L"Font\\WDXLLubrifontJPN-Regular.ttf",*/
-		L"Fon\\KouzanMouhituFontOTF.ttf"
+		L"Font\\KleeOne-SemiBold.ttf",
+		L"Font\\Orbitron-Medium.ttf"
 	};
 }
 
@@ -44,10 +41,8 @@ namespace FontList
 // ※（DWriteCustom.hのChangeFont()）で使用する
 enum FontName
 {
-	craftmincho,
-	_851MkPOP,			//数字からフォント名が始まるため「＿」を付けてエラーが出ないようにしている
-	WDXLLubrifontJPN_Regular,
-	KouzanMouhituFontOTF
+	KleeOne,
+	Orbitron,
 };
 
 

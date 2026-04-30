@@ -1,6 +1,6 @@
 #include"ResultScene.h"	
 #include"../SceneManager.h"
-#include"../../Font/DrawString.h"
+#include"../../Font/DWriteCustom.h"
 #include"../TitleScene/TitleScene.h"
 #include"../../Fireworks/FireworksManager.h"
 

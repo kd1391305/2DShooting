@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include"Scene/SceneManager.h"
 #include"Scene/TitleScene/TitleScene.h"
-#include"Font/DrawString.h"
+#include"Font/DWriteCustom.h"
 #include"Mouse/Mouse.h"
 #include"Key/KeyManager.h"
 #include"Timer/Timer.h"
@@ -36,7 +36,7 @@ void Scene::Release()
 
 void Scene::ImGuiUpdate()
 {
-	//return;
+	return;
 
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_Once);

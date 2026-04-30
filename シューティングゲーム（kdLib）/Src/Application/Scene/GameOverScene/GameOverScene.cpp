@@ -4,6 +4,8 @@
 #include"../../Fireworks/FireworksManager.h"
 #include"../../Bullet/BulletManager.h"
 #include"../../Background/Back.h"
+#include"../../Font/DWriteCustom.h"
+#include"../../main.h"
 
 GameOverScene::GameOverScene(std::shared_ptr<Player> player,
 	std::shared_ptr<EnemyManager> enemy,
@@ -39,6 +41,9 @@ void GameOverScene::Draw()
 
 	SHADER.m_spriteShader.ClearMatrix();
 	SHADER.m_spriteShader.DrawBox(0, 0, SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, &Math::Color{ 0,0,0,0.3f }, true);
+
+	DWriteCustom::Instance().Draw("リトライ", {});
+	DWriteCustom::Instance().Draw("タイトルへ",Math::Vector2{0, -200 });
 }
 
 void GameOverScene::Release()

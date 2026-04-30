@@ -13,14 +13,17 @@ public:
 	Button(Math::Vector2 pos,Math::Vector2 radius,Math::Color color,Math::Color selectingColor) :
 		m_pos(pos), m_radius(radius), m_color(color),m_selectColor(selectingColor), m_bSelect(false),m_selectScale(1.2f,1.2f)
 	{
+		m_scale = { 1, 1 };
 		m_mat = Math::Matrix::CreateTranslation(0, 0, 0);
 	}
 
+	virtual ~Button() {}
+
 	//更新
-	void Update();
+	virtual void Update();
 
 	//描画
-	void Draw();
+	virtual void Draw();
 
 	//今選択されているか？
 	bool IsSelect() { return m_bSelect; }
@@ -41,7 +44,21 @@ protected:
 	Math::Vector2 m_radius;			//半径
 	Math::Color m_color;					//色（通常）
 	Math::Color m_selectColor;		//選択時の色
+	Math::Vector2 m_scale;					//通常時の拡縮
 	Math::Vector2 m_selectScale;			//選択時の拡縮
 	Math::Matrix m_mat;					//行列
 	bool m_bSelect;							//選択中フラグ
+};
+
+class ButtonEx :public Button
+{
+public:
+
+	void SetTex(std::string path);
+
+	void Draw()override;
+
+private:
+
+	std::string m_texPath;
 };

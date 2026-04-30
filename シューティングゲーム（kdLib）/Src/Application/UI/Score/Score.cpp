@@ -1,5 +1,5 @@
 #include"Score.h"
-#include"../../Font/DrawString.h"
+#include"../../Font/DWriteCustom.h"
 
 //デストラクタ
 Score::~Score()
@@ -22,21 +22,20 @@ void Score::Draw()
 	const float tempFontSize = DWriteCustom::Instance().GetFontSize();
 	DWriteCustom::Instance().SetFontSize(20);
 
+	DWriteCustom::Instance().Draw("      Score :", { -350,330 });
+	DWriteCustom::Instance().Draw("HighScore :", { -350,300 });
 
-	//現在のスコアを描画する
+	//現在のスコアを描画
 	char score[100];
-	sprintf_s(score, sizeof(score), "     Score : %.8d", m_score);
-	DWriteCustom::Instance().Draw(
-		score,						//描画するスコア文字列 
-		{ -347,330 });			//描画位置
+	sprintf_s(score, sizeof(score), "%.8d", m_score);
+	DWriteCustom::Instance().Draw(score, { -230,330 });
 
 	//ハイスコアを描画する
 	char highScore[100];
-	sprintf_s(highScore, sizeof(highScore), "HighScore : %.8d", m_highScore);
-	DWriteCustom::Instance().Draw(
-		highScore,				//描画するスコア文字列 
-		{-350,300});			//描画位置
+	sprintf_s(highScore, sizeof(highScore), "%.8d", m_highScore);
+	DWriteCustom::Instance().Draw(highScore, { -230,300 });
 
+	//フォントを元に戻す
 	DWriteCustom::Instance().SetFontSize(tempFontSize);
 }
 

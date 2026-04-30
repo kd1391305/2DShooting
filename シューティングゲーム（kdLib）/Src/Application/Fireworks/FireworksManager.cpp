@@ -1,5 +1,5 @@
 #include"FireworksManager.h"
-#include"../Font/DrawString.h"
+#include"../Font/DWriteCustom.h"
 #include"Fireworks.h"
 
 //更新
@@ -19,21 +19,6 @@ void FireworksManager::Update(float deltaTime)
 			m_list.erase(m_list.begin() + i);
 		}
 	}
-
-	//チャージ弾
-	for (int i = m_chargeBullet.size() - 1; i >= 0; i--)
-	{
-		//チャージ中でなかったら
-		if (!m_chargeBullet[i]->GetChargeFlg())
-		{
-			m_chargeBullet[i]->Update(deltaTime);
-		}
-		//非活性状態だったら
-		if (!m_chargeBullet[i]->GetActiveFlg())
-		{
-			m_chargeBullet.erase(m_chargeBullet.begin() + i);
-		}
-	}
 }
 
 //描画
@@ -47,14 +32,6 @@ void FireworksManager::Draw()
 		if (f->IsActive())
 		{
 			f->Draw();
-		}
-	}
-
-	for (auto& c : m_chargeBullet)
-	{
-		if (c->GetActiveFlg())
-		{
-			c->Draw();
 		}
 	}
 
@@ -79,11 +56,6 @@ void FireworksManager::Shot(FireworksManager::Type name,Math::Vector2 pos, Math:
 	}
 	m_list.back()->Init();
 	m_list.back()->Shot(pos, targetPos, speed, beforeScale, afterScale, color, bTarget);
-}
-
-void FireworksManager::Wait(std::shared_ptr<Fireworks3> fireworks)
-{
-	m_chargeBullet.push_back(fireworks);
 }
 
 //初期化（１回しか呼ばれない）

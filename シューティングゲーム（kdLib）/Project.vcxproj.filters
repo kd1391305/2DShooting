@@ -139,6 +139,18 @@
     <Filter Include="Src\Application\UI\Explan">
       <UniqueIdentifier>{f6a7c8a5-a557-43b1-95cc-92e26e1db131}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Bullet\PlayerBullet">
+      <UniqueIdentifier>{45839e13-415e-4ecd-a8be-196f9347d225}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Bullet\BaseBullet">
+      <UniqueIdentifier>{4016b437-5ba2-484e-9299-acd38b365581}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Bullet\EnemyBullet">
+      <UniqueIdentifier>{c1b2d46b-64ee-4ec7-b0a6-8bcc347a5624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\SoundCache">
+      <UniqueIdentifier>{97d3196c-d02d-4f6d-b12d-506835df07e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -258,7 +270,7 @@
     <ClInclude Include="Src\Application\Font\DirectWriteCustomFont.h">
       <Filter>Src\Application\Font</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Font\DrawString.h">
+    <ClInclude Include="Src\Application\Font\DWriteCustom.h">
       <Filter>Src\Application\Font</Filter>
     </ClInclude>
     <ClInclude Include="Src\Application\Tools\Button\Button.h">
@@ -284,15 +296,6 @@
     </ClInclude>
     <ClInclude Include="Src\Application\Scene\TitleScene\TitleScene.h">
       <Filter>Src\Application\Scene\TitleScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Bullet\BulletBase.h">
-      <Filter>Src\Application\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Bullet\BulletManager.h">
-      <Filter>Src\Application\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Bullet\EnemyBullet.h">
-      <Filter>Src\Application\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="Src\Application\Chara\Player\Player.h">
       <Filter>Src\Application\Chara\Player</Filter>
@@ -335,6 +338,21 @@
     </ClInclude>
     <ClInclude Include="Src\Application\UI\Explan\Explan.h">
       <Filter>Src\Application\UI\Explan</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Bullet\PlayerBullet\PlayerBullet.h">
+      <Filter>Src\Application\Bullet\PlayerBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Bullet\BaseBullet\BaseBullet.h">
+      <Filter>Src\Application\Bullet\BaseBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Bullet\EnemyBullet\EnemyBullet.h">
+      <Filter>Src\Application\Bullet\EnemyBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Bullet\BulletManager.h">
+      <Filter>Src\Application\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundCache.h">
+      <Filter>Src\Application\SoundCache</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -446,15 +464,6 @@
     <ClCompile Include="Src\Application\Scene\TitleScene\TitleScene.cpp">
       <Filter>Src\Application\Scene\TitleScene</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Bullet\BulletBase.cpp">
-      <Filter>Src\Application\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Bullet\BulletManager.cpp">
-      <Filter>Src\Application\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Bullet\EnemyBullet.cpp">
-      <Filter>Src\Application\Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Chara\Player\Player.cpp">
       <Filter>Src\Application\Chara\Player</Filter>
     </ClCompile>
@@ -487,6 +496,18 @@
     </ClCompile>
     <ClCompile Include="Src\Application\UI\Explan\Explan.cpp">
       <Filter>Src\Application\UI\Explan</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Bullet\PlayerBullet\PlayerBullet.cpp">
+      <Filter>Src\Application\Bullet\PlayerBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Bullet\BaseBullet\BaseBullet.cpp">
+      <Filter>Src\Application\Bullet\BaseBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Bullet\EnemyBullet\EnemyBullet.cpp">
+      <Filter>Src\Application\Bullet\EnemyBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Bullet\BulletManager.cpp">
+      <Filter>Src\Application\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

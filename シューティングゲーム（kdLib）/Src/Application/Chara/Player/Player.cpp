@@ -1,9 +1,8 @@
 #include"Player.h"
-#include"../../Font/DrawString.h"
+#include"../../Font/DWriteCustom.h"
 #include"../../Bullet/BulletManager.h"
 #include"../../Key/KeyManager.h"
 #include"../../Timer/Timer.h"
-#include"../../Fireworks/FireworksManager.h"
 #include"../../Mouse/Mouse.h"
 #include"../../Tools/RandEx/RandEx.h"
 #include"../../Scene/GameScene/GameScene.h"
@@ -11,6 +10,8 @@
 #include"../../TextureCache/TextureCache.h"
 #include"../../Light/Light.h"
 #include"../../Animtion/ChargeAnim/ChargeAnim.h"
+#include"../../main.h"
+#include"../../Bullet/PlayerBullet/PlayerBullet.h"
 
 //初期化
 void Player::Init()
@@ -27,7 +28,6 @@ void Player::Init()
 	m_bInvincible = false;
 	m_invincibleTime = 0;
 	m_sumDeltaTime = 0;
-	
 
 	m_shotWait = 0.4f;
 	m_chargeShotWait = 0.7f;		//チャージショットのクールタイム
@@ -44,7 +44,7 @@ void Player::Init()
 	m_deltaDeg = 20;
 	m_alphaMax = 0.2f;
 
-	m_gapPos_chargeBullet=50;		//チャージ弾との距離
+	m_shotPosOffset = { 50,0 };		//チャージ弾との距離
 
 	//プレイヤーの大きさを求める（半径）
 	KdTexture* tex = TextureCache::Instance().Get("Texture/Player/Player0.png").get();
@@ -148,10 +148,6 @@ void Player::Update(float deltaTime)
 		m_pos.y = SCREEN_BOTTOM + m_radius.y;
 	}
 
-
-	////減速処理
-	//m_move *= 1.0f - (4.0f * deltaTime);		//2.0の値はちょうどよい減速率にするため(毎フレーム0.98くらい？になりそう)
-
 	//行列作成
 	Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale, m_scale, 0);
 	Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
@@ -173,7 +169,7 @@ void Player::Draw()
 		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get(path), m_color);
 		if (!m_bInvincible)
 		{
-			float alpha = 0.2f + fabs(sinf(DirectX::XMConvertToRadians(m_deg) * m_alphaMax));
+			float alpha = 0.2f + fabs(sinf(DirectX::XMConvertToRadians(m_deg)) * m_alphaMax);
 			Light::Instance().Draw(m_pos, m_radius, Math::Color{ 1.0f,1.0f,1.0f,alpha });
 		}
 	}
@@ -223,10 +219,10 @@ void Player::Action(float deltaTime)
 		vec.Normalize();
 		m_move = vec * m_moveSpeed;
 	}
-	//チャージ中は移動量0.7f
-	if (m_chargeBullet)
+	//チャージ中は移動量は20％に減少
+	if (m_bullet)
 	{
-		m_move *= 0.7f;
+		m_move *= 0.2f;
 	}
 
 	//弾
@@ -237,88 +233,92 @@ void Player::Action(float deltaTime)
 		//クリックしていないとき
 		if (!KEY.IsHeld(VK_LBUTTON))
 		{
-			if (!m_chargeBullet)
+			if (!m_bullet)
 			{
 				//速射弾を発射
-				Math::Vector2 startPos = { m_pos.x + m_radius.x, m_pos.y };
-				Math::Vector2 targetPos = { m_pos.x + SCREEN_WIDTH,m_pos.y };
-				Math::Vector2 beforeScale = { 0.7f,0.7f };
-				Math::Vector2 afterScale = { 0.4f,0.4f };
-				Math::Color color = { randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.3f,0.4f) };
-				m_pFireworksManager->Shot((FireworksManager::Type)1, startPos, targetPos, m_bulletSpeed, beforeScale, afterScale, color);
-				
+				m_bullet = std::make_shared<PlayerBullet>();
+				Math::Vector2 shotPos,shotSpeed; 
+				float power = 1;
+				shotPos = m_pos + m_shotPosOffset;
+				shotSpeed.x = m_bulletSpeed + (m_chargeSpeedMax - m_bulletSpeed)/m_chargePowerMax * power;
+				shotSpeed.y = 0;
+				m_bullet->SetPower(1);
+				m_bullet->Shot(shotPos, shotSpeed);
+				m_pBulletManager->Add(m_bullet);
+				m_bullet = nullptr;
+
 				//クールタイム
-				m_shotWaitTimer = m_shotWait;				
+				m_shotWaitTimer = m_shotWait;
 			}
+			//チャージしたものを発射
 			else
 			{
-				//チャージしたものを発射
-				m_chargeBullet->SetSpeed(m_chargeSpeedMax);
+				Math::Vector2 shotPos,shotSpeed;
+				//パワーを求める
 				float power = (m_chargeTime / 2.0f) * 10;
-				
-				//パワーが５を超えたら
 				if (power > m_chargePowerMax)
 				{
 					power = m_chargePowerMax;
 				}
-				m_chargeBullet->SetPower(power);
-				m_chargeBullet->Shot();
+				m_bullet->SetPower(power);
+				
+				shotPos = { m_pos.x + m_radius.x, m_pos.y };
+				shotSpeed.x = m_bulletSpeed + (m_chargeSpeedMax - m_bulletSpeed) / m_chargePowerMax * power;
+				shotSpeed.y = 0;
+				
+				//弾を撃つ
+				m_bullet->Shot(shotPos, shotSpeed);
+
+				//アニメーションの座標も更新
+				m_chargeAnim->SetPos(shotPos);
+
 				//クールタイム
 				m_shotWaitTimer = m_chargeShotWait;				
-				//プレイヤークラスではチャージした弾の情報は保有しない（花火管理クラスに譲渡）
-				m_chargeBullet = nullptr;
+
+				//プレイヤークラスではチャージした弾の情報は保有しない
+				m_bullet = nullptr;
 				m_chargeAnim = nullptr;
-				
 			}
 		}
 		//クリックしたとき
 		else
 		{
 			//チャージ中の弾があるなら
-			if (m_chargeBullet)
+			if (m_bullet)
 			{
 				m_chargeTime += deltaTime;
 
-				m_chargeBullet->SetPos({ m_pos.x + m_gapPos_chargeBullet, m_pos.y });
-				m_chargeBullet->SetTargetPos({ m_pos.x + 800, m_pos.y });
-
-				if (m_chargeTime < m_chargeTimeMax)
+				//座標更新
+				Math::Vector2 shotPos = m_pos + m_shotPosOffset;
+				m_bullet->SetPos(shotPos);
+				
+				//パワーを求める
+				float power = (m_chargeTime / 2.0f) * 10;
+				if (power > m_chargePowerMax)
 				{
-					m_chargeBullet->SetBeforeScale(m_chargeBullet->GetBeforeScale() * (1.0 + deltaTime));
-					m_chargeBullet->SetAfterScale(m_chargeBullet->GetAfterScale() * (1.0 + deltaTime));
-					//透明度が小さかったら、透明度を上げる
-					Math::Color color = m_chargeBullet->GetColor();
-					if (color.A() < 0.5f)
-					{
-						color.A(color.A() + deltaTime * 0.1f);
-					}
-					m_chargeBullet->SetColor(color);
+					power = m_chargePowerMax;
 				}
+				m_bullet->SetPower(power);
 
-				//チャージアニメーションの中心座標をプレイヤーの動きに追従させる
-				m_chargeAnim->SetPos({ m_pos.x + m_gapPos_chargeBullet, m_pos.y });
+				//アニメーションの座標も更新
+				m_chargeAnim->SetPos(shotPos);
+				
 			}
 			//なかったら新しく作る
 			else
 			{
-				m_chargeBullet = std::make_shared<Fireworks3>();
-				m_chargeBullet->Init();
+				//チャージ弾を作る
+				m_bullet = std::make_shared<PlayerBullet>();
+				m_bullet->SetPos(m_pos + m_shotPosOffset);
 
-				Math::Vector2 startPos = { m_pos.x + m_radius.x, m_pos.y };
-				Math::Vector2 targetPos = { m_pos.x + 800,m_pos.y };
-				float speed = 400;
-				Math::Vector2 beforeScale = { 0.7f,0.7f };
-				Math::Vector2 afterScale = { 0.4f,0.4f };
-				Math::Color color = { randRange(0.0f,0.5f),randRange(0.0f,0.5f),randRange(0.0f,0.5f),randRange(0.3f,0.5f) };
-				m_chargeBullet->StartCharge(startPos, targetPos, beforeScale, afterScale, color);
+				//チャージ時間を０にする
 				m_chargeTime = 0;
 
-				//花火管理クラスに情報を登録（チャージ中はプレイヤーが値を変更、管理クラスが描画、更新処理を行う）
-				m_pFireworksManager->Wait(m_chargeBullet);
-
+				//チャージ中のアニメーションを作る
 				m_chargeAnim = std::make_shared<ChargeAnim>();
 				m_chargeAnim->Init();
-				m_chargeAnim->Start({ m_pos.x + m_gapPos_chargeBullet, m_pos.y }, { 70,70 }, 200, 350);
+				m_chargeAnim->Start(m_pos + m_shotPosOffset, { 70,70 }, 200, 350);
+				m_pBulletManager->Add(m_bullet);
 			}
 		}
 	}

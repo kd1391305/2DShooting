@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseEnemy.h"
-#include"../../../Font/DrawString.h"
+#include"../../../Font/DWriteCustom.h"
 #include"../../../Tools/RandEx/RandEx.h"
 #include"../../../main.h"
 #include"../../../Bullet/BulletManager.h"
