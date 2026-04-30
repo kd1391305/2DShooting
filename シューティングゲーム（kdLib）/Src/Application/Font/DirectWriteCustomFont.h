@@ -33,7 +33,7 @@ namespace FontList
 	const std::wstring FontPath[] =
 	{
 		L"Font\\KleeOne-SemiBold.ttf",
-		L"Font\\Orbitron-Medium.ttf"
+		L"Font\\Orbitron-Regular.ttf"
 	};
 }
 

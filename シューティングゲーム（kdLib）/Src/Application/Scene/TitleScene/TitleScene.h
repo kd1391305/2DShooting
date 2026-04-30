@@ -29,4 +29,8 @@ private:
 	//タイトル名の画像
 	Math::Vector2 m_namePos;
 	Math::Matrix m_nameMat;
+
+	//花火を撃つクールタイム
+	float m_shotWait;
+	float m_shotWaitTimer;
 };

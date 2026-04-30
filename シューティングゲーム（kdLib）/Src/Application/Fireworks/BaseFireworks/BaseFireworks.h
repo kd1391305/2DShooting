@@ -22,9 +22,12 @@ struct Particle
 		m_pos += m_move * deltaTime;
 		//生存時間を減らす
 		m_life -= deltaTime;
-
+		if (m_life <= 0)
+		{
+			m_color.A(m_color.A() - 0.5 * deltaTime);
+		}
 		//生存時間が終了したか？
-		return m_life > 0;
+		return m_life > 0 || m_color.A() > 0;
 	}
 };
 
@@ -61,8 +64,12 @@ struct Particle2
 		m_mat = scale * rotation * trans;
 		//生存時間を減らす
 		m_life -= deltaTime;
+		if (m_life <= 0)
+		{
+			m_color.A(m_color.A() -0.5 * deltaTime);
+		}
 		//生存時間が終了したか？
-		return m_life > 0;
+		return m_life > 0 || m_color.A() > 0;
 	}
 };
 
@@ -146,7 +153,9 @@ protected:
 	Math::Vector2 m_beforeScale;			//花火が弾けるまでの拡縮
 	Math::Vector2 m_afterScale;				//花火が弾けた後の拡縮
 
-	bool m_bDead_ScreenOut = false;					//スクリーンアウトしたら消えるか？
+	bool m_bDead_ScreenOut = false;			//スクリーンアウトしたら消えるか？
+
+	const float m_deltaAlpha = 3;			// 1 / 3 = 0.33秒で完全消失
 };
 
 

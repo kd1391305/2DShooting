@@ -3,6 +3,7 @@
 #include"../Tools/Collision/Collision.h"
 #include"../main.h"
 #include"../TextureCache/TextureCache.h"
+#include"../Light/Light.h"
 
 //===================================================
 //花火１（円のみで描画）
@@ -530,7 +531,7 @@ void Fireworks4::Init()
 		m_tex->CreateRenderTarget(m_texRadius * 2, m_texRadius * 2);
 	}
 
-	while (m_petal.size() < 3)
+	while (m_petal.size() < 6)
 	{
 		m_petal.emplace_back();
 	}
@@ -615,13 +616,16 @@ void Fireworks4::Draw()
 	m_tex->ClearRenderTarget(Math::Color{0,0,0,0});
 	m_tex->SetRenderTarget();
 
-	//円形の描画
+	//花弁の描画
 	for (auto& p : m_petal)
 	{
-		Math::Matrix scale = Math::Matrix::CreateScale(0.5f, 0.5f, 0);
-		Math::Matrix trans = Math::Matrix::CreateTranslation(p.m_pos.x, p.m_pos.y, 0);
-		SHADER.m_spriteShader.SetMatrix(scale * trans);
-		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Petal.png"), m_color);
+		for (int i = 0; i < 8; i++)
+		{
+			Math::Matrix scale = Math::Matrix::CreateScale(0.2f, 0.2f, 0);
+			Math::Matrix trans = Math::Matrix::CreateTranslation(p.m_pos.x, p.m_pos.y, 0);
+			SHADER.m_spriteShader.SetMatrix(scale * trans);
+			SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Petal.png"), m_color);
+		}
 	}
 
 	//描画先をBuckBufferに戻す
@@ -639,12 +643,12 @@ void Fireworks4::Draw()
 	}
 	trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 
-	//360°を6個に割り、回転させて描画
-	for (int i = 0; i < 10; i++)
+	//360°を8個に割り、回転させて描画
+	for (int i = 0; i < 8; i++)
 	{
-		rotation = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(360 / 6 * i));
+		rotation = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(360 / 8 * i));
 		SHADER.m_spriteShader.SetMatrix(scale * rotation * trans);
-		SHADER.m_spriteShader.DrawTex_Src(m_tex.get());
+		SHADER.m_spriteShader.DrawTex_Src(m_tex);
 	}
 }
 
@@ -688,10 +692,11 @@ void Fireworks4::Shot(Math::Vector2 startPos, Math::Vector2 targetPos, float spe
 			randRange(-3.0f,3.0f)
 		};
 		//色も少し変える
-		float r = m_color.R() + randRange(-0.3f, 0.3f);
-		float g = m_color.G() + randRange(-0.3f, 0.3f);
-		float b = m_color.B() + randRange(-0.3f, 0.3f);
-		float a = m_color.A() + randRange(-0.3f, 0.3f);
+		float r = m_color.R() + randRange(-0.1f, 0.1f);
+		float g = m_color.G() + randRange(-0.1f, 0.1f);
+		float b = m_color.B() + randRange(-0.1f, 0.1f);
+		float a = m_color.A() + randRange(-0.1f, 0.1f);
+		if (a < 0.5f)a = 0.5f;
 		p.m_color = { r,g,b,a };
 
 		//寿命は途中（爆発するまでに）で尽きることの無いように

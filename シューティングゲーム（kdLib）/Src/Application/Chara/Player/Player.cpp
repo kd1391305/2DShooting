@@ -219,10 +219,10 @@ void Player::Action(float deltaTime)
 		vec.Normalize();
 		m_move = vec * m_moveSpeed;
 	}
-	//チャージ中は移動量は20％に減少
+	//チャージ中は移動量は40％に減少
 	if (m_bullet)
 	{
-		m_move *= 0.2f;
+		m_move *= 0.4f;
 	}
 
 	//弾

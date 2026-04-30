@@ -39,6 +39,9 @@ void TitleScene::Init()
 	{
 		m_fireworksManager = std::make_shared<FireworksManager>();
 	}
+
+	m_shotWaitTimer = 2;
+	m_shotWait = 6;
 }
 
 
@@ -53,21 +56,33 @@ void TitleScene::Update()
 	m_fireworksManager->Update(deltaTime);
 
 	//花火を打ち上げるランダムで
-	if (HitGacha(10 * deltaTime))
+	m_shotWaitTimer -= deltaTime;
+	if (m_shotWaitTimer <= 0)
 	{
-		//タイトル名と被らないようにタイトルの横にする
-		float startX = randRange(SCREEN_WIDTH / 4.0f, SCREEN_RIGHT);
-		if (rand() % 2)startX *= -1;
+		{
+			int shotNum = 10;
+			int noise = randRange(0, 5);
+			shotNum += noise;
+			for (int i = 0; i < shotNum; i++)
+			{
+				//タイトル名と被らないようにタイトルの横にする
+				float startX = randRange(SCREEN_WIDTH / 4.0f, SCREEN_RIGHT);
+				if (rand() % 2)startX *= -1;
 
-		Math::Vector2 startPos = {  startX,SCREEN_BOTTOM - 30 };
-		Math::Vector2 targetPos = { startX,randRange(100,SCREEN_TOP) };
-		float speed = 400;
-		Math::Vector2 beforeScale = { 0.7f,0.7f };
-		Math::Vector2 afterScale = { randRange(0.5f,1.5f),randRange(0.5f,1.5f) };
-		Math::Color color = { randRange(0.0f,0.5f),randRange(0.0f,0.5f),randRange(0.0f,0.5f),randRange(0.3f,0.5f) };
-		int type = randRange(0,2);
-		int kind = FireworksManager::Type::Kind;
-		m_fireworksManager->Shot((FireworksManager::Type)(rand() % kind), startPos, targetPos, speed, beforeScale, afterScale, color, true);
+				Math::Vector2 startPos = { startX,SCREEN_BOTTOM - 30 - randRange(0,200) };
+				Math::Vector2 targetPos = { startX,randRange(100,SCREEN_TOP) };
+				float speed = 400 + randRange(-100, 100);
+				Math::Vector2 beforeScale = { 0.7f,0.7f };
+				Math::Vector2 afterScale = { randRange(0.5f,1.5f),randRange(0.5f,1.5f) };
+				Math::Color color = { randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.4f,0.6f) };
+				m_fireworksManager->Shot((FireworksManager::Type)(rand() % FireworksManager::Type::Kind), 
+					startPos, targetPos, speed, beforeScale, afterScale, color, true);
+			}
+		}
+
+		//クールタイムを設ける
+		float noise = randRange(0, 3);
+		m_shotWaitTimer = m_shotWait + noise;
 	}
 
 	//スタートボタンの更新

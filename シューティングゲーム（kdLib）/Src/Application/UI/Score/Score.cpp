@@ -25,17 +25,47 @@ void Score::Draw()
 	DWriteCustom::Instance().Draw("      Score :", { -350,330 });
 	DWriteCustom::Instance().Draw("HighScore :", { -350,300 });
 
+
+	DWriteCustom::Instance().ChangeFont(FontName::Orbitron);
 	//現在のスコアを描画
-	char score[100];
-	sprintf_s(score, sizeof(score), "%.8d", m_score);
-	DWriteCustom::Instance().Draw(score, { -230,330 });
+	{
+		char score[100];
 
+		sprintf_s(score, sizeof(score), "%.8d", m_score);
+		for (int i = 0; i < 8; i++)
+		{
+			std::string digit;
+			digit = score[i];
+			if (score[i] == '1')
+			{
+				DWriteCustom::Instance().Draw(digit, { -230 + i * 18.0f + 4,330 - 5 });
+			}
+			else
+			{
+				DWriteCustom::Instance().Draw(digit, { -230 + i * 18.0f,330 - 5 });
+			}
+		}
+	}
 	//ハイスコアを描画する
-	char highScore[100];
-	sprintf_s(highScore, sizeof(highScore), "%.8d", m_highScore);
-	DWriteCustom::Instance().Draw(highScore, { -230,300 });
-
+	{
+		char highScore[100];
+		sprintf_s(highScore, sizeof(highScore), "%.8d", m_highScore);
+		for (int i = 0; i < 8; i++)
+		{
+			std::string digit;
+			digit = highScore[i];
+			if (highScore[i] == '1')
+			{
+				DWriteCustom::Instance().Draw(digit, { -230 + i * 18.0f + 4,300 - 5 });
+			}
+			else
+			{
+				DWriteCustom::Instance().Draw(digit, { -230 + i * 18.0f,300 - 5 });
+			}
+		}
+	}
 	//フォントを元に戻す
+	DWriteCustom::Instance().ChangeFont(FontName::KleeOne);
 	DWriteCustom::Instance().SetFontSize(tempFontSize);
 }
 
