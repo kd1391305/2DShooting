@@ -12,6 +12,7 @@ public:
 	{
 		Circle,
 		Circle_Line,
+		NewCircle,
 		Petal,
 		Kind
 	};

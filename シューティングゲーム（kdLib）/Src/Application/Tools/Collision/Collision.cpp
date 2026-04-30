@@ -103,6 +103,9 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 						case FireworksManager::Type::Circle_Line:
 							temp = std::make_shared<Fireworks2>();
 							break;
+						case FireworksManager::Type::NewCircle:
+							temp = std::make_shared<Fireworks3>();
+							break;
 						case FireworksManager::Type::Petal:
 							temp = std::make_shared<Fireworks4>();
 							break;
@@ -133,6 +136,9 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 								break;
 							case FireworksManager::Type::Circle_Line:
 								temp = std::make_shared<Fireworks2>();
+								break;
+							case FireworksManager::Type::NewCircle:
+								temp = std::make_shared<Fireworks3>();
 								break;
 							case FireworksManager::Type::Petal:
 								temp = std::make_shared<Fireworks4>();

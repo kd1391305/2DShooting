@@ -73,6 +73,46 @@ protected:
 //===================================================
 
 //===================================================
+//‰Ô‰Î3i‰Ô•Ù‰æ‘œ‚¾‚¯‚Å•`‰æj
+//===================================================
+class Fireworks3 :public BaseFireworks
+{
+public:
+
+	Fireworks3() {}
+	~Fireworks3() { Release(); }
+
+	//‰Šú‰»
+	void Init()override;
+
+	//XV
+	void Update(float deltaTime)override;
+
+	//•`‰æ
+	void Draw()override;
+
+	//‰Ô‰Î‚ğ‘Å‚¿ã‚°‚é
+	void Shot(Math::Vector2 startPos, Math::Vector2 targetPos, float speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget = false);
+
+	//‰Ô‰Î‚ğ’e‚¯‚³‚¹‚é
+	void Explode()override;
+
+protected:
+
+	//‰ğ•ú‚·‚é
+	void Release()override;
+
+	std::vector<Particle3> m_circleList;		//‰~
+
+	//‰æ‘œ‚ÌŠî–{“I‚ÈŠgki100*100‚Ì‰æ‘œ‚ğ6*6‚Ì‘å‚«‚³‚É‚·‚é‚½‚ßj
+	//‚±‚Ì’l‚Énoise‚Æ‚È‚éŠgk‚ğ‚©‚¯‚Ä‘å‚«‚³‚ğ’²®‚·‚é
+	const float m_baseScale = 0.06f;			//•`‰æ‚·‚é‰æ‘œ‚ÌŠî€Šgk
+	const float m_explodeSpeedMax = 150;		//’e‚¯‚é‘¬“x‚ÌÅ‘å’l
+	const float m_gravity = 70;					//d—Í
+};
+//===================================================
+
+//===================================================
 //‰Ô‰Î4i‰Ô•Ù‰æ‘œ‚¾‚¯‚Å•`‰æj
 //===================================================
 class Fireworks4 :public BaseFireworks

@@ -73,6 +73,43 @@ struct Particle2
 	}
 };
 
+//Fireworks3で使用する専用パーティクル
+struct Particle3
+{
+	Math::Vector2 m_pos;		//座標
+	Math::Vector2 m_move;		//移動量	
+	float m_scale;		//拡縮
+	Math::Color m_color;		//色	
+	float m_life;				//生存時間
+	Math::Matrix m_mat;			//行列
+
+	//更新
+	bool Update(float deltaTime, float baseScale)
+	{
+		//座標更新
+		m_pos += m_move * deltaTime;
+
+		//行列作成
+		Math::Matrix scale = Math::Matrix::CreateScale(m_scale * baseScale);
+		Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+		m_mat = scale * trans;
+		//生存時間を減らす
+		m_life -= deltaTime;
+		if (m_life <= 0)
+		{
+			m_color.A(m_color.A() - 0.5 * deltaTime);
+		}
+		//生存時間が終了したか？
+		return m_life > 0 || m_color.A() > 0;
+	}
+
+	void Draw(std::shared_ptr<KdTexture>tex)
+	{
+		SHADER.m_spriteShader.SetMatrix(m_mat);
+		SHADER.m_spriteShader.DrawTex_Src(tex, m_color);
+	}
+};
+
 //花火クラス
 class BaseFireworks
 {
