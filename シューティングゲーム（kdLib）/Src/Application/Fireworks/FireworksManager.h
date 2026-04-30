@@ -31,7 +31,8 @@ public:
 	void Draw();
 
 	//花火を撃つ
-	void Shot(FireworksManager::Type name,Math::Vector2 pos, Math::Vector2 targetPos, float  speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget = false);
+	void FireworksManager::Shot(FireworksManager::Type name, Math::Vector2& pos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color);
+
 
 	//プレイヤーが撃った花火配列を返す
 	std::vector<std::shared_ptr<BaseFireworks>>& GetList() { return m_list; }

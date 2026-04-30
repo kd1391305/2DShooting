@@ -39,7 +39,7 @@ void FireworksManager::Draw()
 }
 
 //花火を打ち上げる
-void FireworksManager::Shot(FireworksManager::Type name,Math::Vector2 pos, Math::Vector2 targetPos, float speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget)
+void FireworksManager::Shot(FireworksManager::Type name,Math::Vector2& pos, Math::Vector2& startMove, float beforeScale,float afterScale, Math::Color& color)
 {
 	//新しく花火オブジェクトを作成
 	switch (name)
@@ -58,7 +58,7 @@ void FireworksManager::Shot(FireworksManager::Type name,Math::Vector2 pos, Math:
 		break;
 	}
 	m_list.back()->Init();
-	m_list.back()->Shot(pos, targetPos, speed, beforeScale, afterScale, color, bTarget);
+	m_list.back()->Shot(pos, startMove, beforeScale, afterScale, color);
 }
 
 //初期化（１回しか呼ばれない）

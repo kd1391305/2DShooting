@@ -129,7 +129,7 @@ public:
 	virtual void Draw() = 0;
 
 	//花火を打ち上げる
-	virtual void Shot(Math::Vector2 startPos, Math::Vector2 targetPos, float speed, Math::Vector2 beforeScale, Math::Vector2 afterScale, Math::Color color, const bool bTarget = false) = 0;
+	virtual void Shot(Math::Vector2& startPos, Math::Vector2&startMove, float beforeScale, float afterScale, Math::Color& color) = 0;
 
 	//花火を弾けさせる
 	virtual void Explode() = 0;
@@ -140,59 +140,32 @@ public:
 	//花火が弾けたか？
 	bool IsExploded() { return m_bExploded; }
 
-	//ターゲット（弾ける予定地点）があるか？
-	bool IsTarget() { return m_bTarget; }
-
-	//座標を返す
-	Math::Vector2 GetPos() { return m_pos; }
-
-	//当たり判定用の半径を返す
-	float GetRadius() { return m_radius; }
-
-	void SetPos(Math::Vector2 set) { m_pos = set; }
-	void SetTargetPos(Math::Vector2 set) { m_targetPos = set; }
-	void SetBeforeScale(Math::Vector2 set) { m_beforeScale = set; }
-	void SetAfterScale(Math::Vector2 set) { m_afterScale = set; }
-	void SetColor(Math::Color set) { m_color = set; }
-	void SetSpeed(float set) { m_speed = set; }
-
-	Math::Vector2 GetTargetPos() { return m_targetPos; }
-	float GetSpeed() { return m_speed; }
-	Math::Vector2 GetBeforeScale() { return m_beforeScale; }
-	Math::Vector2 GetAfterScale() { return m_afterScale; }
-	Math::Color GetColor() { return m_color; }
-
 protected:
 
 	//解放する
-	virtual void Release() = 0;
+	virtual void Release() {};
 
 	//スクリーンアウト（画面外に出たか？）
 	bool IsScreenOut();
 
-	Math::Vector2 m_pos;					//座標
-	Math::Vector2 m_move;					//移動量
-	float m_speed;							//移動する際のスピード（１秒当たり）
-	Math::Color m_color;					//色
-	float m_radius;							//当たり判定用半径
+	Math::Vector2 m_pos;	//座標
+	Math::Vector2 m_move;	//移動量
+	Math::Color m_color;	//色
 
 	bool m_bExploded = false;				//弾けたか
 	bool m_bActive = false;					//活性化状態か
 
-	bool m_bTarget;							//ターゲットがあるか？（ターゲットの位置で爆発するか？）
-	Math::Vector2 m_targetPos;
-
 	//花火クラスはKdTextureに描画してからKdtextureをBuckbufferに描画する
 	//そのための変数
-	std::shared_ptr<KdTexture> m_tex;		//画像	
-	float m_texRadius;						//画像半径
-
-	Math::Vector2 m_beforeScale;			//花火が弾けるまでの拡縮
-	Math::Vector2 m_afterScale;				//花火が弾けた後の拡縮
+	std::shared_ptr< KdTexture> m_tex;		//画像	
+	float m_texRadius;		//画像半径
+	float m_beforeScale;	//花火が弾けるまでの拡縮
+	float m_afterScale;		//花火が弾けた後の拡縮
 
 	bool m_bDead_ScreenOut = false;			//スクリーンアウトしたら消えるか？
 
-	const float m_deltaAlpha = 3;			// 1 / 3 = 0.33秒で完全消失
+	const float m_explodeSpeedMax = 150;		//弾ける速度の最大値
+	const float m_gravity = 70;					//重力
 };
 
 

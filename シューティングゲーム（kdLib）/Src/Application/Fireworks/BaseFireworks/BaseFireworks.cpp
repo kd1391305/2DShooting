@@ -3,9 +3,9 @@
 
 bool BaseFireworks::IsScreenOut()
 {
-	float left = m_pos.x - m_radius;
-	float right = m_pos.x + m_radius;
-	float top = m_pos.y + m_radius;
-	float bottom = m_pos.y - m_radius;
+	float left = m_pos.x - 30;
+	float right = m_pos.x + 30;
+	float top = m_pos.y + 30;
+	float bottom = m_pos.y - 30;
 	return left < SCREEN_LEFT || right > SCREEN_RIGHT || top > SCREEN_TOP || bottom < SCREEN_BOTTOM;
 }

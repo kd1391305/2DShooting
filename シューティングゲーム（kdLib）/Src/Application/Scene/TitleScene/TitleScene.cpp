@@ -70,15 +70,15 @@ void TitleScene::Update()
 				if (rand() % 2)startX *= -1;
 
 				Math::Vector2 startPos = { startX,SCREEN_BOTTOM - 30 - randRange(0,200) };
-				Math::Vector2 targetPos = { startX,randRange(100,SCREEN_TOP) };
+				Math::Vector2 startMove = { 0,randRange(400,700) };
 				float speed = 400 + randRange(-100, 100);
-				Math::Vector2 beforeScale = { 0.7f,0.7f };
-				Math::Vector2 afterScale = { 0.7f,0.7f };
+				float beforeScale = 0.7f;
+				float afterScale = 0.7f;
 				Math::Color color = { randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.4f,0.6f) };
 				/*m_fireworksManager->Shot((FireworksManager::Type)(rand() % FireworksManager::Type::Kind), 
 					startPos, targetPos, speed, beforeScale, afterScale, color, true);*/
 				m_fireworksManager->Shot(FireworksManager::Type::NewCircle, 
-					startPos, targetPos, speed, beforeScale, afterScale, color, true);
+					startPos, startMove, beforeScale, afterScale, color);
 			}
 		}
 
