@@ -351,7 +351,7 @@
     <ClInclude Include="Src\Application\Bullet\BulletManager.h">
       <Filter>Src\Application\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="SoundCache.h">
+    <ClInclude Include="Src\Application\SoundCache\SoundCache.h">
       <Filter>Src\Application\SoundCache</Filter>
     </ClInclude>
   </ItemGroup>

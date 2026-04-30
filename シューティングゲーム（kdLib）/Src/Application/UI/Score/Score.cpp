@@ -30,7 +30,7 @@ void Score::Draw()
 	//現在のスコアを描画
 	{
 		char score[10];
-		sprintf_s(score, sizeof(score), "%.8d", m_score);
+		sprintf_s(score, sizeof(score), "%.8ld", m_score);
 		//一桁ずつ描画
 		for (int i = 0; i < 8; i++)
 		{
@@ -50,7 +50,7 @@ void Score::Draw()
 	//ハイスコアを描画する
 	{
 		char highScore[10];
-		sprintf_s(highScore, sizeof(highScore), "%.8d", m_highScore);
+		sprintf_s(highScore, sizeof(highScore), "%.8ld", m_highScore);
 		//一桁ずつ描画
 		for (int i = 0; i < 8; i++)
 		{

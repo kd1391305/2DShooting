@@ -11,6 +11,7 @@
 #include"../../Tools/Button/Button.h"
 #include"../../Tools/RandEx/RandEx.h"
 #include"../../TextureCache/TextureCache.h"
+#include"../../SoundCache/SoundCache.h"
 
 void TitleScene::Init()
 {
@@ -42,8 +43,12 @@ void TitleScene::Init()
 
 	m_shotWaitTimer = 2;
 	m_shotWait = 6;
-}
 
+	//BGM‚ð—¬‚·
+	std::shared_ptr<KdSoundInstance> temp = SoundCache::Instance().Get("Sound/BGM/Planetarium.wav");
+	temp->SetVolume(0.1f);
+	temp->Play(true);
+}
 
 void TitleScene::Update()
 {
@@ -70,15 +75,13 @@ void TitleScene::Update()
 				if (rand() % 2)startX *= -1;
 
 				Math::Vector2 startPos = { startX,SCREEN_BOTTOM - 30 - randRange(0,200) };
-				Math::Vector2 startMove = { 0,randRange(400,700) };
-				float speed = 400 + randRange(-100, 100);
-				float beforeScale = 0.7f;
-				float afterScale = 0.7f;
+				Math::Vector2 startMove = { 0,randRange(250,320) };
+				float beforeScale = randRange(0.7f, 1.3f);
+				float afterScale = randRange(0.7f, 1.3f);
 				Math::Color color = { randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.4f,0.6f) };
-				/*m_fireworksManager->Shot((FireworksManager::Type)(rand() % FireworksManager::Type::Kind), 
-					startPos, targetPos, speed, beforeScale, afterScale, color, true);*/
-				m_fireworksManager->Shot(FireworksManager::Type::NewCircle, 
+				m_fireworksManager->Shot((FireworksManager::Type)(rand() % FireworksManager::Type::Kind), 
 					startPos, startMove, beforeScale, afterScale, color);
+				
 			}
 		}
 

@@ -1,6 +1,7 @@
 #include"FireworksManager.h"
 #include"../Font/DWriteCustom.h"
 #include"Fireworks.h"
+#include"../SoundCache/SoundCache.h"
 
 //更新
 void FireworksManager::Update(float deltaTime)
@@ -59,6 +60,8 @@ void FireworksManager::Shot(FireworksManager::Type name,Math::Vector2& pos, Math
 	}
 	m_list.back()->Init();
 	m_list.back()->Shot(pos, startMove, beforeScale, afterScale, color);
+
+	SoundCache::Instance().Get("Sound/SE/Fireworks.wav")->Play();
 }
 
 //初期化（１回しか呼ばれない）

@@ -159,7 +159,6 @@
     <ClInclude Include="..\Library\tinygltf\stb_image.h" />
     <ClInclude Include="..\Library\tinygltf\stb_image_write.h" />
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
-    <ClInclude Include="SoundCache.h" />
     <ClInclude Include="Src\Application\Animtion\ChargeAnim\ChargeAnim.h" />
     <ClInclude Include="Src\Application\Background\Back.h" />
     <ClInclude Include="Src\Application\Bullet\BaseBullet\BaseBullet.h" />
@@ -188,6 +187,7 @@
     <ClInclude Include="Src\Application\Scene\ResultScene\ResultScene.h" />
     <ClInclude Include="Src\Application\Scene\SceneManager.h" />
     <ClInclude Include="Src\Application\Scene\TitleScene\TitleScene.h" />
+    <ClInclude Include="Src\Application\SoundCache\SoundCache.h" />
     <ClInclude Include="Src\Application\TextureCache\TextureCache.h" />
     <ClInclude Include="Src\Application\Timer\Timer.h" />
     <ClInclude Include="Src\Application\Tools\Button\Button.h" />
