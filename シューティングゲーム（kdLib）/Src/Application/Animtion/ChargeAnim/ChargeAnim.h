@@ -57,5 +57,5 @@ private:
 
 	float m_animTime;		//アニメーションが始まってからの時間
 	float m_animEndTime;	//アニメーション終了時間
-
+	bool m_chargeMaxFlg = false;
 };

@@ -6,6 +6,7 @@
 void ChargeParticle::Update(float deltaTime)
 {
 	m_pos += m_move * deltaTime;
+	m_life -= deltaTime;
 	Math::Matrix scale = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
 	Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scale * trans;
@@ -24,27 +25,29 @@ void ChargeAnim::Init()
 
 void ChargeAnim::Update(float deltaTime)
 {
-	Math::Matrix scaleMat, transMat;
-	std::shared_ptr<KdTexture> tex = TextureCache::Instance().Get("Texture/Particle.png");
-	float texWidth = tex->GetInfo().Width;
-	float texHeight = tex->GetInfo().Height;
-	float radian = DirectX::XMConvertToRadians(randRange(0, 360));
-	m_particleList.push_back(std::make_shared<ChargeParticle>());
-	m_particleList.back()->m_move.x = -cosf(radian) * m_moveSpeed;
-	m_particleList.back()->m_move.y = -sinf(radian) * m_moveSpeed;
-	m_particleList.back()->m_pos.x = m_centerPos.x + cosf(radian) * randRange(m_radius.x - 10, m_radius.y);
-	m_particleList.back()->m_pos.y = m_centerPos.y + sinf(radian) * randRange(m_radius.x - 10, m_radius.y);
-	m_particleList.back()->m_life = randRange(0.3f, 0.6f);
-	m_particleList.back()->m_color = { 1,1,1,1 };
-	float r = randRange(3, 6);
-	m_particleList.back()->m_radius = { r,r };
-	m_particleList.back()->m_scale.x = m_particleList.back()->m_radius.x / texWidth;
-	m_particleList.back()->m_scale.y = m_particleList.back()->m_radius.y / texHeight;
+	if (!m_chargeMaxFlg)
+	{
+		Math::Matrix scaleMat, transMat;
+		std::shared_ptr<KdTexture> tex = TextureCache::Instance().Get("Texture/Particle.png");
+		float texWidth = tex->GetInfo().Width;
+		float texHeight = tex->GetInfo().Height;
+		float radian = DirectX::XMConvertToRadians(randRange(0, 360));
+		m_particleList.push_back(std::make_shared<ChargeParticle>());
+		m_particleList.back()->m_move.x = -cosf(radian) * m_moveSpeed;
+		m_particleList.back()->m_move.y = -sinf(radian) * m_moveSpeed;
+		m_particleList.back()->m_pos.x = m_centerPos.x + cosf(radian) * randRange(m_radius.x - 10, m_radius.y);
+		m_particleList.back()->m_pos.y = m_centerPos.y + sinf(radian) * randRange(m_radius.x - 10, m_radius.y);
+		m_particleList.back()->m_life = randRange(0.3f, 0.6f);
+		m_particleList.back()->m_color = { 1,0.1f,01.f,1 };
+		float r = randRange(3, 6);
+		m_particleList.back()->m_radius = { r,r };
+		m_particleList.back()->m_scale.x = m_particleList.back()->m_radius.x / texWidth;
+		m_particleList.back()->m_scale.y = m_particleList.back()->m_radius.y / texHeight;
 
-	scaleMat = Math::Matrix::CreateScale(m_particleList.back()->m_scale.x, m_particleList.back()->m_scale.y, 0);
-	scaleMat = Math::Matrix::CreateTranslation(m_particleList.back()->m_pos.x, m_particleList.back()->m_pos.y, 0);
-	m_particleList.back()->m_mat = scaleMat * transMat;
-
+		scaleMat = Math::Matrix::CreateScale(m_particleList.back()->m_scale.x, m_particleList.back()->m_scale.y, 0);
+		scaleMat = Math::Matrix::CreateTranslation(m_particleList.back()->m_pos.x, m_particleList.back()->m_pos.y, 0);
+		m_particleList.back()->m_mat = scaleMat * transMat;
+	}
 	for (int i = m_particleList.size() - 1; i >= 0; i--)
 	{
 		m_particleList[i]->Update(deltaTime);
@@ -105,7 +108,12 @@ void ChargeAnim::Start(Math::Vector2 pos, Math::Vector2 radius,float moveSpeedMi
 
 void ChargeAnim::StartChargeMaxAnim()
 {
-
+	for (auto& p : m_particleList)
+	{
+		p->m_move *= 10;
+		p->m_life = randRange(0.1,0.15f);
+	}
+	m_chargeMaxFlg = true;
 }
 
 bool ChargeAnim::IsEnd()

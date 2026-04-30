@@ -8,7 +8,7 @@ public:
 		m_pos(0, 0),
 		m_move(0, 0),
 		m_bActive(false),
-		m_radius(0)
+		m_radius(16)
 	{
 	}
 
@@ -32,7 +32,7 @@ public:
 	bool IsActive() { return m_bActive; }
 
 	Math::Vector2 GetPos() { return m_pos; }
-	float GetRadius() { return m_radius; }
+	virtual float GetRadius() { return m_radius; }
 
 	void SetActive(bool set) { m_bActive = set; }
 protected:

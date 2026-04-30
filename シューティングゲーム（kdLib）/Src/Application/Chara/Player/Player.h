@@ -72,6 +72,7 @@ private:
 	const float m_chargeSpeedMax = 800.0f;			//チャージ最大スピード
 	const float m_chargePowerMax = 5;				//チャージ最大パワー（敵を倒せる量）
 	float m_chargeShotWait;							//チャージショットのクールタイム
+	bool m_bChargeMaxFlg;							//チャージマックスになったらtrue
 	std::shared_ptr<ChargeAnim> m_chargeAnim=nullptr;		//チャージショットのアニメーション
 	Math::Vector2 m_shotPosOffset;						//チャージ弾との距離
 

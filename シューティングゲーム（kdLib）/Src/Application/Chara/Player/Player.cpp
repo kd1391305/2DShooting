@@ -18,7 +18,7 @@ void Player::Init()
 {
 	m_pos = { -300,50 };
 	m_move = { 0,0 };
-	m_moveSpeed = 300;
+	m_moveSpeed = 500;
 	m_hpMax = 100;
 	m_hp = m_hpMax;
 	m_scale = 0.5f;
@@ -31,6 +31,7 @@ void Player::Init()
 
 	m_shotWait = 0.4f;
 	m_chargeShotWait = 0.7f;		//チャージショットのクールタイム
+	m_bChargeMaxFlg = false;
 	//次の弾を撃つまでに一秒経ってから（シーン切り替え後すぐに弾を撃つのは少しおかしいから）
 	m_shotWaitTimer = 1.0f;
 
@@ -278,6 +279,7 @@ void Player::Action(float deltaTime)
 				//プレイヤークラスではチャージした弾の情報は保有しない
 				m_bullet = nullptr;
 				m_chargeAnim = nullptr;
+				m_bChargeMaxFlg = false;
 			}
 		}
 		//クリックしたとき
@@ -287,22 +289,30 @@ void Player::Action(float deltaTime)
 			if (m_bullet)
 			{
 				m_chargeTime += deltaTime;
-
+				if (m_chargeTime >= m_chargeTimeMax)
+				{
+					m_chargeTime = m_chargeTimeMax;
+					if (!m_bChargeMaxFlg)
+					{
+						m_bullet->SetPower(m_chargePowerMax);
+						m_chargeAnim->StartChargeMaxAnim();
+						m_bChargeMaxFlg = true;
+					}
+				}
+				else
+				{
+					//パワーを求める
+					float power = (m_chargeTime / 2.0f) * 10;
+					if (power > m_chargePowerMax)
+					{
+						power = m_chargePowerMax;
+					}
+					m_bullet->SetPower(power);
+				}
 				//座標更新
 				Math::Vector2 shotPos = m_pos + m_shotPosOffset;
 				m_bullet->SetPos(shotPos);
-				
-				//パワーを求める
-				float power = (m_chargeTime / 2.0f) * 10;
-				if (power > m_chargePowerMax)
-				{
-					power = m_chargePowerMax;
-				}
-				m_bullet->SetPower(power);
-
-				//アニメーションの座標も更新
 				m_chargeAnim->SetPos(shotPos);
-				
 			}
 			//なかったら新しく作る
 			else

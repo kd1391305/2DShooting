@@ -29,38 +29,41 @@ void Score::Draw()
 	DWriteCustom::Instance().ChangeFont(FontName::Orbitron);
 	//現在のスコアを描画
 	{
-		char score[100];
-
+		char score[10];
 		sprintf_s(score, sizeof(score), "%.8d", m_score);
+		//一桁ずつ描画
 		for (int i = 0; i < 8; i++)
 		{
 			std::string digit;
 			digit = score[i];
 			if (score[i] == '1')
 			{
+				//+4右にずらす
 				DWriteCustom::Instance().Draw(digit, { -230 + i * 18.0f + 4,330 - 5 });
 			}
 			else
 			{
-				DWriteCustom::Instance().Draw(digit, { -230 + i * 18.0f,330 - 5 });
+				DWriteCustom::Instance().Draw(digit, { -230 + i * 18.0f,	330 - 5 });
 			}
 		}
 	}
 	//ハイスコアを描画する
 	{
-		char highScore[100];
+		char highScore[10];
 		sprintf_s(highScore, sizeof(highScore), "%.8d", m_highScore);
+		//一桁ずつ描画
 		for (int i = 0; i < 8; i++)
 		{
 			std::string digit;
 			digit = highScore[i];
 			if (highScore[i] == '1')
 			{
+				//+4右にずらす
 				DWriteCustom::Instance().Draw(digit, { -230 + i * 18.0f + 4,300 - 5 });
 			}
 			else
 			{
-				DWriteCustom::Instance().Draw(digit, { -230 + i * 18.0f,300 - 5 });
+				DWriteCustom::Instance().Draw(digit, { -230 + i * 18.0f,	300 - 5 });
 			}
 		}
 	}
