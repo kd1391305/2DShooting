@@ -1,6 +1,6 @@
 #include "Boss.h"
-#include"../../TextureCache/TextureCache.h"
-#include"../../Bullet/BulletManager.h"
+#include"../../../TextureCache/TextureCache.h"
+#include"../../../Bullet/BulletManager.h"
 
 Boss::Boss(std::shared_ptr<BulletManager> pBulletManager, Math::Vector2* pPlayerPos):
 m_pBulletManager(pBulletManager), m_pPlayerPos(pPlayerPos)
@@ -10,7 +10,7 @@ m_pBulletManager(pBulletManager), m_pPlayerPos(pPlayerPos)
 void Boss::Init()
 {
 	m_pos = {};				//座標
-	m_move = {};				//移動量
+	m_move = {};			//移動量
 	m_moveSpeed = 200;		//移動スピード
 	m_radius = { 64,64 };			//半径（当たり判定、画面端判定）
 
@@ -125,6 +125,9 @@ void Boss::Spawn(Math::Vector2 pos,Math::Vector2 move)
 {
 	m_pos = pos;
 	m_move = move;
+	Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale);
+	Math::Matrix transMat  = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	m_mat = scaleMat * transMat;
 }
 
 void Boss::Dead()

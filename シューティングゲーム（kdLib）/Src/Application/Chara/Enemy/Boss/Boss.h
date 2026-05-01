@@ -1,5 +1,5 @@
 #pragma once
-#include"../BaseChara/BaseChara.h"
+#include"../../BaseChara/BaseChara.h"
 
 class BulletManager;
 

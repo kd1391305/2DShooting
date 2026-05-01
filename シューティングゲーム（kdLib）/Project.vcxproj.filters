@@ -106,9 +106,6 @@
     <Filter Include="Src\Application\TextureCache">
       <UniqueIdentifier>{5921333c-c76c-4154-93eb-744ad5306298}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Chara\Boss">
-      <UniqueIdentifier>{c6594bdf-15b5-479e-8a40-7e6aec25d532}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\Chara\Enemy\BaseEnemy">
       <UniqueIdentifier>{f07f15fa-dc90-439d-83ed-c4f1abe65787}</UniqueIdentifier>
     </Filter>
@@ -153,6 +150,12 @@
     </Filter>
     <Filter Include="Src\Application\Tools\ObjectPool">
       <UniqueIdentifier>{22c87121-0029-4155-8349-7e316a4877b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Scene\GameClearScene">
+      <UniqueIdentifier>{f673c016-892b-49d1-b704-4018fadbed8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Enemy\Boss">
+      <UniqueIdentifier>{bfb4f42d-8b24-4415-b35a-0004bf62024e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -324,9 +327,6 @@
     <ClInclude Include="Src\Application\TextureCache\TextureCache.h">
       <Filter>Src\Application\TextureCache</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Chara\Boss\Boss.h">
-      <Filter>Src\Application\Chara\Boss</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy1.h">
       <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
     </ClInclude>
@@ -359,6 +359,12 @@
     </ClInclude>
     <ClInclude Include="Src\Application\Tools\ObjectPool\ObjectPool.h">
       <Filter>Src\Application\Tools\ObjectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\GameClearScene\GameClearScene.h">
+      <Filter>Src\Application\Scene\GameClearScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\Boss\Boss.h">
+      <Filter>Src\Application\Chara\Enemy\Boss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -485,9 +491,6 @@
     <ClCompile Include="Src\Application\Scene\GameOverScene\GameOverScene.cpp">
       <Filter>Src\Application\Scene\GameOverScene</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Chara\Boss\Boss.cpp">
-      <Filter>Src\Application\Chara\Boss</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy1.cpp">
       <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
     </ClCompile>
@@ -514,6 +517,12 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Bullet\BulletManager.cpp">
       <Filter>Src\Application\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\GameClearScene\GameClearScene.cpp">
+      <Filter>Src\Application\Scene\GameClearScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\Boss\Boss.cpp">
+      <Filter>Src\Application\Chara\Enemy\Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

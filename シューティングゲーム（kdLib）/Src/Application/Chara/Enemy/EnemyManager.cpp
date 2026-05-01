@@ -5,6 +5,7 @@
 #include"../../Scene/GameScene/GameScene.h"
 #include"Enemies/Enemy1.h"
 #include"Enemies/Enemy2.h"
+#include"Boss/Boss.h"
 
 //コンストラクタ
 EnemyManager::EnemyManager()
@@ -22,9 +23,15 @@ void EnemyManager::Update(float deltaTime)
 {
 	//スポーンタイマーを進める
 	m_spawnWaitTimer -= deltaTime;
-	if (m_spawnWaitTimer < 0)m_spawnWaitTimer = 0;
-	if (m_enemyList.empty())m_spawnWaitTimer = 0;
-
+	if (m_spawnWaitTimer < 0)
+	{
+		m_spawnWaitTimer = 0;
+		m_bEmptySpawnFlg = true;
+	}
+	if (m_bEmptySpawnFlg)
+	{
+		if (m_enemyList.empty())m_spawnWaitTimer = 0;
+	}
 	if (m_spawnWaitTimer <= 0)
 	{
 		//敵をスポーンする
@@ -50,12 +57,17 @@ void EnemyManager::Update(float deltaTime)
 		}
 		itr++;
 	}
+
+	//ボスの更新
+	if (m_boss)
+		m_boss->Update(deltaTime);
 }
 
 //描画
 void EnemyManager::Draw()
 {
 	for (auto& b : m_enemyList)if (b->IsActive())b->Draw();
+	if (m_boss)m_boss->Draw();
 }
 
 

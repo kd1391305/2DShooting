@@ -138,6 +138,7 @@ void Fireworks1::Draw()
 		rotation = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(360 / 10 * i));
 		SHADER.m_spriteShader.SetMatrix(scale * rotation * trans);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex);
+		SHADER.m_spriteShader.DrawTex_Src(m_tex, Math::Color{ 0.8f,0.8f,0.8f,1 });
 	}
 }
 
@@ -166,11 +167,8 @@ void Fireworks1::Shot(Math::Vector2& startPos, Math::Vector2& startMove, float b
 			texPos.y + randRange(-3.5f,3.5f)
 		};
 
-		//移動量を少しだけ変化させる
-		p.m_move = {
-			randRange(-3.0f,3.0f),
-			randRange(-3.0f,3.0f)
-		};
+		//移動量を0
+		p.m_move = {};
 		//色も少し変える
 		float r = m_color.R() + randRange(-0.1f, 0.1f);
 		float g = m_color.G() + randRange(-0.1f, 0.1f);
@@ -383,6 +381,8 @@ void Fireworks2::Draw()
 		rotation = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(360 / 10 * i));
 		SHADER.m_spriteShader.SetMatrix(scale * rotation * trans);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex);
+		SHADER.m_spriteShader.DrawTex_Src(m_tex, Math::Color{ 0.8f,0.8f,0.8f,1 });
+
 	}
 }
 
@@ -411,11 +411,8 @@ void Fireworks2::Shot(Math::Vector2& startPos, Math::Vector2& startMove, float b
 			texPos.y + randRange(-3.5f,3.5f)
 		};
 
-		//移動量を少しだけ変化させる
-		p.m_move = {
-			randRange(-3.0f,3.0f),
-			randRange(-3.0f,3.0f)
-		};
+		//移動量を0
+		p.m_move = {};
 		//色も少し変える
 		float r = m_color.R() + randRange(-0.1f, 0.1f);
 		float g = m_color.G() + randRange(-0.1f, 0.1f);
@@ -585,7 +582,7 @@ void Fireworks3::Draw()
 
 	//円の描画
 	{
-		std::shared_ptr<KdTexture>tex = TextureCache::Instance().Get("Texture/Fireworks/Particle.png");
+		std::shared_ptr<KdTexture>tex = TextureCache::Instance().Get("Texture/Fireworks/Particle2.png");
 		for (auto& p : m_circleList)
 		{
 			for (int i = 0; i < 3; ++i)
@@ -594,6 +591,7 @@ void Fireworks3::Draw()
 			}
 		}
 	}
+
 
 	//描画先をBuckBufferに戻す
 	D3D.SetBackBuffer();
@@ -612,6 +610,7 @@ void Fireworks3::Draw()
 
 	SHADER.m_spriteShader.SetMatrix(scale * trans);
 	SHADER.m_spriteShader.DrawTex_Src(m_tex);
+	SHADER.m_spriteShader.DrawTex_Src(m_tex, Math::Color{ 0.8f,0.8f,0.8f,1 });
 }
 
 void Fireworks3::Shot(Math::Vector2& startPos, Math::Vector2&startMove, float beforeScale, float afterScale, Math::Color& color)
@@ -638,11 +637,8 @@ void Fireworks3::Shot(Math::Vector2& startPos, Math::Vector2&startMove, float be
 			texPos.y + randRange(-3.5f,3.5f)
 		};
 
-		//移動量を少しだけ変化させる
-		p.m_move = {
-			randRange(-3.0f,3.0f),
-			randRange(-3.0f,3.0f)
-		};
+		//移動量を0
+		p.m_move = {};
 
 		//拡縮を少し変更
 		p.m_scale = randRange(0.7f, 1.3f);
@@ -803,7 +799,7 @@ void Fireworks4::Draw()
 			Math::Matrix scale = Math::Matrix::CreateScale(0.2f, 0.2f, 0);
 			Math::Matrix trans = Math::Matrix::CreateTranslation(p.m_pos.x, p.m_pos.y, 0);
 			SHADER.m_spriteShader.SetMatrix(scale * trans);
-			SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Petal.png"), m_color);
+			SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Petal.png"), p.m_color);
 		}
 	}
 
@@ -828,6 +824,8 @@ void Fireworks4::Draw()
 		rotation = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(360 / 8 * i));
 		SHADER.m_spriteShader.SetMatrix(scale * rotation * trans);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex);
+		SHADER.m_spriteShader.DrawTex_Src(m_tex, Math::Color{ 0.8f,0.8f,0.8f,1 });
+
 	}
 }
 
@@ -856,11 +854,9 @@ void Fireworks4::Shot(Math::Vector2& startPos, Math::Vector2& startMove, float b
 			texPos.y + randRange(-3.5f,3.5f)
 		};
 
-		//移動量を少しだけ変化させる
-		p.m_move = {
-			randRange(-3.0f,3.0f),
-			randRange(-3.0f,3.0f)
-		};
+		//移動量を0
+		p.m_move = {};
+		
 		//色も少し変える
 		float r = m_color.R() + randRange(-0.1f, 0.1f);
 		float g = m_color.G() + randRange(-0.1f, 0.1f);

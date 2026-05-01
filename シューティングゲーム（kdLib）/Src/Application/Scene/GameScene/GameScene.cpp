@@ -15,7 +15,6 @@
 #include"../GameOverScene/GameOverScene.h"
 #include"../../Font/DWriteCustom.h"
 #include"../../Mouse/Mouse.h"
-#include"../../Chara/Boss/Boss.h"
 #include"../../main.h"
 #include"../../UI/Score/Score.h"
 
@@ -77,22 +76,6 @@ void Game::Update()
 	//すべての敵の更新
 	m_enemyManager->Update(deltaTime);
 
-	//ボスの更新
-	if (m_boss)
-	{
-		m_boss->Update(deltaTime);
-	}
-	else
-	{
-		//ボスの出現条件
-		if (m_UI->GetScoreInst()->Get() > 5000)
-		{
-			//ボス出現
-			m_boss = std::make_shared<Boss>(m_bulletManager, m_player->GetPosAddress());
-			m_boss->Init();
-			m_boss->Spawn({ SCREEN_RIGHT * m_boss->GetRadius().x , 0 }, { -50,0 });
-		}
-	}
 	//全ての弾の更新
 	m_bulletManager->Update(deltaTime);
 
@@ -107,14 +90,13 @@ void Game::Draw()
 {
 	m_back->Draw();
 
+	m_fireworksManager->Draw();
+
 	m_player->Draw();
+
 	m_bulletManager->Draw();
 
 	m_enemyManager->Draw();
-
-	if (m_boss)m_boss->Draw();
-
-	m_fireworksManager->Draw();
 
 	m_UI->Draw();
 }

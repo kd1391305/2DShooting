@@ -2,6 +2,8 @@
 
 class BaseEnemy;
 
+class Boss;
+
 //敵を管理するクラス
 class EnemyManager
 {
@@ -13,6 +15,7 @@ public:
 	void Draw();
 
 	std::vector<std::shared_ptr<BaseEnemy>>& GetEnemyList() { return m_enemyList; }
+	std::shared_ptr<Boss> GetBoss() { return m_boss; }
 
 private:
 	//スポーンする
@@ -34,4 +37,8 @@ private:
 	float m_spawnWaitTimer;				//敵がスポーンするクールタイム
 	std::queue<SpawnPutturn>m_spawnPutturnHistory;
 	float m_spawnProbability[SpawnPutturn::Kind];
+
+	std::shared_ptr<Boss> m_boss = nullptr;
+
+	bool m_bEmptySpawnFlg = false;		//敵がいないとき、スポーンするフラグ
 };

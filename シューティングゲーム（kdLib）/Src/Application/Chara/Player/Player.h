@@ -68,7 +68,7 @@ private:
 
 	std::shared_ptr<PlayerBullet> m_bullet;			//弾
 	float m_chargeTime;								//チャージ時間
-	const float m_chargeTimeMax = 1.0f;				//チャージ最大時間
+	const float m_chargeTimeMax = 0.8f;				//チャージ最大時間
 	const float m_chargeSpeedMax = 800.0f;			//チャージ最大スピード
 	const float m_chargePowerMax = 5;				//チャージ最大パワー（敵を倒せる量）
 	float m_chargeShotWait;							//チャージショットのクールタイム

@@ -111,7 +111,7 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 							break;
 						}
 						temp->Init();
-						float afterScale = { randRange(0.5f,0.8f) };
+						float afterScale = { randRange(0.1f,0.2f) };
 						temp->Shot(e->GetPos(), Math::Vector2{ NULL, NULL }, NULL, afterScale, e->GetColor());
 						temp->Explode();
 						fireworksList.push_back(temp);
@@ -149,7 +149,7 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 							shotPos.x += randRange(-100, 100);
 							shotPos.y += randRange(-100, 100);
 
-							afterScale = { randRange(0.5f,0.8f) };
+							afterScale = { randRange(0.2f,0.3f) };
 
 							r = randRange(0.0f, 0.6f);
 							g = randRange(0.0f, 0.6f);

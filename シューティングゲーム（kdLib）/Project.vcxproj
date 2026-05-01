@@ -166,8 +166,8 @@
     <ClInclude Include="Src\Application\Bullet\EnemyBullet\EnemyBullet.h" />
     <ClInclude Include="Src\Application\Bullet\PlayerBullet\PlayerBullet.h" />
     <ClInclude Include="Src\Application\Chara\BaseChara\BaseChara.h" />
-    <ClInclude Include="Src\Application\Chara\Boss\Boss.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.h" />
+    <ClInclude Include="Src\Application\Chara\Enemy\Boss\Boss.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy1.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy2.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\EnemyManager.h" />
@@ -182,6 +182,7 @@
     <ClInclude Include="Src\Application\Scene.h" />
     <ClInclude Include="Src\Application\main.h" />
     <ClInclude Include="Src\Application\Scene\BaseScene\BaseScene.h" />
+    <ClInclude Include="Src\Application\Scene\GameClearScene\GameClearScene.h" />
     <ClInclude Include="Src\Application\Scene\GameOverScene\GameOverScene.h" />
     <ClInclude Include="Src\Application\Scene\GameScene\GameScene.h" />
     <ClInclude Include="Src\Application\Scene\ResultScene\ResultScene.h" />
@@ -227,8 +228,8 @@
     <ClCompile Include="Src\Application\Bullet\BulletManager.cpp" />
     <ClCompile Include="Src\Application\Bullet\EnemyBullet\EnemyBullet.cpp" />
     <ClCompile Include="Src\Application\Bullet\PlayerBullet\PlayerBullet.cpp" />
-    <ClCompile Include="Src\Application\Chara\Boss\Boss.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.cpp" />
+    <ClCompile Include="Src\Application\Chara\Enemy\Boss\Boss.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy1.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy2.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\EnemyManager.cpp" />
@@ -241,6 +242,7 @@
     <ClCompile Include="Src\Application\Mouse\Mouse.cpp" />
     <ClCompile Include="Src\Application\Scene.cpp" />
     <ClCompile Include="Src\Application\main.cpp" />
+    <ClCompile Include="Src\Application\Scene\GameClearScene\GameClearScene.cpp" />
     <ClCompile Include="Src\Application\Scene\GameOverScene\GameOverScene.cpp" />
     <ClCompile Include="Src\Application\Scene\GameScene\GameScene.cpp" />
     <ClCompile Include="Src\Application\Scene\ResultScene\ResultScene.cpp" />

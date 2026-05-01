@@ -29,7 +29,7 @@ void Player::Init()
 	m_invincibleTime = 0;
 	m_sumDeltaTime = 0;
 
-	m_shotWait = 0.4f;
+	m_shotWait = 0.2f;
 	m_chargeShotWait = 0.7f;		//チャージショットのクールタイム
 	m_bChargeMaxFlg = false;
 	//次の弾を撃つまでに一秒経ってから（シーン切り替え後すぐに弾を撃つのは少しおかしいから）
@@ -241,9 +241,9 @@ void Player::Action(float deltaTime)
 				Math::Vector2 shotPos,shotSpeed; 
 				float power = 1;
 				shotPos = m_pos + m_shotPosOffset;
-				shotSpeed.x = m_bulletSpeed + (m_chargeSpeedMax - m_bulletSpeed)/m_chargePowerMax * power;
+				shotSpeed.x = m_bulletSpeed + (m_chargeSpeedMax - m_bulletSpeed)/m_chargePowerMax *( power-1);
 				shotSpeed.y = 0;
-				m_bullet->SetPower(1);
+				m_bullet->SetPower(power);
 				m_bullet->Shot(shotPos, shotSpeed);
 				m_pBulletManager->Add(m_bullet);
 				m_bullet = nullptr;
@@ -256,7 +256,7 @@ void Player::Action(float deltaTime)
 			{
 				Math::Vector2 shotPos,shotSpeed;
 				//パワーを求める
-				float power = (m_chargeTime / 2.0f) * 10;
+				float power = (m_chargeTime / m_chargeTimeMax) * 10;
 				if (power > m_chargePowerMax)
 				{
 					power = m_chargePowerMax;
@@ -288,6 +288,18 @@ void Player::Action(float deltaTime)
 			//チャージ中の弾があるなら
 			if (m_bullet)
 			{
+				//もし、チャージ中の弾が敵を倒していたら、初期化
+				if (m_bullet->GetPierceNum() >= 1)
+				{
+					m_bullet->SetActive(false);
+					m_chargeTime = 0;
+					m_bullet = nullptr;
+					m_chargeAnim = nullptr;
+					m_bChargeMaxFlg = false;
+					m_shotWaitTimer = m_chargeShotWait;
+					return;
+				}
+
 				m_chargeTime += deltaTime;
 				if (m_chargeTime >= m_chargeTimeMax)
 				{
@@ -302,7 +314,7 @@ void Player::Action(float deltaTime)
 				else
 				{
 					//パワーを求める
-					float power = (m_chargeTime / 2.0f) * 10;
+					float power = (m_chargeTime / m_chargeTimeMax) * 10;
 					if (power > m_chargePowerMax)
 					{
 						power = m_chargePowerMax;
@@ -320,6 +332,7 @@ void Player::Action(float deltaTime)
 				//チャージ弾を作る
 				m_bullet = std::make_shared<PlayerBullet>();
 				m_bullet->SetPos(m_pos + m_shotPosOffset);
+				m_bullet->SetPower(1);
 
 				//チャージ時間を０にする
 				m_chargeTime = 0;
