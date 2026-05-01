@@ -193,6 +193,7 @@
     <ClInclude Include="Src\Application\Tools\Button\Button.h" />
     <ClInclude Include="Src\Application\Tools\Collision\Collision.h" />
     <ClInclude Include="Src\Application\Tools\Gauge\Gauge.h" />
+    <ClInclude Include="Src\Application\Tools\ObjectPool\ObjectPool.h" />
     <ClInclude Include="Src\Application\Tools\RandEx\RandEx.h" />
     <ClInclude Include="Src\Application\UI\Explan\Explan.h" />
     <ClInclude Include="Src\Application\UI\Score\Score.h" />

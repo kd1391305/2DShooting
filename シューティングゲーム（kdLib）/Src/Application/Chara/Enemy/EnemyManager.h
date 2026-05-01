@@ -18,10 +18,10 @@ private:
 	//スポーンする
 	void Spawn(float deltaTime);
 
+
 	//敵がスポーンするタイプ
-	enum SpawnType
+	enum SpawnPutturn
 	{
-		Normal,		//普通に右端からランダムにスポーン
 		Circle,		//敵がぐるぐる回って出現する
 		Row,		//敵が一直線に並んで出現
 		Kind		//種類
@@ -29,7 +29,9 @@ private:
 
 
 	std::vector<std::shared_ptr<BaseEnemy>> m_enemyList;		//敵
-	float m_spawnProbability;									//敵発生確率（毎秒あたり）
-	float m_spawnWaitTimer[SpawnType::Kind];					//スポーン待ち時間を測る（0になったらスポーンできる）
-	float m_spawnWait[SpawnType::Kind];							//スポーン待ち時間
+	
+	const float m_spawnWait = 10.0f;	//10秒ごとに敵が出現パターンに沿ってスポーンする
+	float m_spawnWaitTimer;				//敵がスポーンするクールタイム
+	std::queue<SpawnPutturn>m_spawnPutturnHistory;
+	float m_spawnProbability[SpawnPutturn::Kind];
 };

@@ -9,25 +9,30 @@
 //コンストラクタ
 EnemyManager::EnemyManager()
 {
-	m_spawnWait[SpawnType::Normal]	=  1.0f;
-	m_spawnWait[SpawnType::Circle]	= 20.0f;
-	m_spawnWait[SpawnType::Row]		= 10.0f;
+	//4秒間は敵をスポーンしない
+	m_spawnWaitTimer = 4.0f;
 
-	for (int i = 0; i < SpawnType::Kind; i++)
-	{
-		m_spawnWaitTimer[i] = m_spawnWait[i];
-	}
+	//敵のスポーン確率
+	m_spawnProbability[SpawnPutturn::Circle]	= 0.5f;
+	m_spawnProbability[SpawnPutturn::Row]		= 0.5f;
 }
 
 //更新
 void EnemyManager::Update(float deltaTime)
 {
-	for (auto&t:m_spawnWaitTimer)
-	{
-		t -= deltaTime;
-		if (t < 0)t = 0;
-	}
+	//スポーンタイマーを進める
+	m_spawnWaitTimer -= deltaTime;
+	if (m_spawnWaitTimer < 0)m_spawnWaitTimer = 0;
+	if (m_enemyList.empty())m_spawnWaitTimer = 0;
 
+	if (m_spawnWaitTimer <= 0)
+	{
+		//敵をスポーンする
+		Spawn(deltaTime);
+
+		float noise = randRange(0.0f, 5.0f);
+		m_spawnWaitTimer = m_spawnWait + noise;
+	}
 
 	for (auto itr = m_enemyList.begin(); itr != m_enemyList.end();)
 	{
@@ -45,10 +50,6 @@ void EnemyManager::Update(float deltaTime)
 		}
 		itr++;
 	}
-
-	//敵をスポーンするか決める
-	//スポーン処理も行う
-	Spawn(deltaTime);
 }
 
 //描画
@@ -61,80 +62,96 @@ void EnemyManager::Draw()
 //スポーンする
 void EnemyManager::Spawn(float deltaTime)
 {
-	//スポーン待機時間が０になったら確率でスポーンさせる
 
-	//敵が画面右端から左端に向けて動く
-	if (m_spawnWaitTimer[SpawnType::Normal] <= 0)
+	float r = randRange(0, 1.0f);
+	float sum = 0;
+
+	sum += m_spawnProbability[SpawnPutturn::Circle];
+	if (r < sum)
 	{
-		if (HitGacha(10.0f * deltaTime))
+		//敵が画面右端から円を描くように左に向かって動く。
+		//ある一定の場所で敵は止まる
+		//敵をスポーンさせる数
+		int spawnNum = 6;
+
+		Math::Vector2 startPos = { SCREEN_RIGHT + 200,0 };
+		Math::Vector2 endPos = { 200,0 };
+		Math::Vector2 centerMoveSpeed = { -300,0 };
+		float deltaRadian = DirectX::XMConvertToRadians(50);
+		float gapCenter = 80;
+
+		for (int i = 0; i < spawnNum; i++)
 		{
+			float radian = DirectX::XMConvertToRadians((360 / (float)spawnNum) * i);
+
+			std::shared_ptr<Enemy2> temp = std::make_shared<Enemy2>();
+			temp->Init();
+			temp->InitSpawn(startPos, endPos, centerMoveSpeed, radian, deltaRadian, gapCenter);
+
 			//新しく敵を作成する
-			std::shared_ptr<Enemy1>enemy;
+			m_enemyList.push_back(temp);
+			//敵のスポーン
+			m_enemyList.back()->Spawn();
+		}
+
+		m_spawnPutturnHistory.push(SpawnPutturn::Circle);
+		return;
+	}
+
+	sum += m_spawnProbability[SpawnPutturn::Row];
+	if (r < sum)
+	{
+		//敵が列状になって敵が出現
+		//			〇〇〇〇〇
+		//		〇〇〇〇〇
+		//	〇〇〇〇〇
+		//		〇〇〇〇〇
+		//			〇〇〇〇〇
+
+		const int groupNum = 5;
+		const int enemyNum = 5;
+
+		std::shared_ptr<Enemy1>enemy[groupNum][enemyNum];
+		for (int i = 0; i < groupNum; i++)
+		{
+			for (int j = 0; j < enemyNum; j++)
+			{
+				enemy[i][j] = std::make_shared<Enemy1>();
+				enemy[i][j]->Init();
+			}
+		}
+
+		//各グループごとの座標を求める
+		float baseX = SCREEN_WIDTH + enemy[0][0]->GetRadius().x;
+		enemy[0][0]->SetPos({baseX,0});
+		enemy[1][0]->SetPos({baseX + 100,100});
+		enemy[2][0]->SetPos({baseX + 100 ,-100});
+		enemy[3][0]->SetPos({baseX + 200,200});
+		enemy[4][0]->SetPos({baseX + 200,-200});
+
+		//グループの先頭座標をもとに、後続の敵の座標をセット
+		float gapX = enemy[0][0]->GetRadius().x * 2;
+		for (int i = 0; i < 5; i++)
+		{
+			for (int j = 1; j < 5; j++)
+			{
+				enemy[i][j]->SetPos({ enemy[i][0]->GetPos().x + gapX * j, enemy[i][0]->GetPos().y });
+			}
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				enemy[i][j]->Spawn();
+				m_enemyList.push_back(enemy[i][j]);
+			}
+		}
+
+		m_spawnPutturnHistory.push(SpawnPutturn::Row);
+	}
+	KdTexture tex;
 	
-			enemy = std::make_shared<Enemy1>();
-			enemy->Init();
-			enemy->SetPos({ SCREEN_RIGHT + enemy->GetRadius().x,randRange(SCREEN_BOTTOM + enemy->GetRadius().y,SCREEN_TOP - enemy->GetRadius().y) });
-			enemy->Spawn();
-			m_enemyList.push_back(enemy);
-			
-			m_spawnWaitTimer[SpawnType::Normal] = m_spawnWait[SpawnType::Normal];
-		}
-	}
-
-	//敵が画面右端から円を描くように左に向かって動く。
-	//ある一定の場所で敵は止まる
-	if (m_spawnWaitTimer[SpawnType::Circle] <= 0)
-	{
-		if (HitGacha(10.0f * deltaTime))
-		{
-			//敵をスポーンさせる数
-			int spawnNum = 6;
-
-			Math::Vector2 startPos = { SCREEN_RIGHT + 300,0 };
-			Math::Vector2 endPos = { 200,0 };
-			Math::Vector2 centerMoveSpeed = { -300,0 };
-			float deltaRadian = DirectX::XMConvertToRadians(50);
-			float gapCenter = 80;
-
-			for (int i = 0; i < spawnNum; i++)
-			{
-				float radian = DirectX::XMConvertToRadians((360 / (float)spawnNum) * i);
-
-				std::shared_ptr<Enemy2> temp = std::make_shared<Enemy2>();
-				temp->Init();
-				temp->InitSpawn(startPos, endPos, centerMoveSpeed, radian, deltaRadian, gapCenter);
-
-				//新しく敵を作成する
-				m_enemyList.push_back(temp);
-				//敵のスポーン
-				m_enemyList.back()->Spawn();
-			}
-
-			m_spawnWaitTimer[SpawnType::Circle] = m_spawnWait[SpawnType::Circle];
-		}
-	}
-
-	//敵が列状になって敵が出現
-	if (m_spawnWaitTimer[SpawnType::Row] <= 0)
-	{
-		if (HitGacha(10.0f * deltaTime))
-		{
-			//列にする敵の数
-			int enemyNum = 5;
-			float y = randRange(-300, 300);
-			std::shared_ptr<Enemy1>enemy;
-			for (int i = 0; i < enemyNum; i++)
-			{
-				enemy = std::make_shared<Enemy1>();
-				enemy->Init();
-				enemy->SetPos({ SCREEN_RIGHT + 100 + 50.0f * i,y });
-				enemy->Spawn();
-				m_enemyList.push_back(enemy);
-			}
-
-			m_spawnWaitTimer[SpawnType::Row] = m_spawnWait[SpawnType::Row];
-		}
-	}
 }
 
 

@@ -151,6 +151,9 @@
     <Filter Include="Src\Application\SoundCache">
       <UniqueIdentifier>{97d3196c-d02d-4f6d-b12d-506835df07e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Tools\ObjectPool">
+      <UniqueIdentifier>{22c87121-0029-4155-8349-7e316a4877b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -353,6 +356,9 @@
     </ClInclude>
     <ClInclude Include="Src\Application\SoundCache\SoundCache.h">
       <Filter>Src\Application\SoundCache</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Tools\ObjectPool\ObjectPool.h">
+      <Filter>Src\Application\Tools\ObjectPool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
