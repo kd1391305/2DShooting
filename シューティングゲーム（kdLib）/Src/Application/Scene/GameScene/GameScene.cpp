@@ -85,7 +85,7 @@ void Game::Update()
 	else
 	{
 		//ボスの出現条件
-		if (m_UI->GetScoreInst()->Get() > 10000)
+		if (m_UI->GetScoreInst()->Get() > 5000)
 		{
 			//ボス出現
 			m_boss = std::make_shared<Boss>(m_bulletManager, m_player->GetPosAddress());

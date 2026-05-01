@@ -42,4 +42,8 @@ private:
 
 	std::shared_ptr<Button> m_titleButton;		//タイトルへ行くボタン
 	std::shared_ptr<Button> m_gameButton;		//ゲームへ戻るボタン
+
+	Math::Color m_color;
+	const float m_maxAlpha = 0.4f;
+	const float m_deltaAlpha = 2;				//1 / 2 = 0.5秒で 1 上がる
 };

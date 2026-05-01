@@ -60,8 +60,6 @@ void FireworksManager::Shot(FireworksManager::Type name,Math::Vector2& pos, Math
 	}
 	m_list.back()->Init();
 	m_list.back()->Shot(pos, startMove, beforeScale, afterScale, color);
-
-	SoundCache::Instance().Get("Sound/SE/Fireworks.wav")->Play();
 }
 
 //‰Šú‰»i‚P‰ñ‚µ‚©ŒÄ‚Î‚ê‚È‚¢j

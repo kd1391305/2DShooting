@@ -14,6 +14,8 @@ Score::~Score()
 
 void Score::Init()
 {
+	m_score = 0;
+	m_highScore = 0;
 	LoadHighScore();
 }
 
@@ -90,10 +92,7 @@ bool Score::SaveHighScore()
 	//ハイスコアを新たに書き込む
 	if ((fp = fopen("Data/HighScore.csv", "w")) != nullptr)
 	{
-		for (int i = 0; i < 5; i++)
-		{
-			fprintf_s(fp, "%ld", m_highScore);
-		}
+		fprintf_s(fp, "%ld", m_highScore);
 		fclose(fp);
 		//セーブが出来た
 		return true;

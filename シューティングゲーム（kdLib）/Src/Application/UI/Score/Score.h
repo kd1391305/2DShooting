@@ -30,6 +30,6 @@ private:
 	//ハイスコアをセーブする
 	bool SaveHighScore();
 
-	long m_score;			//現在のスコア
-	long m_highScore;		//最大スコア
+	long m_score=0;			//現在のスコア
+	long m_highScore=0;		//最大スコア
 };

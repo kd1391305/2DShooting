@@ -6,13 +6,13 @@
 #include"../../Background/Back.h"
 #include"../../Font/DWriteCustom.h"
 #include"../../main.h"
+#include"../../Timer/Timer.h"
 
 GameOverScene::GameOverScene(std::shared_ptr<Player> player,
 	std::shared_ptr<EnemyManager> enemy,
 	std::shared_ptr<FireworksManager> fireworks,
 	std::shared_ptr<BulletManager> bullet,
 	std::shared_ptr<Back> back) 
-	
 {
 	m_player = player;
 	m_enemyManager = enemy;
@@ -23,12 +23,18 @@ GameOverScene::GameOverScene(std::shared_ptr<Player> player,
 
 void GameOverScene::Init()
 {
-
+	m_color = { 0,0,0,0 };
 }
 
 void GameOverScene::Update()
 {
+	float deltaTime = Timer::Instance().GetDeltaTime();
 
+	m_color.A(m_color.A() + m_deltaAlpha * deltaTime);
+	if (m_color.A() >= m_maxAlpha)
+	{
+		m_color.A(m_maxAlpha);
+	}
 }
 
 void GameOverScene::Draw()
@@ -40,7 +46,7 @@ void GameOverScene::Draw()
 	m_bulletManager->Draw();
 
 	SHADER.m_spriteShader.ClearMatrix();
-	SHADER.m_spriteShader.DrawBox(0, 0, SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, &Math::Color{ 0,0,0,0.3f }, true);
+	SHADER.m_spriteShader.DrawBox(0, 0, SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f, &m_color, true);
 
 	DWriteCustom::Instance().Draw("リトライ", {});
 	DWriteCustom::Instance().Draw("タイトルへ",Math::Vector2{0, -200 });
