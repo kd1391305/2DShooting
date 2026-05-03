@@ -24,7 +24,7 @@ void Explan::Init(Math::Vector2* pPlayerPos)
 		m_chargeExplan.m_backPos =m_moveExplan.m_pos;
 		m_chargeExplan.m_backPos.y -= fontSize;
 
-		m_moveExplan.m_radius = { 70,30 };
+		m_moveExplan.m_radius = { 100,45 };
 		m_moveExplan.m_backRadius = m_moveExplan.m_radius;
 		m_moveExplan.m_backRadius.y += fontSize;
 
@@ -38,7 +38,7 @@ void Explan::Init(Math::Vector2* pPlayerPos)
 		m_chargeExplan.m_backPos = m_chargeExplan.m_pos;
 		m_chargeExplan.m_backPos.y -= fontSize;
 
-		m_chargeExplan.m_radius = { 70,30 };
+		m_chargeExplan.m_radius = { 100,45 };
 		m_chargeExplan.m_backRadius = m_chargeExplan.m_radius;
 		m_chargeExplan.m_backRadius.y += fontSize;
 		m_chargeExplan.m_scale.x = m_chargeExplan.m_radius.x / tex->GetRadius().x;

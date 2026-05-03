@@ -7,6 +7,7 @@ public:
 	Button() :
 		m_pos(0, 0), m_radius(10, 10), m_color(1, 1, 1, 1), m_bSelect(false), m_selectScale(1.2f,1.2f)
 	{
+		m_scale = { 1, 1 };
 		m_mat = Math::Matrix::CreateTranslation(0, 0, 0);
 	}
 
@@ -31,6 +32,7 @@ public:
 	void SetPos(Math::Vector2 set) { m_pos = set; }
 	void SetRadius(Math::Vector2 set) { m_radius = set; }
 	void SetColor(Math::Color set) { m_color = set; }
+	void SetScale(Math::Vector2 set) { m_scale = set; }
 	void SetSelectColor(Math::Color set) { m_selectColor = set; }
 	void SetSelectScale(Math::Vector2 set) { m_selectScale = set; }
 	void SetSelect(bool set) { m_bSelect = set;}

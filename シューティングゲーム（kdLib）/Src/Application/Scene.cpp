@@ -10,6 +10,7 @@
 void Scene::Draw2D()
 {
 	SceneManager::Instance().Draw();
+	
 	MOUSE.Draw();
 }
 

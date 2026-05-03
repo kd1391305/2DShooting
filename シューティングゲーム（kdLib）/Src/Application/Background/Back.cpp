@@ -21,7 +21,7 @@ void LightParticle::Update(float deltaTime)
 	}
 	else
 	{
-		float alpha = m_alphaMin + sinf(DirectX::XMConvertToRadians(m_degree) * (m_alphaMax - m_alphaMin));
+		float alpha = m_alphaMin + sinf(DirectX::XMConvertToRadians(m_degree)) * (m_alphaMax - m_alphaMin);
 		m_color.A(alpha);
 	}
 }
@@ -31,34 +31,75 @@ void LightParticle::Draw()
 	Light::Instance().Draw(m_pos, m_radius, m_color);
 }
 
-
-
 void Back::Init()
 {
+	//ズームアウトからスタート
+	m_bZoomInFlg = false;
+	m_allScale = m_zoomOutBackScale; 
+	m_bZoomingFlg = false;
+
+	m_farBgWidth = (float)TextureCache::Instance().Get("Texture/Back.png").get()->GetInfo().Width * m_allScale;
+
 	//フェンスの横幅
-	m_fanceWidth = 110.5f;
+	m_fanceWidth = m_fanceRenderWidth * m_allScale;
 
-	//データの初期化
-	for (int i = 0; i < s_drawNum; i++)
+	m_lanternDistance = m_fanceWidth * 5;
+
+	//背景描画クラス特有のスクリーンの右端
+	m_renderScreenLeft = SCREEN_LEFT / m_allScale;
+
+	//最背面の背景画像のための初期化
 	{
-		m_pos[i] = { 0 + (float)TextureCache::Instance().Get("Texture/Back.png").get()->GetInfo().Width * i,0 };									//一つ目は中心スタート、二つ目はその右隣からスタート
-		Math::Matrix scaleMat = Math::Matrix::CreateScale(1 - (i % 2) * 2, 1, 0);		//偶数はそのまま、奇数は反転させて描画する
-		Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos[i].x, m_pos[i].y, 0);
-		m_mat[i] = scaleMat * transMat;
+		for (int i = 0; i < 2; i++)
+		{
+			m_farBg.push_back(FarBackground());
+		}
+		//一枚目は中央からスタート
+		m_farBg.front().m_pos = { 0,0 };
+		m_farBg.front().m_scale = { m_allScale,m_allScale };
+		//二枚目は一枚目の右隣からスタート
+		m_farBg.back().m_pos = { m_farBg.front().m_pos.x + m_farBgWidth,0 };
+		m_farBg.back().m_scale = { -m_allScale,m_allScale };
+		for (auto& farBg : m_farBg)
+		{
+			Math::Matrix scaleMat = Math::Matrix::CreateScale(farBg.m_scale.x, farBg.m_scale.y, 0);
+			Math::Matrix transMat = Math::Matrix::CreateTranslation(farBg.m_pos.x, farBg.m_pos.y, 0);
+			m_farBg.front().m_mat = scaleMat * transMat;
+		}
 	}
 
-	//背景オブジェクトの初期化
-	for (int i = 0; i < 3; i++)
+	//フェンスの初期化
 	{
-		m_lantern[i].m_pos = { SCREEN_LEFT + m_fanceWidth * 4 * i,-300 };
-		m_lantern[i].m_scale = 0.2f;
-		m_lantern[i].m_color = { 0.8f,0.8f,0.8f,0.5f };
+		for (int i = 0; i < 20; i++)
+		{
+			m_fance.push_back(BackObject());
+		}
+
+		int i = 0;
+		for (auto& fance : m_fance)
+		{
+			fance.m_pos = { m_renderScreenLeft + m_fanceWidth * i,-300 * m_allScale };
+			fance.m_scale = m_fanceRenderScale * m_allScale;
+			fance.m_color = { 0.8f,0.8f,0.8f,0.5f };
+			i++;
+		}
 	}
-	for (int i = 0; i < 13; i++)
+	//ランタンの初期化
 	{
-		m_fance[i].m_pos = { SCREEN_LEFT + m_fanceWidth * i,-300 };
-		m_fance[i].m_scale = 1.0f;
-		m_fance[i].m_color = { 0.8f,0.8f,0.8f,0.5f };
+
+		for (int i = 0; i < 5; i++)
+		{
+			m_lantern.push_back(BackObject());
+		}
+
+		int i = 0;
+		for (auto& lantern : m_lantern)
+		{
+			lantern.m_pos = { m_fance.front().m_pos.x + m_fanceWidth * 4 * i,-300 * m_allScale };
+			lantern.m_scale = m_lanternRenderScale * m_allScale;
+			lantern.m_color = { 0.8f,0.8f,0.8f,0.5f };
+			i++;
+		}
 	}
 
 	for (int i = 0; i < 30; i++)
@@ -70,50 +111,13 @@ void Back::Init()
 //更新
 void Back::Update(float deltaTime)
 {
-	float scrollX = -40.0f * deltaTime;
-
-	for (int i = 0; i < s_drawNum; i++)
+	if (m_bZoomingFlg)
 	{
-		//左にスクロールする
-		m_pos[i].x += scrollX;
-
-		//画面端に到達したら、画面右端にセットする
-		float radiusX = (float)TextureCache::Instance().Get("Texture/Back.png").get()->GetInfo().Width / 2.0f;			//画像の半径
-		float right = m_pos[i].x + radiusX;						//画像の右端
-		if (right < SCREEN_LEFT)m_pos[i].x += radiusX * 2 * 2;
-
-		//行列作成
-		Math::Matrix scaleMat, transMat;
-		scaleMat = Math::Matrix::CreateScale(1 - (i % 2) * 2, 1, 0);					//偶数なら左右反転、奇数ならそのまま
-		transMat = Math::Matrix::CreateTranslation(m_pos[i].x, m_pos[i].y, 0);
-		m_mat[i] = scaleMat * transMat;
+		UpdateZooming(deltaTime);
 	}
-	for (auto& l : m_lantern)
+	else
 	{
-		if (l.m_pos.x < SCREEN_LEFT - m_fanceWidth / 2.0f)
-		{
-			l.m_pos.x = SCREEN_LEFT + m_fanceWidth * 12;
-		}
-		l.Update(scrollX);
-	}
-
-
-	for (auto& f : m_fance)
-	{
-		if (f.m_pos.x < SCREEN_LEFT - m_fanceWidth / 2.0f)
-		{
-			f.m_pos.x = SCREEN_LEFT + m_fanceWidth * 12;
-		}
-		f.Update(scrollX);
-	}
-
-	for (auto& l : m_lightParticleList)
-	{
-		l.Update(deltaTime);
-		if (l.m_color.A() < 0 && l.m_life < 0)
-		{
-			Respawn(&l);
-		}
+		UpdateNormal(deltaTime);
 	}
 
 }
@@ -122,9 +126,9 @@ void Back::Update(float deltaTime)
 void Back::Draw()
 {
 	std::shared_ptr<KdTexture> tex =  TextureCache::Instance().Get("Texture/Back.png");
-	for (int i = 0; i < 2; i++)
+	for (auto&farBg:m_farBg)
 	{
-		SHADER.m_spriteShader.SetMatrix(m_mat[i]);
+		SHADER.m_spriteShader.SetMatrix(farBg.m_mat);
 		D3D.SetBlendState(BlendMode::Add);
 		SHADER.m_spriteShader.DrawTex_Src(tex, Math::Color{1.0f,1.0f,1.0f,1.0f});
 		D3D.SetBlendState(BlendMode::Alpha);
@@ -141,7 +145,7 @@ void Back::Draw()
 	for (auto& l : m_lantern)
 	{
 		l.Draw(lanternTex);
-		Light::Instance().Draw(l.m_pos, { 25, 25 },Math::Color{0.9f,0.9f,0.9f,0.2f});
+		Light::Instance().Draw(l.m_pos * m_allScale, { 25, 25 },Math::Color{0.9f,0.9f,0.9f,0.2f});
 	}
 
 	for (auto& l : m_lightParticleList)
@@ -150,9 +154,23 @@ void Back::Draw()
 	}
 }
 
+//ズームインする（ゲーム画面に遷移時に呼び出す）
+void Back::StartZoomIn()
+{
+	m_bZoomInFlg = true;
+	m_bZoomingFlg = true;
+}
+
+//ズームアウトする（タイトル画面に遷移時に呼び出す）
+void Back::StartZoomOut()
+{
+	m_bZoomInFlg = false;
+	m_bZoomingFlg = true;
+}
+
 void Back::Respawn(LightParticle* light)
 {
-	light->m_pos = { randRange(SCREEN_LEFT,SCREEN_RIGHT),randRange(SCREEN_BOTTOM,SCREEN_TOP) };
+	light->m_pos = { randRange(m_renderScreenLeft,-m_renderScreenLeft),randRange(SCREEN_BOTTOM,SCREEN_TOP) };
 	light->m_move = { randRange(-5.0f,5.0f),randRange(-5.0f,5.0f) };
 	float r = randRange(1.5, 3);
 	light->m_radius = { r,r };
@@ -162,6 +180,203 @@ void Back::Respawn(LightParticle* light)
 	light->m_alphaMax = randRange(0.2f, 0.6f);
 	light->m_color = { 0.7f,0.7f,0.7f,randRange(light->m_alphaMin,light->m_alphaMax) };
 	light->m_life = randRange(5, 20);
+}
+
+void Back::UpdateZooming(float deltaTime)
+{
+	//ズーム中の拡縮を変更
+	if (m_bZoomInFlg)
+	{
+		m_allScale += m_zoomSpeed * deltaTime;
+		if (m_allScale >= m_zoomInBackScale)
+		{
+			m_allScale = m_zoomInBackScale;
+			m_bZoomingFlg = false;
+		}
+	}
+	else
+	{
+		m_allScale -= m_zoomSpeed * deltaTime;
+		if (m_allScale <= m_zoomOutBackScale)
+		{
+			m_allScale = m_zoomOutBackScale;
+			m_bZoomingFlg = false;
+		}
+	}
+
+	//背景にあるオブジェクト全ての拡縮を変更する
+	//最背面の描画用
+	m_farBgWidth = (float)TextureCache::Instance().Get("Texture/Back.png").get()->GetInfo().Width * m_allScale;
+	m_fanceWidth = m_fanceRenderWidth * m_allScale;
+
+	m_renderScreenLeft = SCREEN_LEFT / m_allScale;
+	
+	m_farBg.front().m_scale = { m_allScale,m_allScale };
+	m_farBg.back().m_scale = { -m_allScale,m_allScale };
+
+	//フェンス
+	for (auto& fance : m_fance)
+	{
+		fance.m_scale = m_fanceRenderScale * m_allScale;
+	}
+	//ランタン
+	for (auto& lantern : m_lantern)
+	{
+		lantern.m_scale = m_lanternRenderScale * m_allScale;
+	}
+
+	float scrollX;
+	{
+		//アンダーフローが発生するため、小数点以下第一位以上をスクロール量とする
+		//発生すると背景画像が少しずれ、バックバッファが表示される
+		int tempScrollX = -m_scrollSpeed * deltaTime * m_allScale * 10;
+		scrollX = tempScrollX / 10.0f;
+	}
+
+	//背景画像の更新
+	{
+		//背景画像がアンダーフロー時にバックバッファが表示されないようにしている。
+		// スクロール量を直接足すのはリストの最初だけ。
+		//　次からは最初の値を元に足す。
+		m_farBg.front().m_pos.x += scrollX;
+		m_farBg.back().m_pos.x = m_farBg.front().m_pos.x + m_farBgWidth;
+
+		//画面端に到達したら、画面右端にセットする
+		if (m_farBg.front().m_pos.x < m_renderScreenLeft - m_farBgWidth/2.0f)
+		{
+			m_farBg.front().m_pos.x = m_farBg.back().m_pos.x + m_farBgWidth;
+			//背景画像二枚のうち、左にあるほうをリストの最初に、右にあるものをリストの最後にする
+			m_farBg.splice(m_farBg.end(), m_farBg, m_farBg.begin());
+		}
+		for (auto& farBg : m_farBg)
+		{
+			Math::Matrix scaleMat = Math::Matrix::CreateScale(farBg.m_scale.x, farBg.m_scale.y, 0);
+			Math::Matrix transMat = Math::Matrix::CreateTranslation(farBg.m_pos.x, farBg.m_pos.y, 0);
+			farBg.m_mat = scaleMat * transMat;
+		}
+	}
+
+	//背景オブジェクトの更新
+	//提灯
+	for (auto& l : m_lantern)
+	{
+		l.Update(scrollX,m_allScale);
+	}
+	//画面外に到達したとき
+	// m_fanceWidthには本来の画像より少し小さい値を入れている。
+	// そのため、画面端判定に使用すると、画像が画面内で消えてしまう。
+	// なので 画面端判定はゆとりを持たせている
+	if (m_lantern.front().m_pos.x < SCREEN_LEFT/m_zoomOutBackScale - m_fanceWidth)
+	{
+		m_lantern.front().m_pos.x = m_lantern.back().m_pos.x + m_lanternDistance;
+		m_lantern.splice(m_lantern.end(), m_lantern, m_lantern.begin());
+	}
+
+	//フェンス
+	for (auto& f : m_fance)
+	{
+		f.Update(scrollX,m_allScale);
+	}
+	//画面外に到達したとき
+	// m_fanceWidthには本来の画像より少し小さい値を入れている。
+	// そのため、画面端判定に使用すると、画像が画面内で消えてしまう。
+	// なので 画面端判定はゆとりを持たせている
+	if (m_fance.front().m_pos.x < SCREEN_LEFT / m_zoomOutBackScale - m_fanceWidth)
+	{
+		//フェンスを右端に配置
+		//リストの最後に配置する
+		m_fance.front().m_pos.x = m_fance.back().m_pos.x + m_fanceWidth;
+		m_fance.splice(m_fance.end(), m_fance, m_fance.begin());
+	}
+
+
+	//画面中の明かり（蛍みたいなパーティクル）
+	for (auto& l : m_lightParticleList)
+	{
+		l.Update(deltaTime);
+		if (l.m_color.A() < 0 && l.m_life < 0)
+		{
+			Respawn(&l);
+		}
+	}
+}
+
+void Back::UpdateNormal(float deltaTime)
+{
+	float scrollX;
+	{
+		//アンダーフローが発生するため、小数点以下第一位以上をスクロール量とする
+		//発生すると背景画像が少しずれ、バックバッファが表示される
+		int tempScrollX = -m_scrollSpeed * deltaTime * m_allScale * 10;
+		scrollX = tempScrollX / 10.0f;
+	}
+
+	//背景画像の更新
+	{
+		//背景画像がアンダーフロー時にバックバッファが表示されないようにしている。
+		// スクロール量を直接足すのはリストの最初だけ。
+		//　次からは最初の値を元に足す。
+		m_farBg.front().m_pos.x += scrollX;
+		m_farBg.back().m_pos.x = m_farBg.front().m_pos.x + m_farBgWidth;
+
+		//画面端に到達したら、画面右端にセットする
+		if (m_farBg.front().m_pos.x < m_renderScreenLeft - m_farBgWidth / 2.0f)
+		{
+			m_farBg.front().m_pos.x = m_farBg.back().m_pos.x + m_farBgWidth;
+			//背景画像二枚のうち、左にあるほうをリストの最初に、右にあるものをリストの最後にする
+			m_farBg.splice(m_farBg.end(), m_farBg, m_farBg.begin());
+		}
+		for (auto& farBg : m_farBg)
+		{
+			Math::Matrix scaleMat = Math::Matrix::CreateScale(farBg.m_scale.x, farBg.m_scale.y, 0);
+			Math::Matrix transMat = Math::Matrix::CreateTranslation(farBg.m_pos.x, farBg.m_pos.y, 0);
+			farBg.m_mat = scaleMat * transMat;
+		}
+	}
+
+	//背景オブジェクトの更新
+	//提灯
+	for (auto& l : m_lantern)
+	{
+		l.Update(scrollX,m_allScale);
+	}
+	//画面外に到達したとき
+	// m_fanceWidthには本来の画像より少し小さい値を入れている。
+	// そのため、画面端判定に使用すると、画像が画面内で消えてしまう。
+	// なので 画面端判定はゆとりを持たせている
+	if (m_lantern.front().m_pos.x < SCREEN_LEFT / m_zoomOutBackScale - m_fanceWidth)
+	{
+		m_lantern.front().m_pos.x = m_lantern.back().m_pos.x + m_lanternDistance;
+		m_lantern.splice(m_lantern.end(), m_lantern, m_lantern.begin());
+	}
+
+	//フェンス
+	for (auto& f : m_fance)
+	{
+		f.Update(scrollX,m_allScale);
+	}
+	//画面外に到達したとき
+	// m_fanceWidthには本来の画像より少し小さい値を入れている。
+	// そのため、画面端判定に使用すると、画像が画面内で消えてしまう。
+	// なので 画面端判定はゆとりを持たせている
+	if (m_fance.front().m_pos.x < SCREEN_LEFT / m_zoomOutBackScale - m_fanceWidth)
+	{
+		//フェンスを右端に配置
+		//リストの最後に配置する
+		m_fance.front().m_pos.x = m_fance.back().m_pos.x + m_fanceWidth;
+		m_fance.splice(m_fance.end(), m_fance, m_fance.begin());
+	}
+
+
+	//画面中の明かり（蛍みたいなパーティクル）
+	for (auto& l : m_lightParticleList)
+	{
+		l.Update(deltaTime);
+		if (l.m_color.A() < 0 && l.m_life < 0)
+		{
+			Respawn(&l);
+		}
+	}
 }
 
 

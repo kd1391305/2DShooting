@@ -8,11 +8,10 @@
 #include"../../Background/Back.h"
 #include"../../UI/UI.h"
 #include"../../Chara/Player/Player.h"
-#include"GameClear.h"
-#include"GameOver.h"
 #include"../../Chara/Enemy/BaseEnemy/BaseEnemy.h"
 #include"../SceneManager.h"
 #include"../GameOverScene/GameOverScene.h"
+#include"../GameClearScene/GameClearScene.h"
 #include"../../Font/DWriteCustom.h"
 #include"../../Mouse/Mouse.h"
 #include"../../main.h"
@@ -37,6 +36,8 @@ Game::Game(std::shared_ptr<Back> back, std::shared_ptr<FireworksManager> firewor
 //初期化
 void Game::Init()
 {
+	m_back->StartZoomIn();
+
 	//プレイヤーの初期化
 	m_player->SetGame(this);
 	m_player->SetBulletManager(m_bulletManager);
@@ -47,6 +48,8 @@ void Game::Init()
 
 	//タイマークラスをリセット
 	Timer::Instance().Reset();
+
+	m_enemyManager->SetGame(this);
 }
 
 //更新
@@ -64,9 +67,19 @@ void Game::Update()
 	//プレイヤー　と　敵の弾
 	CollisionPlayer_EBullet(m_player, m_bulletManager->GetEnemyList());
 
-	//プレイヤの弾　と　敵
+	//プレイヤーの弾　と　敵
 	CollisionPlayerBullet_Enemy(m_bulletManager->GetPlayerList(), m_enemyManager->GetEnemyList(), m_fireworksManager->GetList(), m_UI->GetScoreInst());
+	{
+		std::shared_ptr<Boss> boss = m_enemyManager->GetBoss();
+		if (boss)
+		{
+			//プレイヤーの弾　と　ボス
+			CollisionPlayer_Boss(m_player, boss);
 
+			//プレイヤー　と　ボス
+			CollisionPlayerBullet_Boss(m_bulletManager->GetPlayerList(), boss, m_fireworksManager->GetList());
+		}
+	}
 	//背景の更新
 	m_back->Update(deltaTime);
 
@@ -111,6 +124,15 @@ void Game::GameOver()
 		m_fireworksManager,
 		m_bulletManager,
 		m_back));
+}
+
+void Game::GameClear()
+{
+	SceneManager::Instance().ChangeState(new GameClearScene(
+		m_back,
+		m_fireworksManager
+	)
+	);
 }
 
 //解放

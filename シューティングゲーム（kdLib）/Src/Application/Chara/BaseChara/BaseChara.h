@@ -12,7 +12,7 @@ public:
 	virtual ~BaseChara() {}
 
 	//=============================================
-	// 純粋仮想関数
+	// 仮想関数
 	//=============================================
 	//初期化
 	virtual void Init() = 0;
@@ -22,11 +22,15 @@ public:
 	virtual void Draw() = 0;
 	//倒れたときの処理
 	virtual void Dead() = 0;
-private:
+	//当たった時の処理
+	virtual void OnHit() {}
+protected:
 	//解放
 	virtual void Release() = 0;
 	//=============================================
 	
+
+
 public:
 	//ダメージ
 	void Damage(float damage) {

@@ -13,6 +13,12 @@
 #include"../../TextureCache/TextureCache.h"
 #include"../../SoundCache/SoundCache.h"
 
+TitleScene::TitleScene(std::shared_ptr<Back> back)
+{
+	m_back = back;
+	m_back->StartZoomOut();
+}
+
 void TitleScene::Init()
 {
 	m_namePos = { 0,200 };
@@ -27,7 +33,8 @@ void TitleScene::Init()
 	m_start->SetPos({ 0,-100 });					//座標
 	m_start->SetRadius({ 210,80 });			//半径
 	m_start->SetColor({ 1,1,1,1 });			//通常の色	
-	m_start->SetSelectColor({ 1,1,0,1 });	//選択時の色
+	m_start->SetSelectScale({ 1.01f,1.01f });	//選択時の拡縮
+	m_start->SetSelectColor({ 1,1,0.8,1 });	//選択時の色
 	m_start->SetTex("Texture/Start.png");
 
 	if (!m_back)
@@ -48,6 +55,7 @@ void TitleScene::Init()
 	std::shared_ptr<KdSoundInstance> temp = SoundCache::Instance().Get("Sound/BGM/Planetarium.wav");
 	temp->SetVolume(0.1f);
 	temp->Play(true);
+
 }
 
 void TitleScene::Update()
@@ -81,7 +89,6 @@ void TitleScene::Update()
 				Math::Color color = { randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.4f,0.6f) };
 				m_fireworksManager->Shot((FireworksManager::Type)(rand() % FireworksManager::Type::Kind), 
 					startPos, startMove, beforeScale, afterScale, color);
-				
 			}
 		}
 

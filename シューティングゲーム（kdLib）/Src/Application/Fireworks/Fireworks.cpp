@@ -34,7 +34,7 @@ void Fireworks1::Update(float deltaTime)
 		m_pos += m_move * deltaTime;
 
 		//重力
-		m_move.y -= m_gravity * deltaTime;
+		m_move.y -= m_shotGravity * deltaTime;
 
 		//十分に減速したら
 		if (m_move.y < 20)
@@ -81,6 +81,9 @@ void Fireworks1::Update(float deltaTime)
 		if (m_bExploded)
 		{
 			m_circleList[i].m_move *= 1.0f - (0.98 * deltaTime);
+
+			//重力
+			m_circleList[i].m_move.y -= m_particleGravity * deltaTime;
 		}
 		//寿命が尽きたら削除
 		if (!m_circleList[i].Update(deltaTime))
@@ -251,7 +254,7 @@ void Fireworks2::Update(float deltaTime)
 		m_pos += m_move * deltaTime;
 
 		//重力
-		m_move.y -= m_gravity * deltaTime;
+		m_move.y -= m_shotGravity * deltaTime;
 
 		//十分に減速したら
 		if (m_move.y < 20)
@@ -289,6 +292,9 @@ void Fireworks2::Update(float deltaTime)
 		if (m_bExploded)
 		{
 			p.m_move *= 1.0f - (0.98 * deltaTime);
+
+			//重力
+			p.m_move.y -= m_particleGravity * deltaTime;
 		}
 		//寿命が尽きたら削除
 		if (!p.Update(deltaTime))
@@ -312,6 +318,9 @@ void Fireworks2::Update(float deltaTime)
 			if (m_bExploded)
 			{
 				p.m_move *= 1.0f - (0.95 * deltaTime);
+
+				//重力
+				p.m_move.y -= m_particleGravity * deltaTime;
 			}
 			//寿命が尽きたら削除
 			if (!p.Update(deltaTime))
@@ -488,6 +497,7 @@ void Fireworks2::Explode()
 //花火3（円だけで描画)
 //===================================================
 
+//初期化
 void Fireworks3::Init()
 {
 	m_texRadius = 200;
@@ -504,6 +514,7 @@ void Fireworks3::Init()
 	m_bActive = false;
 }
 
+//更新
 void Fireworks3::Update(float deltaTime)
 {
 	//弾けているときは動かない
@@ -513,7 +524,7 @@ void Fireworks3::Update(float deltaTime)
 		m_pos += m_move * deltaTime;
 
 		//重力
-		m_move.y -= m_gravity * deltaTime;
+		m_move.y -= m_shotGravity * deltaTime;
 
 		//十分に減速したら
 		if (m_move.y < 20)
@@ -553,7 +564,7 @@ void Fireworks3::Update(float deltaTime)
 			p.m_move *= 1.0f - (0.95 * deltaTime);
 
 			//重力
-			p.m_move.y -= m_gravity * deltaTime;
+			p.m_move.y -= m_particleGravity * deltaTime;
 		}
 		//寿命が尽きて、透明度も０になったら削除
 		if (!p.Update(deltaTime, m_baseScale))
@@ -574,6 +585,7 @@ void Fireworks3::Update(float deltaTime)
 	}
 }
 
+//描画
 void Fireworks3::Draw()
 {
 	//描画先の初期化
@@ -582,7 +594,7 @@ void Fireworks3::Draw()
 
 	//円の描画
 	{
-		std::shared_ptr<KdTexture>tex = TextureCache::Instance().Get("Texture/Fireworks/Particle2.png");
+		std::shared_ptr<KdTexture>tex = TextureCache::Instance().Get("Texture/Fireworks/Particle.png");
 		for (auto& p : m_circleList)
 		{
 			for (int i = 0; i < 3; ++i)
@@ -591,7 +603,6 @@ void Fireworks3::Draw()
 			}
 		}
 	}
-
 
 	//描画先をBuckBufferに戻す
 	D3D.SetBackBuffer();
@@ -613,6 +624,7 @@ void Fireworks3::Draw()
 	SHADER.m_spriteShader.DrawTex_Src(m_tex, Math::Color{ 0.8f,0.8f,0.8f,1 });
 }
 
+//花火を打ち上げる
 void Fireworks3::Shot(Math::Vector2& startPos, Math::Vector2&startMove, float beforeScale, float afterScale, Math::Color& color)
 {
 	m_pos = startPos;
@@ -655,6 +667,7 @@ void Fireworks3::Shot(Math::Vector2& startPos, Math::Vector2&startMove, float be
 	}
 }
 
+//花火を弾けさせる
 void Fireworks3::Explode()
 {
 	m_bExploded = true;
@@ -726,7 +739,7 @@ void Fireworks4::Update(float deltaTime)
 		m_pos += m_move * deltaTime;
 
 		//重力
-		m_move.y -= m_gravity * deltaTime;
+		m_move.y -= m_shotGravity * deltaTime;
 
 		//十分に減速したら
 		if (m_move.y < 20)
@@ -764,6 +777,8 @@ void Fireworks4::Update(float deltaTime)
 		if (m_bExploded)
 		{
 			p.m_move *= 1.0f - (0.98 * deltaTime);
+			//重力
+			p.m_move.y -= m_particleGravity * deltaTime;
 		}
 		//寿命が尽きたら削除
 		if (!p.Update(deltaTime))

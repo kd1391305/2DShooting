@@ -165,7 +165,8 @@ protected:
 	bool m_bDead_ScreenOut = false;			//スクリーンアウトしたら消えるか？
 
 	const float m_explodeSpeedMax = 150;		//弾ける速度の最大値
-	const float m_gravity = 70;					//重力
+	const float m_shotGravity = 70;					//撃ちあがる時の重力
+	const float m_particleGravity = 20;			//パーティクルの重力
 };
 
 

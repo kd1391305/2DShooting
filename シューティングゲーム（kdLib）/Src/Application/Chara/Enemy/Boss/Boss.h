@@ -1,7 +1,7 @@
 #pragma once
 #include"../../BaseChara/BaseChara.h"
 
-class BulletManager;
+class Game;
 
 class Boss:public BaseChara
 
@@ -9,7 +9,7 @@ class Boss:public BaseChara
 public:
 
 	Boss() = delete;
-	Boss(std::shared_ptr<BulletManager>pBulletManager, Math::Vector2 *pPlayerPos);
+	Boss(Game*game);
 	~Boss()override {}
 
 
@@ -25,7 +25,11 @@ public:
 
 	void Dead();
 
+	void OnHit()override;
+
 private:
+
+	Game* m_pGame;
 
 	void Release()override;
 
@@ -35,9 +39,6 @@ private:
 	float m_shotSpeed;				//’e‘¬
 
 
-	std::shared_ptr<BulletManager> m_pBulletManager;
-	Math::Vector2* m_pPlayerPos;
-
 	//‚R‚U‚O“x‚É’e‚ğ”­Ë‚·‚é‚ÌƒN[ƒ‹ƒ^ƒCƒ€
 	float m_circleShotWait;
 	float m_circleShotWaitTimer;
@@ -45,5 +46,7 @@ private:
 	int m_circleShotCntMax;			//Å‘å‚É‚È‚Á‚½‚ç”{‚ÌƒN[ƒ‹ƒ^ƒCƒ€‚ğİ‚¯‚é
 	float m_circleShotSpeed;		//’e‘¬
 	const int m_circleShotBulletNum = 30;
+
+	float m_endPosX = 200;		//ˆÚ“®‚·‚é‚Æ‚«XÀ•W‚Q‚O‚OˆÈ‰º‚É‚Í‚¢‚©‚È‚¢ij
 
 };

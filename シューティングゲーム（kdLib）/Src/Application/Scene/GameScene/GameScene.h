@@ -21,8 +21,12 @@ public:
 	void Draw();
 
 	std::shared_ptr<FireworksManager> GetFireworksManager() { return m_fireworksManager; }
+	std::shared_ptr<Player> GetPlayer() { return m_player; }
+	std::shared_ptr<BulletManager> GetBulletManager() { return m_bulletManager; }
 
 	void GameOver();
+
+	void GameClear();
 
 private:
 

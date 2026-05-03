@@ -5,7 +5,9 @@
 #include"../../Scene/GameScene/GameScene.h"
 #include"Enemies/Enemy1.h"
 #include"Enemies/Enemy2.h"
+#include"Enemies/Enemy3.h"
 #include"Boss/Boss.h"
+#include"../Player/Player.h"
 
 //コンストラクタ
 EnemyManager::EnemyManager()
@@ -14,8 +16,9 @@ EnemyManager::EnemyManager()
 	m_spawnWaitTimer = 4.0f;
 
 	//敵のスポーン確率
-	m_spawnProbability[SpawnPutturn::Circle]	= 0.5f;
-	m_spawnProbability[SpawnPutturn::Row]		= 0.5f;
+	m_spawnProbability[SpawnPutturn::Circle]	= 0.3f;
+	m_spawnProbability[SpawnPutturn::Row]		= 0.3f;
+	m_spawnProbability[SpawnPutturn::Square]	= 0.4f;
 }
 
 //更新
@@ -58,9 +61,24 @@ void EnemyManager::Update(float deltaTime)
 		itr++;
 	}
 
+
+	if (Timer::Instance().GetTime() > 60)
+	{
+		if (!m_boss)
+		{
+			m_boss = std::make_shared<Boss>(m_pGame);
+			m_boss->Init();
+			m_boss->Spawn({ SCREEN_RIGHT + m_boss->GetRadius().x,0 }, { -200, 0 });
+		}
+
+	}
+
+
 	//ボスの更新
 	if (m_boss)
+	{
 		m_boss->Update(deltaTime);
+	}
 }
 
 //描画
@@ -135,11 +153,11 @@ void EnemyManager::Spawn(float deltaTime)
 
 		//各グループごとの座標を求める
 		float baseX = SCREEN_WIDTH + enemy[0][0]->GetRadius().x;
-		enemy[0][0]->SetPos({baseX,0});
-		enemy[1][0]->SetPos({baseX + 100,100});
-		enemy[2][0]->SetPos({baseX + 100 ,-100});
-		enemy[3][0]->SetPos({baseX + 200,200});
-		enemy[4][0]->SetPos({baseX + 200,-200});
+		enemy[0][0]->SetPos({ baseX,0 });
+		enemy[1][0]->SetPos({ baseX + 100,100 });
+		enemy[2][0]->SetPos({ baseX + 100 ,-100 });
+		enemy[3][0]->SetPos({ baseX + 200,200 });
+		enemy[4][0]->SetPos({ baseX + 200,-200 });
 
 		//グループの先頭座標をもとに、後続の敵の座標をセット
 		float gapX = enemy[0][0]->GetRadius().x * 2;
@@ -162,8 +180,26 @@ void EnemyManager::Spawn(float deltaTime)
 
 		m_spawnPutturnHistory.push(SpawnPutturn::Row);
 	}
-	KdTexture tex;
-	
+
+	sum += m_spawnProbability[SpawnPutturn::Square];
+	if (r < sum)
+	{
+		//かたい敵を出現させる
+		for (int i = 0; i < 5; i++)
+		{
+			for (int j = 0; j < 5; j++)
+			{
+				std::shared_ptr<Enemy3> enemy;
+				enemy = std::make_shared<Enemy3>();
+				enemy->Init();
+				enemy->SetPos(Math::Vector2{ SCREEN_RIGHT + (200.0f * i + 1),0 + 150.0f * (j - 2) });
+				enemy->SetMove(Math::Vector2{ -100,0 });
+				enemy->Spawn();
+				m_enemyList.push_back(enemy);
+			}
+		}
+
+	}
 }
 
 

@@ -9,6 +9,7 @@ class TitleScene :public BaseScene
 {
 public:
 	TitleScene() {}
+	TitleScene(std::shared_ptr<Back> back);
 	~TitleScene() override { Release(); }
 
 	void Init();

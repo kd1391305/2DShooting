@@ -4,6 +4,8 @@ class BaseEnemy;
 
 class Boss;
 
+class Game;
+
 //“G‚ğŠÇ—‚·‚éƒNƒ‰ƒX
 class EnemyManager
 {
@@ -13,6 +15,8 @@ public:
 	void Update(float deltaTime);
 
 	void Draw();
+
+	void SetGame(Game* set) { m_pGame = set; }
 
 	std::vector<std::shared_ptr<BaseEnemy>>& GetEnemyList() { return m_enemyList; }
 	std::shared_ptr<Boss> GetBoss() { return m_boss; }
@@ -27,9 +31,11 @@ private:
 	{
 		Circle,		//“G‚ª‚®‚é‚®‚é‰ñ‚Á‚ÄoŒ»‚·‚é
 		Row,		//“G‚ªˆê’¼ü‚É•À‚ñ‚ÅoŒ»
+		Square,
 		Kind		//í—Ş
 	};
 
+	Game* m_pGame;
 
 	std::vector<std::shared_ptr<BaseEnemy>> m_enemyList;		//“G
 	

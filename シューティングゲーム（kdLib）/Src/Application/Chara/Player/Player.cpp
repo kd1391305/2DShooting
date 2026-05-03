@@ -409,9 +409,6 @@ void Player::DrawDeadAnim()
 
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex_Src(&tex);
-
-	
-
 }
 
 //“|‚ê‚½‚Ìˆ—

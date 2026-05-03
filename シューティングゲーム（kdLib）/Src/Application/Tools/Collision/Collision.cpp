@@ -8,6 +8,7 @@
 #include"../../Chara/Enemy/BaseEnemy/BaseEnemy.h"
 #include"../RandEx/RandEx.h"
 #include"../../Fireworks/FireworksManager.h"
+#include"../../Chara/Enemy/Boss/Boss.h"
 
 //プレイヤー　と　敵
 bool CollisionPlayer_Enemy(std::shared_ptr<Player> player, std::vector<std::shared_ptr<BaseEnemy>>& enemyList)
@@ -51,25 +52,29 @@ bool CollisionPlayer_EBullet(std::shared_ptr<Player> player, std::vector<std::sh
 	return false;
 }
 
-//弾　と　弾
-//bool Collision(Bullets* b1, Bullets* b2)
-//{
-//	for (auto& B1 : b1->GetBullets())
-//	{
-//		if (!B1.IsActive())continue;
-//		for (auto& B2 : b2->GetBullets())
-//		{
-//			if (!B2.IsActive())continue;
-//			if (IsCollision(B1.GetPos(), Bullet::GetRadius(), B2.GetPos(), Bullet::GetRadius()))
-//			{
-//				B1.SetActive(false);
-//				B2.SetActive(false);
-//				return true;
-//			}
-//		}
-//	}
-//	return false;
-//}
+//プレイヤー　と　ボス
+bool CollisionPlayer_Boss(std::shared_ptr<Player> player, std::shared_ptr<Boss> boss)
+{
+	if (!boss)return false;
+	//プレイヤーが無敵中の場合
+	if (player->IsInvincible())return false;
+
+	if (IsCollision(player->GetPos(), player->GetRadius().x, boss->GetPos(), boss->GetRadius().x))
+	{
+		//プレイヤーにダメージ
+		player->Damage(10);
+		
+		//無敵時間
+		player->Invincible(1.5f);			//1.5秒間無敵
+		
+		//ボスにもダメージ
+		boss->Damage(10);
+		
+		Timer::Instance().Stop(0.35f);		//0.35秒停止
+		return true;
+	}
+	return false;
+}
 
 //チャージ弾　と　敵
 bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& playerList, std::vector<std::shared_ptr<BaseEnemy>>& enemyList, std::vector<std::shared_ptr<BaseFireworks>>& fireworksList, std::shared_ptr<Score> score)
@@ -82,11 +87,14 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 			{
 				if (IsCollision(p->GetPos(), p->GetRadius(), e->GetPos(), e->GetRadius().x))
 				{
+					//ダメージ
+					e->Damage(10 * p->GetPower());
+
 					//敵に貫通する
 					p->Pierce();
 
-					//ダメージ
-					e->Damage(10);
+					//当たった時の処理
+					e->OnHit();
 
 					//スコアを加算する
 					score->Add(100);
@@ -160,9 +168,68 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 							temp->Draw();
 							fireworksList.push_back(temp);
 						}
+						break;
 					}
 					
 				}
+			}
+		}
+	}
+	return false;
+}
+
+//プレイヤーの弾　と　ボス
+bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss> boss, std::vector<std::shared_ptr<BaseFireworks>>& fireworksList)
+{
+	if (!boss)return false;
+
+	Math::Vector2 bossPos = boss->GetPos();
+	float bossRadius = boss->GetRadius().x;
+
+	for (auto& bullet : playerBullet)
+	{
+		if (!bullet->IsActive())continue;
+		if (IsCollision(bossPos, bossRadius, bullet->GetPos(), bullet->GetRadius()))
+		{
+			//敵に貫通する
+			bullet->Pierce();
+
+			//ダメージ
+			boss->Damage(10);
+
+			//当たった時の処理
+			boss->OnHit();
+
+			//花火を弾けさせる
+			{
+				std::shared_ptr<BaseFireworks>temp;
+				int type = rand() % FireworksManager::Type::Kind;
+				switch (type)
+				{
+				case FireworksManager::Type::Circle:
+					temp = std::make_shared<Fireworks1>();
+					break;
+				case FireworksManager::Type::Circle_Line:
+					temp = std::make_shared<Fireworks2>();
+					break;
+				case FireworksManager::Type::NewCircle:
+					temp = std::make_shared<Fireworks3>();
+					break;
+				case FireworksManager::Type::Petal:
+					temp = std::make_shared<Fireworks4>();
+					break;
+				}
+				temp->Init();
+				float afterScale = { randRange(0.1f,0.2f) };
+				float r, g, b, a;
+				r = randRange(0, 0.5f);
+				g = randRange(0, 0.5f);
+				b = randRange(0, 0.5f);
+				a = randRange(0.4f, 0.6f);
+
+				temp->Shot(bullet->GetPos(), Math::Vector2{ NULL, NULL }, NULL, afterScale, Math::Color{ r,g,b,a });
+				temp->Explode();
+				fireworksList.push_back(temp);
 			}
 		}
 	}

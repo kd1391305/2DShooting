@@ -3,6 +3,7 @@
 
 class FireworksManager;
 class Back;
+class ButtonEx;
 
 class GameClearScene :public BaseScene
 {
@@ -23,4 +24,7 @@ private:
 
 	std::shared_ptr<Back> m_back;
 	std::shared_ptr<FireworksManager> m_fireworksManager;
+
+	std::shared_ptr<ButtonEx> m_titleButton;		//タイトルへ行くボタン
+	std::shared_ptr<ButtonEx> m_gameButton;		//ゲームへ戻るボタン
 };

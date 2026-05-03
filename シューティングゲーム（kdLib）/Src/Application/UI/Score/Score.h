@@ -14,12 +14,13 @@ public:
 	~Score();
 
 	void Init();
+
+	void Update();
 	
 	void Draw();
 
 	//スコアを追加する
-	void Add(int addScore) { m_score += addScore; }
-
+	void Add(int addScore);
 	long Get() { return m_score; }
 	
 private:
@@ -32,4 +33,7 @@ private:
 
 	long m_score=0;			//現在のスコア
 	long m_highScore=0;		//最大スコア
+
+	std::queue<int>m_waitScore;			//加算するのを待っているスコア待機列
+	static const int s_waitCnt = 6;		//6フレーム間で平等にスコアを加算する
 };

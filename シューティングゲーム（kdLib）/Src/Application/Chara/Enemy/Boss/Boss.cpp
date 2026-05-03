@@ -1,9 +1,11 @@
 #include "Boss.h"
 #include"../../../TextureCache/TextureCache.h"
 #include"../../../Bullet/BulletManager.h"
+#include"../../../Scene/GameScene/GameScene.h"
+#include"../../Player/Player.h"
 
-Boss::Boss(std::shared_ptr<BulletManager> pBulletManager, Math::Vector2* pPlayerPos):
-m_pBulletManager(pBulletManager), m_pPlayerPos(pPlayerPos)
+Boss::Boss(Game*game):
+	m_pGame(game)
 {
 }
 
@@ -33,11 +35,11 @@ void Boss::Init()
 	m_shotWait = 0.15f;			//クールタイム
 	m_shotCnt = 0;
 	m_shotCntMax = 5;		//通常弾を５回まで連続で撃てる
-	m_shotSpeed = 350;
-	m_circleShotSpeed = 320;
+	m_shotSpeed = 250;
+	m_circleShotSpeed = 220;
 
 	m_circleShotWait = 0.2f;
-	m_circleShotWaitTimer = 5.0f;
+	m_circleShotWaitTimer = 10.0f;
 	m_circleShotCnt = 0;
 	m_circleShotCntMax = 5;	//３６０°に飛ばす弾を連続で３回撃てる
 }
@@ -75,16 +77,24 @@ void Boss::Draw()
 
 void Boss::Action(float deltaTime)
 {
+	//ボスの座標補正
+	if (m_pos.x <= m_endPosX)
+	{
+		m_move.x = 0;
+		m_pos.x = m_endPosX;
+	}
+
+
 	//通常弾はプレイヤーに向けて発射
 	if (m_shotWaitTimer == 0)
 	{
+		const Math::Vector2 playerPos = m_pGame->GetPlayer()->GetPos();
 		Math::Vector2 pos = { m_pos.x - m_radius.x, m_pos.y };
-
 		Math::Vector2 move;
-		float radian = atan2f(m_pPlayerPos->y - pos.y, m_pPlayerPos->x - pos.x);
+		float radian = atan2f(playerPos.y - pos.y, playerPos.x - pos.x);
 		move.x = cosf(radian) * m_shotSpeed;
 		move.y = sinf(radian) * m_shotSpeed;
-		m_pBulletManager->Shot(pos, move);
+		m_pGame->GetBulletManager()->Shot(pos, move);
 		m_shotCnt++;
 		if (m_shotCnt >= m_shotCntMax)
 		{
@@ -106,11 +116,11 @@ void Boss::Action(float deltaTime)
 			Math::Vector2 move;
 			move.x = cosf(radian) * m_circleShotSpeed;
 			move.y = sinf(radian) * m_circleShotSpeed;
-			m_pBulletManager->Shot(m_pos, move);
+			m_pGame->GetBulletManager()->Shot(m_pos, move);
 		}
 		if (m_circleShotCnt >= m_circleShotCntMax)
 		{
-			m_circleShotWaitTimer = m_circleShotWait * m_circleShotCntMax;
+			m_circleShotWaitTimer = m_circleShotWait * m_circleShotCntMax * m_circleShotBulletNum;
 			m_circleShotCnt = 0;
 		}
 		else
@@ -132,7 +142,13 @@ void Boss::Spawn(Math::Vector2 pos,Math::Vector2 move)
 
 void Boss::Dead()
 {
+	//ボスが倒れたらゲームクリア
+	m_pGame->GameClear();
+}
 
+void Boss::OnHit()
+{
+	
 }
 
 void Boss::Release()
