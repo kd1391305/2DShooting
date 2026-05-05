@@ -43,19 +43,15 @@ void TitleScene::Init()
 		m_back->Init();
 	}
 
-	if (!m_fireworksManager)
-	{
-		m_fireworksManager = std::make_shared<FireworksManager>();
-	}
-
 	m_shotWaitTimer = 2;
-	m_shotWait = 6;
+	m_shotWait = 10;
 
 	//BGMを流す
-	std::shared_ptr<KdSoundInstance> temp = SoundCache::Instance().Get("Sound/BGM/Planetarium.wav");
-	temp->SetVolume(0.1f);
-	temp->Play(true);
+	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");
+	bgm->SetVolume(0.01f);
+	bgm->Play(true);
 
+	m_bChangeScene = false;
 }
 
 void TitleScene::Update()
@@ -63,48 +59,90 @@ void TitleScene::Update()
 	float deltaTime = Timer::Instance().GetDeltaTime();
 
 	//背景の更新
-	if(m_back)m_back->Update(deltaTime);
+	if (m_back)m_back->Update(deltaTime);
 
-	//花火の更新
-	m_fireworksManager->Update(deltaTime);
-
-	//花火を打ち上げるランダムで
-	m_shotWaitTimer -= deltaTime;
-	if (m_shotWaitTimer <= 0)
+	//シーン切り替えフラグが立っているとき
+	if (m_bChangeScene)
 	{
-		{
-			int shotNum = 10;
-			int noise = randRange(0, 5);
-			shotNum += noise;
-			for (int i = 0; i < shotNum; i++)
-			{
-				//タイトル名と被らないようにタイトルの横にする
-				float startX = randRange(SCREEN_WIDTH / 4.0f, SCREEN_RIGHT);
-				if (rand() % 2)startX *= -1;
-
-				Math::Vector2 startPos = { startX,SCREEN_BOTTOM - 30 - randRange(0,200) };
-				Math::Vector2 startMove = { 0,randRange(250,320) };
-				float beforeScale = randRange(0.7f, 1.3f);
-				float afterScale = randRange(0.7f, 1.3f);
-				Math::Color color = { randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.0f,0.6f),randRange(0.4f,0.6f) };
-				m_fireworksManager->Shot((FireworksManager::Type)(rand() % FireworksManager::Type::Kind), 
-					startPos, startMove, beforeScale, afterScale, color);
-			}
-		}
-
-		//クールタイムを設ける
-		float noise = randRange(0, 3);
-		m_shotWaitTimer = m_shotWait + noise;
-	}
-
-	//スタートボタンの更新
-	m_start->Update();
-	if (m_start->IsSelect())
-	{
-		if (KEY.IsDown(VK_LBUTTON))
+		m_changeSceneWaitTimer -= deltaTime;
+		if (m_changeSceneWaitTimer <= 0)
 		{
 			//ゲーム画面へ移行
-			SceneManager::Instance().ChangeState(new Game(m_back, m_fireworksManager));
+			SceneManager::Instance().ChangeState(std::make_shared<Game>(m_back));
+		}
+	}
+	else
+	{
+
+		//花火を打ち上げるランダムで
+		m_shotWaitTimer -= deltaTime;
+		if (m_shotWaitTimer <= 0)
+		{
+			{
+				int shotNum = 15;
+				int noise = randRange(-2, 2);
+				shotNum += noise;
+				for (int i = 0; i < shotNum; i++)
+				{
+					//タイトル名と被らないようにタイトルの横にする
+					float startX = randRange(SCREEN_WIDTH / 4.0f, SCREEN_RIGHT / 0.8f);
+					if (i % 2)startX *= -1;
+
+					Math::Vector2 startPos = { startX,SCREEN_BOTTOM - 30 - randRange(0,200) };
+					Math::Vector2 startMove = { 0,randRange(270,370) };
+					float beforeScale = randRange(0.3f, 0.5f);
+					float afterScale = randRange(0.7f, 1.3f);
+					Math::Color color = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
+					Math::Color color2 = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
+					FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
+					for (int i = 0; i < 3; i++)
+					{
+						m_back->GetFireworks()->Shot(type,
+							startPos, startMove, beforeScale, afterScale, color);
+					}
+					//二重花火にする（花火の中にちいさな花火を追加）
+					m_back->GetFireworks()->Shot(type,
+						startPos, startMove, beforeScale, afterScale / 1.5f, color);
+				}
+			}
+			//クールタイムを設ける
+			float noise = randRange(0, 6);
+			m_shotWaitTimer = m_shotWait + noise;
+
+			//タイトル専用の花火効果音を流す
+			std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Fireworks_Title.wav");
+			se->SetVolume(0.05f);
+			se->Play(false);
+		}
+
+		//スタートボタンの更新
+		m_start->Update();
+		if (m_start->IsSelect())
+		{
+			if (!m_bHitCursor)
+			{
+				m_bHitCursor = true;
+				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Cursor.wav");
+				se->SetVolume(0.1f);
+				se->Play(false);
+			}
+
+			if (KEY.IsDown(VK_LBUTTON))
+			{
+
+				//効果音発生
+				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Click.wav");
+				se->SetVolume(0.1f);
+				se->Play(false);
+
+				//シーン切り替えの準備をする
+				m_bChangeScene = true;
+				m_changeSceneWaitTimer = m_changeSceneWait;
+			}
+		}
+		else
+		{
+			m_bHitCursor = false;
 		}
 	}
 }
@@ -115,13 +153,12 @@ void TitleScene::Draw()
 
 	m_start->Draw();
 
-	m_fireworksManager->Draw();
-
 	SHADER.m_spriteShader.SetMatrix(m_nameMat);
 	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Title.png"));
 }
 
 void TitleScene::Release()
 {
-	
+	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav",SoundCache::SoundState::Playing);
+	bgm->Stop();
 }

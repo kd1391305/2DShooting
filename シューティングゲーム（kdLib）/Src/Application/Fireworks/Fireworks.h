@@ -18,7 +18,7 @@ public:
 	void Update(float deltaTime);
 
 	//描画
-	void Draw();
+	void Draw(float backScale)override;
 
 	//花火を打ち上げる
 	void Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
@@ -32,6 +32,7 @@ private:
 	void Release();
 
 	std::vector<Particle> m_circleList;		//花火の火（丸形）
+	int m_circleActiveNum;
 };
 //===================================================
 
@@ -52,7 +53,7 @@ public:
 	void Update(float deltaTime)override;
 
 	//描画
-	void Draw()override;
+	void Draw(float backScale)override;
 
 	//花火を打ち上げる
 	void Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
@@ -64,7 +65,9 @@ protected:
 
 
 	std::vector<Particle> m_circleList;		//花火の火（丸形）
+	int m_circleActiveNum;					//丸型の活性状態の数		
 	std::vector<Particle2> m_lineList;		//花火の火（棒形）
+	int m_lineActiveNum;					//丸型の活性状態の数	
 
 	Math::Vector2 m_lineBaseScale;
 };
@@ -87,7 +90,7 @@ public:
 	void Update(float deltaTime)override;
 
 	//描画
-	void Draw()override;
+	void Draw(float backScale)override;
 
 	//花火を打ち上げる
 	void Shot( Math::Vector2& startPos, Math::Vector2&startMove, float beforeScale, float afterScale, Math::Color& color)override;
@@ -98,6 +101,7 @@ public:
 protected:
 
 	std::vector<Particle3> m_circleList;		//円
+	int m_circleActiveNum;
 
 	//画像の基本的な拡縮（100*100の画像を6*6の大きさにするため）
 	//この値にnoiseとなる拡縮をかけて大きさを調整する
@@ -122,7 +126,7 @@ public:
 	void Update(float deltaTime)override;
 
 	//描画
-	void Draw()override;
+	void Draw(float backScale)override;
 
 	//花火を打ち上げる
 	void Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
@@ -135,8 +139,42 @@ protected:
 	//解放する
 	void Release()override;
 
-	std::vector<Particle> m_petal;		//花びら
+	std::vector<Particle> m_petalList;		//花びら
+	int m_petalActiveNum;
 };
 //===================================================
 
+//===================================================
+//花火5（トレイル（軌跡）付き）
+//===================================================
+class Fireworks5 :public BaseFireworks
+{
+public:
 
+	Fireworks5() {}
+	~Fireworks5() { Release(); }
+
+	//初期化
+	void Init()override;
+
+	//更新
+	void Update(float deltaTime)override;
+
+	//描画
+	void Draw(float backScale)override;
+
+	//花火を打ち上げる
+	void Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
+
+	//花火を弾けさせる
+	void Explode()override;
+
+protected:
+
+	//解放する
+	void Release()override;
+
+	std::vector<Particle4> m_trailList;		//軌跡
+	int m_trailActiveNum;
+};
+//===================================================

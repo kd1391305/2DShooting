@@ -46,7 +46,7 @@ public:
 	Math::Vector2 GetPos() { return m_pos; }
 	Math::Vector2 GetMove() { return m_move; }
 	Math::Vector2 GetRadius() { return m_radius; }
-	Math::Color GetColor() { return m_color; }
+	virtual Math::Color GetColor() { return m_color; }
 	float GetHp() { return m_hp; }
 
 	void SetPos(Math::Vector2 set) { m_pos = set; }

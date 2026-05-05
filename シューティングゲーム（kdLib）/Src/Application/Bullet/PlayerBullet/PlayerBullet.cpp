@@ -4,7 +4,11 @@ void PlayerBullet::Pierce()
 {
 	m_pierceNum++;
 	m_power--;
-	if (m_power < 0)m_power = 0;
+	if (m_power < 0)
+	{
+		m_power = 0;
+		m_bActive = false;
+	}
 }
 
 void PlayerBullet::Draw()

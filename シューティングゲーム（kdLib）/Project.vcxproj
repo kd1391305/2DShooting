@@ -186,7 +186,6 @@
     <ClInclude Include="Src\Application\Scene\GameClearScene\GameClearScene.h" />
     <ClInclude Include="Src\Application\Scene\GameOverScene\GameOverScene.h" />
     <ClInclude Include="Src\Application\Scene\GameScene\GameScene.h" />
-    <ClInclude Include="Src\Application\Scene\ResultScene\ResultScene.h" />
     <ClInclude Include="Src\Application\Scene\SceneManager.h" />
     <ClInclude Include="Src\Application\Scene\TitleScene\TitleScene.h" />
     <ClInclude Include="Src\Application\SoundCache\SoundCache.h" />
@@ -195,7 +194,6 @@
     <ClInclude Include="Src\Application\Tools\Button\Button.h" />
     <ClInclude Include="Src\Application\Tools\Collision\Collision.h" />
     <ClInclude Include="Src\Application\Tools\Gauge\Gauge.h" />
-    <ClInclude Include="Src\Application\Tools\ObjectPool\ObjectPool.h" />
     <ClInclude Include="Src\Application\Tools\RandEx\RandEx.h" />
     <ClInclude Include="Src\Application\UI\Explan\Explan.h" />
     <ClInclude Include="Src\Application\UI\Score\Score.h" />
@@ -248,7 +246,7 @@
     <ClCompile Include="Src\Application\Scene\GameClearScene\GameClearScene.cpp" />
     <ClCompile Include="Src\Application\Scene\GameOverScene\GameOverScene.cpp" />
     <ClCompile Include="Src\Application\Scene\GameScene\GameScene.cpp" />
-    <ClCompile Include="Src\Application\Scene\ResultScene\ResultScene.cpp" />
+    <ClCompile Include="Src\Application\Scene\SceneManager.cpp" />
     <ClCompile Include="Src\Application\Scene\TitleScene\TitleScene.cpp" />
     <ClCompile Include="Src\Application\Timer\Timer.cpp" />
     <ClCompile Include="Src\Application\Tools\Button\Button.cpp" />

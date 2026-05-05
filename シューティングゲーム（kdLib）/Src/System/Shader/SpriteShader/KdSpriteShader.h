@@ -61,7 +61,7 @@ public:
 
 	void ClearMatrix()
 	{
-		static const Math::Matrix clear = Math::Matrix::CreateTranslation(0, 0, 0);
+		static const Math::Matrix clear;
 		m_cb0.Work().mTransform = clear;
 	}
 

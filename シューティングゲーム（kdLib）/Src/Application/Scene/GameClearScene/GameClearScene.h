@@ -9,8 +9,8 @@ class GameClearScene :public BaseScene
 {
 public:
 	GameClearScene() = delete;
-	GameClearScene(std::shared_ptr<Back>back,std::shared_ptr<FireworksManager>fireworksManager):
-		m_back(back),m_fireworksManager(fireworksManager)
+	GameClearScene(std::shared_ptr<Back>back):
+		m_back(back)
 	{}
 	~GameClearScene() override { Release(); }
 
@@ -23,7 +23,6 @@ private:
 	void Release()override;
 
 	std::shared_ptr<Back> m_back;
-	std::shared_ptr<FireworksManager> m_fireworksManager;
 
 	std::shared_ptr<ButtonEx> m_titleButton;		//タイトルへ行くボタン
 	std::shared_ptr<ButtonEx> m_gameButton;		//ゲームへ戻るボタン

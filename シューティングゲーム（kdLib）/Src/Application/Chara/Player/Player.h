@@ -44,6 +44,13 @@ public:
 
 	void SetGame(Game* set) { m_pGame = set; }
 	void SetBulletManager(std::shared_ptr<BulletManager>set) { m_pBulletManager = set; }
+
+	void CreateMatrix()
+	{
+		Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale, m_scale, 0);
+		Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+		m_mat = scaleMat * transMat;
+	}
 private:
 
 	//倒れた時のアニメーション用の値を初期化
@@ -59,8 +66,8 @@ private:
 
 	std::shared_ptr<BulletManager> m_pBulletManager;
 
-	bool m_bInvincible;					//無敵かどうかのフラグ
-	float m_invincibleTime;				//無敵時間
+	bool	m_bInvincible;					//無敵かどうかのフラグ
+	float	m_invincibleTime;				//無敵時間
 
 	float m_sumDeltaTime;				//経過した時間を足していく(無敵状態のときの透明度を切り替える処理で使用)
 

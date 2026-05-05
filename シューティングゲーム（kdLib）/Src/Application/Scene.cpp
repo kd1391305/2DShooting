@@ -6,6 +6,9 @@
 #include"Mouse/Mouse.h"
 #include"Key/KeyManager.h"
 #include"Timer/Timer.h"
+#include"Background/Back.h"
+#include"Scene/GameClearScene/GameClearScene.h"
+#include"Scene/GameOverScene/GameOverScene.h"
 
 void Scene::Draw2D()
 {
@@ -26,7 +29,10 @@ void Scene::Init()
 {
 	srand(timeGetTime());
 	DWriteCustom::Instance().Init();
-	SceneManager::Instance().ChangeState(new TitleScene());
+	//std::shared_ptr<Back>back = std::make_shared<Back>();
+	//back->Init();
+	//SceneManager::Instance().ChangeState(new GameClearScene(back));]
+	SceneManager::Instance().ChangeState(std::make_shared<TitleScene>());
 	Timer::Instance().Reset();
 }
 
@@ -37,7 +43,7 @@ void Scene::Release()
 
 void Scene::ImGuiUpdate()
 {
-	return;
+	//return;
 
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_Once);

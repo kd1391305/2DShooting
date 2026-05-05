@@ -15,12 +15,16 @@ public:
 	virtual void Spawn();
 
 	void OnHit()override;
+
+	Math::Color GetColor()override { return m_normalColor; }
 private:
 	//敵の行動
 	virtual void Action(float deltaTime);
 
-	bool m_bHitFlg;
+	Math::Color m_hitColor;
+	Math::Color m_normalColor;
 
+	bool m_bHitFlg;
 	float m_hitEffectTimer;					//エフェクト発生中のタイマー（０になったらエフェクトを切る）
 	const float m_hitEffectTime = 0.1f;		//エフェクトの時間
 };

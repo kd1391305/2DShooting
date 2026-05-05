@@ -3,6 +3,7 @@
 #include"../Light/Light.h"
 #include"../TextureCache/TextureCache.h"
 #include"../Tools/RandEx/RandEx.h"
+#include"../Fireworks/FireworksManager.h"
 
 void LightParticle::Update(float deltaTime)
 {
@@ -33,20 +34,19 @@ void LightParticle::Draw()
 
 void Back::Init()
 {
+	m_fireworks = std::make_shared<FireworksManager>();
+
 	//ズームアウトからスタート
 	m_bZoomInFlg = false;
 	m_allScale = m_zoomOutBackScale; 
 	m_bZoomingFlg = false;
 
-	m_farBgWidth = (float)TextureCache::Instance().Get("Texture/Back.png").get()->GetInfo().Width * m_allScale;
+	m_farBgWidth = (float)TextureCache::Instance().Get("Texture/Back.png").get()->GetInfo().Width;
 
 	//フェンスの横幅
 	m_fanceWidth = m_fanceRenderWidth * m_allScale;
 
 	m_lanternDistance = m_fanceWidth * 5;
-
-	//背景描画クラス特有のスクリーンの右端
-	m_renderScreenLeft = SCREEN_LEFT / m_allScale;
 
 	//最背面の背景画像のための初期化
 	{
@@ -56,15 +56,13 @@ void Back::Init()
 		}
 		//一枚目は中央からスタート
 		m_farBg.front().m_pos = { 0,0 };
-		m_farBg.front().m_scale = { m_allScale,m_allScale };
+		m_farBg.front().m_scale = { 1,1 };
 		//二枚目は一枚目の右隣からスタート
 		m_farBg.back().m_pos = { m_farBg.front().m_pos.x + m_farBgWidth,0 };
-		m_farBg.back().m_scale = { -m_allScale,m_allScale };
+		m_farBg.back().m_scale = { -1,1 };
 		for (auto& farBg : m_farBg)
 		{
-			Math::Matrix scaleMat = Math::Matrix::CreateScale(farBg.m_scale.x, farBg.m_scale.y, 0);
-			Math::Matrix transMat = Math::Matrix::CreateTranslation(farBg.m_pos.x, farBg.m_pos.y, 0);
-			m_farBg.front().m_mat = scaleMat * transMat;
+			farBg.CreateMat(m_allScale);
 		}
 	}
 
@@ -78,7 +76,7 @@ void Back::Init()
 		int i = 0;
 		for (auto& fance : m_fance)
 		{
-			fance.m_pos = { m_renderScreenLeft + m_fanceWidth * i,-300 * m_allScale };
+			fance.m_pos = { -m_farBgWidth / 2.0f + m_fanceWidth * i,-300 * m_allScale };
 			fance.m_scale = m_fanceRenderScale * m_allScale;
 			fance.m_color = { 0.8f,0.8f,0.8f,0.5f };
 			i++;
@@ -111,6 +109,16 @@ void Back::Init()
 //更新
 void Back::Update(float deltaTime)
 {
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	{
+		StartZoomIn();
+	}
+	else if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	{
+		StartZoomOut();
+	}
+
+
 	if (m_bZoomingFlg)
 	{
 		UpdateZooming(deltaTime);
@@ -119,12 +127,14 @@ void Back::Update(float deltaTime)
 	{
 		UpdateNormal(deltaTime);
 	}
-
+	m_fireworks->Update(deltaTime);
 }
 
 //描画
 void Back::Draw()
 {
+
+	//最背面の背景画像を描画
 	std::shared_ptr<KdTexture> tex =  TextureCache::Instance().Get("Texture/Back.png");
 	for (auto&farBg:m_farBg)
 	{
@@ -135,12 +145,14 @@ void Back::Draw()
 		SHADER.m_spriteShader.DrawTex_Src(tex, Math::Color{ 0.6f,0.6f,0.6f,0.8f });
 	}
 
+	//フェンスの描画
 	std::shared_ptr<KdTexture>fanceTex = TextureCache::Instance().Get("Texture/Fance.png");
 	for (auto& f : m_fance)
 	{
 		f.Draw(fanceTex);
 	}
 
+	//ランタンの描画
 	std::shared_ptr<KdTexture>lanternTex = TextureCache::Instance().Get("Texture/Lantern.png");
 	for (auto& l : m_lantern)
 	{
@@ -148,10 +160,14 @@ void Back::Draw()
 		Light::Instance().Draw(l.m_pos * m_allScale, { 25, 25 },Math::Color{0.9f,0.9f,0.9f,0.2f});
 	}
 
+	//蛍的なものの描画
 	for (auto& l : m_lightParticleList)
 	{
 		l.Draw();
 	}
+
+	//花火の描画
+	m_fireworks->Draw(m_allScale);
 }
 
 //ズームインする（ゲーム画面に遷移時に呼び出す）
@@ -170,7 +186,7 @@ void Back::StartZoomOut()
 
 void Back::Respawn(LightParticle* light)
 {
-	light->m_pos = { randRange(m_renderScreenLeft,-m_renderScreenLeft),randRange(SCREEN_BOTTOM,SCREEN_TOP) };
+	light->m_pos = { randRange(SCREEN_LEFT,SCREEN_RIGHT),randRange(SCREEN_BOTTOM,SCREEN_TOP) };
 	light->m_move = { randRange(-5.0f,5.0f),randRange(-5.0f,5.0f) };
 	float r = randRange(1.5, 3);
 	light->m_radius = { r,r };
@@ -204,32 +220,11 @@ void Back::UpdateZooming(float deltaTime)
 		}
 	}
 
-	//背景にあるオブジェクト全ての拡縮を変更する
-	//最背面の描画用
-	m_farBgWidth = (float)TextureCache::Instance().Get("Texture/Back.png").get()->GetInfo().Width * m_allScale;
-	m_fanceWidth = m_fanceRenderWidth * m_allScale;
-
-	m_renderScreenLeft = SCREEN_LEFT / m_allScale;
-	
-	m_farBg.front().m_scale = { m_allScale,m_allScale };
-	m_farBg.back().m_scale = { -m_allScale,m_allScale };
-
-	//フェンス
-	for (auto& fance : m_fance)
-	{
-		fance.m_scale = m_fanceRenderScale * m_allScale;
-	}
-	//ランタン
-	for (auto& lantern : m_lantern)
-	{
-		lantern.m_scale = m_lanternRenderScale * m_allScale;
-	}
-
 	float scrollX;
 	{
 		//アンダーフローが発生するため、小数点以下第一位以上をスクロール量とする
 		//発生すると背景画像が少しずれ、バックバッファが表示される
-		int tempScrollX = -m_scrollSpeed * deltaTime * m_allScale * 10;
+		int tempScrollX = -m_scrollSpeed * deltaTime * 10;
 		scrollX = tempScrollX / 10.0f;
 	}
 
@@ -242,7 +237,7 @@ void Back::UpdateZooming(float deltaTime)
 		m_farBg.back().m_pos.x = m_farBg.front().m_pos.x + m_farBgWidth;
 
 		//画面端に到達したら、画面右端にセットする
-		if (m_farBg.front().m_pos.x < m_renderScreenLeft - m_farBgWidth/2.0f)
+		if (m_farBg.front().m_pos.x <= -m_farBgWidth)
 		{
 			m_farBg.front().m_pos.x = m_farBg.back().m_pos.x + m_farBgWidth;
 			//背景画像二枚のうち、左にあるほうをリストの最初に、右にあるものをリストの最後にする
@@ -250,9 +245,7 @@ void Back::UpdateZooming(float deltaTime)
 		}
 		for (auto& farBg : m_farBg)
 		{
-			Math::Matrix scaleMat = Math::Matrix::CreateScale(farBg.m_scale.x, farBg.m_scale.y, 0);
-			Math::Matrix transMat = Math::Matrix::CreateTranslation(farBg.m_pos.x, farBg.m_pos.y, 0);
-			farBg.m_mat = scaleMat * transMat;
+			farBg.CreateMat(m_allScale);
 		}
 	}
 
@@ -317,10 +310,10 @@ void Back::UpdateNormal(float deltaTime)
 		// スクロール量を直接足すのはリストの最初だけ。
 		//　次からは最初の値を元に足す。
 		m_farBg.front().m_pos.x += scrollX;
-		m_farBg.back().m_pos.x = m_farBg.front().m_pos.x + m_farBgWidth;
+		m_farBg.back().m_pos.x = m_farBg.front().m_pos.x + m_farBgWidth ;
 
 		//画面端に到達したら、画面右端にセットする
-		if (m_farBg.front().m_pos.x < m_renderScreenLeft - m_farBgWidth / 2.0f)
+		if (m_farBg.front().m_pos.x <= -m_farBgWidth)
 		{
 			m_farBg.front().m_pos.x = m_farBg.back().m_pos.x + m_farBgWidth;
 			//背景画像二枚のうち、左にあるほうをリストの最初に、右にあるものをリストの最後にする
@@ -328,9 +321,7 @@ void Back::UpdateNormal(float deltaTime)
 		}
 		for (auto& farBg : m_farBg)
 		{
-			Math::Matrix scaleMat = Math::Matrix::CreateScale(farBg.m_scale.x, farBg.m_scale.y, 0);
-			Math::Matrix transMat = Math::Matrix::CreateTranslation(farBg.m_pos.x, farBg.m_pos.y, 0);
-			farBg.m_mat = scaleMat * transMat;
+			farBg.CreateMat(m_allScale);
 		}
 	}
 

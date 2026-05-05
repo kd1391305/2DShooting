@@ -13,19 +13,6 @@
 #include"../GameScene/GameScene.h"
 #include"../TitleScene/TitleScene.h"
 
-GameOverScene::GameOverScene(std::shared_ptr<Player> player,
-	std::shared_ptr<EnemyManager> enemy,
-	std::shared_ptr<FireworksManager> fireworks,
-	std::shared_ptr<BulletManager> bullet,
-	std::shared_ptr<Back> back) 
-{
-	m_player = player;
-	m_enemyManager = enemy;
-	m_fireworksManager = fireworks;
-	m_bulletManager = bullet;
-	m_back = back;
-}
-
 void GameOverScene::Init()
 {
 	m_color = { 0,0,0,0 };
@@ -60,7 +47,7 @@ void GameOverScene::Update()
 	{
 		if (KEY.IsDown(VK_LBUTTON))
 		{
-			SceneManager::Instance().ChangeState(new Game(m_back, m_fireworksManager));
+			SceneManager::Instance().ChangeState(m_game);
 		}
 	}
 
@@ -69,18 +56,17 @@ void GameOverScene::Update()
 	{
 		if (KEY.IsDown(VK_LBUTTON))
 		{
-			SceneManager::Instance().ChangeState(new TitleScene(m_back));
+			SceneManager::Instance().ChangeState(std::make_shared<TitleScene>(m_game->GetBack()));
 		}
 	}
 }
 
 void GameOverScene::Draw()
 {
-	m_back->Draw();
-	m_player->Draw();
-	m_enemyManager->Draw();
-	m_fireworksManager->Draw();
-	m_bulletManager->Draw();
+	m_game->GetBack()->Draw();
+	m_game->GetPlayer()->Draw();
+	m_game->GetBulletManager()->Draw();
+	m_game->GetEnemyManager()->Draw();
 
 	//画面全体に薄く黒色をかぶせる処理
 	SHADER.m_spriteShader.ClearMatrix();
@@ -94,8 +80,8 @@ void GameOverScene::Draw()
 	DWriteCustom::Instance().SetShadow({ -2. - 2 }, { 0.8f,0.2f,0.2f,0.8f });
 	DWriteCustom::Instance().Draw("Game Over", { -120,100 }, 100, { 0.8f,0.8f,0.8f,1.0f });
 	DWriteCustom::Instance().SetShadow({}, {});
-	DWriteCustom::Instance().Draw("タイトルへ", Math::Vector2{ -250,posY }, 30);
-	DWriteCustom::Instance().Draw("リトライ", { 70,posY }, 30);
+	DWriteCustom::Instance().Draw("タイトルへ", Math::Vector2{ -240,posY }, 30);
+	DWriteCustom::Instance().Draw("リトライ", { 60,posY }, 30);
 }
 
 void GameOverScene::Release()

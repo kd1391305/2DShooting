@@ -5,7 +5,7 @@ struct BackObject
 	void Update(float scrollX, float allScale)
 	{
 		m_pos.x += scrollX;
-		m_mat = Math::Matrix::CreateScale(m_scale, m_scale, 0) * Math::Matrix::CreateTranslation(m_pos.x * allScale, m_pos.y*allScale, 0);
+		m_mat = Math::Matrix::CreateScale(m_scale*allScale, m_scale*allScale, 0) * Math::Matrix::CreateTranslation(m_pos.x * allScale, m_pos.y*allScale, 0);
 	}
 
 	void Draw(std::shared_ptr<KdTexture>tex)
@@ -27,6 +27,10 @@ struct FarBackground
 	Math::Vector2 m_scale;
 	Math::Matrix m_mat;
 
+	void CreateMat(float allScale)
+	{
+		m_mat = Math::Matrix::CreateScale(m_scale.x * allScale, m_scale.y * allScale, 0) * Math::Matrix::CreateTranslation(m_pos.x * allScale, m_pos.y * allScale, 0);
+	}
 
 	void Draw(std::shared_ptr<KdTexture>tex)
 	{
@@ -52,6 +56,7 @@ struct LightParticle
 	void Draw();
 };
 
+class FireworksManager;
 
 class Back
 {
@@ -70,6 +75,8 @@ public:
 	//ズームアウトする（タイトル画面に遷移時に呼び出す）
 	void StartZoomOut();
 
+	std::shared_ptr<FireworksManager>GetFireworks() { return m_fireworks; }
+
 private:
 
 	void Respawn(LightParticle* light);
@@ -81,8 +88,6 @@ private:
 	void UpdateNormal(float deltaTime);
 
 	
-	float m_renderScreenLeft;
-
 	std::list<FarBackground> m_farBg;	//最背面の背景用リスト
 	float m_farBgWidth;					//最背面の背景の横幅
 	const float m_scrollSpeed = 40.0f;
@@ -104,5 +109,7 @@ private:
 	const float m_fanceRenderScale = 1.0f;
 
 	LightParticle m_lightParticleList[30];		//埃のような粒子
+
+	std::shared_ptr<FireworksManager> m_fireworks;
 };
 

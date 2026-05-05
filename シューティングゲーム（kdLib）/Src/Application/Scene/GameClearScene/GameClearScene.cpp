@@ -33,14 +33,13 @@ void GameClearScene::Update()
 	const float deltaTime = Timer::Instance().GetDeltaTime();
 
 	m_back->Update(deltaTime);
-	m_fireworksManager->Update(deltaTime);
 
 	m_gameButton->Update();
 	if (m_gameButton->IsSelect())
 	{
 		if (KEY.IsDown(VK_LBUTTON))
 		{
-			SceneManager::Instance().ChangeState(new Game(m_back, m_fireworksManager));
+			SceneManager::Instance().ChangeState(std::make_shared<Game>(m_back));
 		}
 	}
 
@@ -49,7 +48,7 @@ void GameClearScene::Update()
 	{
 		if (KEY.IsDown(VK_LBUTTON))
 		{
-			SceneManager::Instance().ChangeState(new TitleScene(m_back));
+			SceneManager::Instance().ChangeState(std::make_shared<TitleScene>(m_back));
 		}
 	}
 }
@@ -57,8 +56,6 @@ void GameClearScene::Update()
 void GameClearScene::Draw()
 {
 	m_back->Draw();
-	m_fireworksManager->Draw();
-
 	m_titleButton->Draw();
 	DWriteCustom::Instance().Draw("ƒ^ƒCƒgƒ‹‚Ö", m_titleButton->GetPos());
 	m_gameButton->Draw();

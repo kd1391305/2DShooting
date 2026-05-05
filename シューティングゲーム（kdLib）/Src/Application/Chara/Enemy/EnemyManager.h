@@ -25,6 +25,9 @@ private:
 	//スポーンする
 	void Spawn(float deltaTime);
 
+	void Spawn_Circle();
+	void Spawn_Row();
+	void Spawn_Square();
 
 	//敵がスポーンするタイプ
 	enum SpawnPutturn

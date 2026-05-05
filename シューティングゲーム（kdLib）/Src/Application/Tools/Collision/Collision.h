@@ -7,9 +7,9 @@ class BaseEnemy;
 class PlayerBullet;
 class EnemyBullet;
 class Score;
-class BaseFireworks;
 class PlayerBullet;
 class Boss;
+class FireworksManager;
 
 //プレイヤー　と　敵
 bool CollisionPlayer_Enemy(std::shared_ptr<Player> player, std::vector<std::shared_ptr<BaseEnemy>>& enemyList);
@@ -24,10 +24,10 @@ bool CollisionPlayer_Boss(std::shared_ptr<Player>player, std::shared_ptr<Boss>bo
 //bool Collision(Bullets* b1,Bullets*b2);
 
 //プレイヤーの弾　と　敵
-bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::vector<std::shared_ptr<BaseEnemy>>& enemyList,std::vector<std::shared_ptr<BaseFireworks>>&fireworksList,std::shared_ptr<Score> score);
+bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::vector<std::shared_ptr<BaseEnemy>>& enemyList,std::shared_ptr<FireworksManager> fireworksManager,std::shared_ptr<Score> score);
 
 //プレイヤーの弾　と　ボス
-bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss>boss, std::vector<std::shared_ptr<BaseFireworks>>& fireworksList);
+bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss>boss, std::shared_ptr<FireworksManager> fireworksManager);
 
 
 //円形当たり判定

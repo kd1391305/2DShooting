@@ -10,6 +10,7 @@ public:
     //渡すサウンドデータの状態
     enum SoundState
     {
+        None,           //指定なし
         NotPlaying,     //再生していない
         Playing,        //再生中
     };
@@ -44,14 +45,18 @@ private:
     
 
 public:
-    std::shared_ptr<KdSoundInstance> Get(const std::string& path, const SoundState state = SoundState::NotPlaying) {
+    std::shared_ptr<KdSoundInstance> Get(const std::string& path, const SoundState state = SoundState::None) {
 
         auto it = cache.find(path);
         //SEデータが見つかったなら、
         if (it != cache.end()) 
         {
+            if (state == SoundState::None)
+            {
+                return it->second->m_seInstList.front();
+            }
             //再生していないインスタンスを探す
-            if (state == SoundState::NotPlaying)
+            else if (state == SoundState::NotPlaying)
             {
                 for (auto& se : it->second->m_seInstList)
                 {

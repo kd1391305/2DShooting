@@ -67,8 +67,6 @@ bool CollisionPlayer_Boss(std::shared_ptr<Player> player, std::shared_ptr<Boss> 
 		//ñ≥ìGéûä‘
 		player->Invincible(1.5f);			//1.5ïbä‘ñ≥ìG
 		
-		//É{ÉXÇ…Ç‡É_ÉÅÅ[ÉW
-		boss->Damage(10);
 		
 		Timer::Instance().Stop(0.35f);		//0.35ïbí‚é~
 		return true;
@@ -76,8 +74,8 @@ bool CollisionPlayer_Boss(std::shared_ptr<Player> player, std::shared_ptr<Boss> 
 	return false;
 }
 
-//É`ÉÉÅ[ÉWíeÅ@Ç∆Å@ìG
-bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& playerList, std::vector<std::shared_ptr<BaseEnemy>>& enemyList, std::vector<std::shared_ptr<BaseFireworks>>& fireworksList, std::shared_ptr<Score> score)
+//ÉvÉåÉCÉÑÅ[ÇÃíeÅ@Ç∆Å@ìG
+bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& playerList, std::vector<std::shared_ptr<BaseEnemy>>& enemyList,std::shared_ptr<FireworksManager> fireworksManager, std::shared_ptr<Score> score)
 {
 	for (auto& p : playerList)
 	{
@@ -100,75 +98,39 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 					score->Add(100);
 
 					//â‘âŒÇíeÇØÇ≥ÇπÇÈ
+					if (!e->IsActive())
 					{
-						std::shared_ptr<BaseFireworks>temp;
-						int type = rand() % FireworksManager::Type::Kind;
-						switch (type)
+						int type = fireworksManager->GetRandomType_Quick();
+						float afterScale = randRange(0.2f, 0.35f);
+						float seVolume = 0.005f;
+						fireworksManager->Explode((FireworksManager::Type)type, e->GetPos(), afterScale, e->GetColor(), seVolume);
+
+						//íeÇ™è¡Ç¶ÇÈÇ∆Ç´ÅiÇ±ÇÃíeÇ™ìGÇì|ÇµÇΩêîÅAâ‘âŒÇåÇÇ¬Åj
+						if (p->GetPower() <= 0)
 						{
-						case FireworksManager::Type::Circle:
-							temp = std::make_shared<Fireworks1>();
-							break;
-						case FireworksManager::Type::Circle_Line:
-							temp = std::make_shared<Fireworks2>();
-							break;
-						case FireworksManager::Type::NewCircle:
-							temp = std::make_shared<Fireworks3>();
-							break;
-						case FireworksManager::Type::Petal:
-							temp = std::make_shared<Fireworks4>();
-							break;
-						}
-						temp->Init();
-						float afterScale = { randRange(0.1f,0.2f) };
-						temp->Shot(e->GetPos(), Math::Vector2{ NULL, NULL }, NULL, afterScale, e->GetColor());
-						temp->Explode();
-						fireworksList.push_back(temp);
-					}
-					
-					
-					//íeÇ™è¡Ç¶ÇÈÇ∆Ç´ÅiÇ±ÇÃíeÇ™ìGÇì|ÇµÇΩêîÅAâ‘âŒÇåÇÇ¬Åj
-					if(p->GetPower() <= 0)
-					{
-						p->SetActive(false);
-						std::shared_ptr<BaseFireworks>temp;
-						Math::Vector2 shotPos;
-						float r, g, b, a, afterScale;
-						for (int i = 1; i < p->GetPierceNum(); i++)
-						{
-							//â‘âŒÇíeÇØÇ≥ÇπÇÈ
-							int type = rand() % FireworksManager::Type::Kind;
-							switch (type)
+							p->SetActive(false);
+							Math::Vector2 shotPos;
+							float r, g, b, a, afterScale;
+							for (int i = 1; i < p->GetPierceNum(); i++)
 							{
-							case FireworksManager::Type::Circle:
-								temp = std::make_shared<Fireworks1>();
-								break;
-							case FireworksManager::Type::Circle_Line:
-								temp = std::make_shared<Fireworks2>();
-								break;
-							case FireworksManager::Type::NewCircle:
-								temp = std::make_shared<Fireworks3>();
-								break;
-							case FireworksManager::Type::Petal:
-								temp = std::make_shared<Fireworks4>();
-								break;
+								//â‘âŒÇíeÇØÇ≥ÇπÇÈ
+								shotPos = e->GetPos();
+								shotPos.x += randRange(-100, 100);
+								shotPos.y += randRange(-100, 100);
+
+								afterScale = { randRange(0.3f,0.5f) };
+
+								r = randRange(0.0f, 0.9f);
+								g = randRange(0.0f, 0.9f);
+								b = randRange(0.0f, 0.9f);
+								a = randRange(0.6f, 0.8f);
+
+								type = fireworksManager->GetRandomType_Quick();
+
+								fireworksManager->Explode((FireworksManager::Type)type, shotPos, afterScale, Math::Color{ r,g,b,a }, seVolume);
 							}
-							temp->Init();
-							shotPos = e->GetPos();
-							shotPos.x += randRange(-100, 100);
-							shotPos.y += randRange(-100, 100);
-
-							afterScale = { randRange(0.2f,0.3f) };
-
-							r = randRange(0.0f, 0.6f);
-							g = randRange(0.0f, 0.6f);
-							b = randRange(0.0f, 0.6f);
-							a = randRange(0.4f, 0.6f);
-							temp->Shot(shotPos, Math::Vector2{ NULL,NULL } ,NULL, afterScale, Math::Color{ r,g,b,a });
-							temp->Explode();
-							temp->Draw();
-							fireworksList.push_back(temp);
+							break;
 						}
-						break;
 					}
 					
 				}
@@ -179,7 +141,7 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 }
 
 //ÉvÉåÉCÉÑÅ[ÇÃíeÅ@Ç∆Å@É{ÉX
-bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss> boss, std::vector<std::shared_ptr<BaseFireworks>>& fireworksList)
+bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss> boss, std::shared_ptr<FireworksManager> fireworksManager)
 {
 	if (!boss)return false;
 
@@ -191,46 +153,13 @@ bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& play
 		if (!bullet->IsActive())continue;
 		if (IsCollision(bossPos, bossRadius, bullet->GetPos(), bullet->GetRadius()))
 		{
-			//ìGÇ…ä—í Ç∑ÇÈ
-			bullet->Pierce();
-
 			//É_ÉÅÅ[ÉW
-			boss->Damage(10);
+			boss->Damage(10 * bullet->GetPower());
+
+			bullet->SetActive(false);
 
 			//ìñÇΩÇ¡ÇΩéûÇÃèàóù
 			boss->OnHit();
-
-			//â‘âŒÇíeÇØÇ≥ÇπÇÈ
-			{
-				std::shared_ptr<BaseFireworks>temp;
-				int type = rand() % FireworksManager::Type::Kind;
-				switch (type)
-				{
-				case FireworksManager::Type::Circle:
-					temp = std::make_shared<Fireworks1>();
-					break;
-				case FireworksManager::Type::Circle_Line:
-					temp = std::make_shared<Fireworks2>();
-					break;
-				case FireworksManager::Type::NewCircle:
-					temp = std::make_shared<Fireworks3>();
-					break;
-				case FireworksManager::Type::Petal:
-					temp = std::make_shared<Fireworks4>();
-					break;
-				}
-				temp->Init();
-				float afterScale = { randRange(0.1f,0.2f) };
-				float r, g, b, a;
-				r = randRange(0, 0.5f);
-				g = randRange(0, 0.5f);
-				b = randRange(0, 0.5f);
-				a = randRange(0.4f, 0.6f);
-
-				temp->Shot(bullet->GetPos(), Math::Vector2{ NULL, NULL }, NULL, afterScale, Math::Color{ r,g,b,a });
-				temp->Explode();
-				fireworksList.push_back(temp);
-			}
 		}
 	}
 	return false;

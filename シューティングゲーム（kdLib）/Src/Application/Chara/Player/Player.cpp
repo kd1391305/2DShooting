@@ -16,7 +16,7 @@
 //èâä˙âª
 void Player::Init()
 {
-	m_pos = { -300,50 };
+	m_pos = { -900,50 };
 	m_move = { 0,0 };
 	m_moveSpeed = 500;
 	m_hpMax = 100;

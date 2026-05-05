@@ -49,9 +49,6 @@
     <Filter Include="Src\Application\Background">
       <UniqueIdentifier>{3fb7303b-90c1-4db3-a0c4-3f2ea8e7cc86}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Fireworks">
-      <UniqueIdentifier>{7075964d-3780-451c-8b80-784f0bbb65fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\Scene">
       <UniqueIdentifier>{2f4e528f-6176-4c76-af0e-1c60797edd16}</UniqueIdentifier>
     </Filter>
@@ -60,9 +57,6 @@
     </Filter>
     <Filter Include="Src\Application\Scene\TitleScene">
       <UniqueIdentifier>{2c87b33a-28b9-4463-bfd2-f6b8f9c98984}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Scene\ResultScene">
-      <UniqueIdentifier>{63e8d072-2086-4c75-abc6-ca3fa07f9501}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Application\UI">
       <UniqueIdentifier>{fa05bd49-c4f7-487e-8c1a-1db0f72271bb}</UniqueIdentifier>
@@ -90,9 +84,6 @@
     </Filter>
     <Filter Include="Src\Application\Chara\BaseChara">
       <UniqueIdentifier>{42a79b72-87dc-4e42-ad3a-1af006abc9d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Fireworks\BaseFireworks">
-      <UniqueIdentifier>{1d6a2b2e-4368-4756-9b26-f8f98539a7d3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Application\Light">
       <UniqueIdentifier>{f6f4445b-55d4-474c-9f1d-09e4194b92fc}</UniqueIdentifier>
@@ -145,9 +136,6 @@
     <Filter Include="Src\Application\SoundCache">
       <UniqueIdentifier>{97d3196c-d02d-4f6d-b12d-506835df07e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Tools\ObjectPool">
-      <UniqueIdentifier>{22c87121-0029-4155-8349-7e316a4877b3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\Scene\GameClearScene">
       <UniqueIdentifier>{f673c016-892b-49d1-b704-4018fadbed8d}</UniqueIdentifier>
     </Filter>
@@ -156,6 +144,12 @@
     </Filter>
     <Filter Include="Src\Application\Tools\Timer">
       <UniqueIdentifier>{5aa50e1b-923a-431b-a5b9-4b4afb52588e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Fireworks">
+      <UniqueIdentifier>{7075964d-3780-451c-8b80-784f0bbb65fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Fireworks\BaseFireworks">
+      <UniqueIdentifier>{1d6a2b2e-4368-4756-9b26-f8f98539a7d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -270,9 +264,6 @@
     <ClInclude Include="Src\Application\Scene\GameScene\GameScene.h">
       <Filter>Src\Application\Scene\GameScene</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Scene\ResultScene\ResultScene.h">
-      <Filter>Src\Application\Scene\ResultScene</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\Font\DirectWriteCustomFont.h">
       <Filter>Src\Application\Font</Filter>
     </ClInclude>
@@ -356,9 +347,6 @@
     </ClInclude>
     <ClInclude Include="Src\Application\SoundCache\SoundCache.h">
       <Filter>Src\Application\SoundCache</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Tools\ObjectPool\ObjectPool.h">
-      <Filter>Src\Application\Tools\ObjectPool</Filter>
     </ClInclude>
     <ClInclude Include="Src\Application\Scene\GameClearScene\GameClearScene.h">
       <Filter>Src\Application\Scene\GameClearScene</Filter>
@@ -452,9 +440,6 @@
     <ClCompile Include="Src\Application\Scene\GameScene\GameScene.cpp">
       <Filter>Src\Application\Scene\GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Scene\ResultScene\ResultScene.cpp">
-      <Filter>Src\Application\Scene\ResultScene</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Font\DirectWriteCustomFont.cpp">
       <Filter>Src\Application\Font</Filter>
     </ClCompile>
@@ -532,6 +517,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Font\DWriteCustom.cpp">
       <Filter>Src\Application\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\SceneManager.cpp">
+      <Filter>Src\Application\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

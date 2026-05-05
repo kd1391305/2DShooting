@@ -14,34 +14,35 @@ void Boss::Init()
 	m_pos = {};				//座標
 	m_move = {};			//移動量
 	m_moveSpeed = 200;		//移動スピード
-	m_radius = { 64,64 };			//半径（当たり判定、画面端判定）
+	m_radius = { 64,0};			//半径（当たり判定、画面端判定）
 
 	std::shared_ptr<KdTexture> tex = TextureCache::Instance().Get("Texture/Boss/Boss0.png");
 	float width = tex->GetInfo().Width;
-
+	float height = tex->GetInfo().Height;
 	m_scale = { m_radius.x * 2 / width };			//画像の拡縮
-	
+	m_radius.y = height / m_scale / 2.0f;
+
 	m_color = { 1,1,1,1 };			//色
 	
-	m_hpMax = 1000;			//最大体力
-	m_hp = m_hpMax;			//体力
+	m_hpMax = 100;					//最大体力
+	m_hp = m_hpMax;					//体力
 
 	
-	m_animCnt = 0;			//アニメーションカウンター
-	m_animCntMax = 8;		//アニメーションの終わり（何コマか？）
-	m_animSpeed = 5.0f;		//アニメーションスピード
-
-	m_shotWaitTimer = 1;	//撃つまでのクールタイムを測る
-	m_shotWait = 0.15f;			//クールタイム
+	m_animCnt = 0;					//アニメーションカウンター
+	m_animCntMax = 8;				//アニメーションの終わり（何コマか？）
+	m_animSpeed = 5.0f;				//アニメーションスピード
+		
+	m_shotWaitTimer = 1;			//撃つまでのクールタイムを測る
+	m_shotWait = 0.15f;				//クールタイム
 	m_shotCnt = 0;
-	m_shotCntMax = 5;		//通常弾を５回まで連続で撃てる
+	m_shotCntMax = 5;				//通常弾を５回まで連続で撃てる
 	m_shotSpeed = 250;
 	m_circleShotSpeed = 220;
 
 	m_circleShotWait = 0.2f;
 	m_circleShotWaitTimer = 10.0f;
 	m_circleShotCnt = 0;
-	m_circleShotCntMax = 5;	//３６０°に飛ばす弾を連続で３回撃てる
+	m_circleShotCntMax = 5;			//３６０°に飛ばす弾を連続で３回撃てる
 }
 
 void Boss::Update(float deltaTime)

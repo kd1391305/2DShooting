@@ -12,8 +12,11 @@ void Enemy3::Init()
 	m_animCnt = 0;					//現在のアニメーション
 	m_animCntMax = 4;				//アニメーションのコマ数
 	m_animSpeed = 5;				//アニメーションのスピード
-
-	m_color = { 0.2f,1.0f,0.2f,1.0f };	//色
+	
+	//色
+	m_normalColor = { 0,1,0,1 };
+	m_hitColor = { 1,1,0,1 };	
+	m_color = m_normalColor;
 
 	m_bActive = true;				//活性状態
 
@@ -47,7 +50,7 @@ void Enemy3::OnHit()
 {
 	m_bHitFlg = true;
 	m_hitEffectTimer = m_hitEffectTime;
-	m_color = { 1,0.5f,0.5f,1 };
+	m_color = m_hitColor;
 }
 
 void Enemy3::Action(float deltaTime)
@@ -60,7 +63,7 @@ void Enemy3::Action(float deltaTime)
 		{
 			m_hitEffectTimer = 0;
 			m_bHitFlg = false;
-			m_color = { 0.2f,1.0f,0.2f,1.0f };
+			m_color = m_normalColor;
 		}
 	}
 
