@@ -23,7 +23,7 @@ public:
 
 private:
 	//スポーンする
-	void Spawn(float deltaTime);
+	void Spawn();
 
 	void Spawn_Circle();
 	void Spawn_Row();
@@ -38,12 +38,28 @@ private:
 		Kind		//種類
 	};
 
+	//敵をスポーンさせるための変数をまとめた構造体
+	struct SpawnData
+	{
+		Math::Vector2 pos;						//出現する場所
+		Math::Vector2 radius;					//敵の大きさ
+		float moveSpeed;						//移動スピード
+		float moveDeg;							//移動方向
+		Math::Color normalColor;				//通常の色
+		Math::Color hitColor;					//当たった時の色
+		float hp;								//HP
+		float bulletSpeed;						//弾のスピード
+		float shotCoolTime;						//クールタイム
+		float shotCoolTimeNoiseMax	= 0.0f;		//クールタイムのノイズ
+		float spawnShotCoolTime		= 0.0f;		//スポーン時の追加クールタイム
+	};
+
 	Game* m_pGame;
 
 	std::vector<std::shared_ptr<BaseEnemy>> m_enemyList;		//敵
 	
-	const float m_spawnWait = 10.0f;	//10秒ごとに敵が出現パターンに沿ってスポーンする
-	float m_spawnWaitTimer;				//敵がスポーンするクールタイム
+	const float m_spawnCoolTime = 10.0f;	//10秒ごとに敵が出現パターンに沿ってスポーンする
+	float m_spawnCoolTimer;				//敵がスポーンするクールタイム
 	std::queue<SpawnPutturn>m_spawnPutturnHistory;
 	float m_spawnProbability[SpawnPutturn::Kind];
 

@@ -16,7 +16,7 @@ public:
 	void Draw();
 	
 	//“G‚Ì’e‚ðŒ‚‚Â
-	void Shot(Math::Vector2 pos, Math::Vector2 move);
+	void Shoot(Math::Vector2 pos, Math::Vector2 move);
 	void Add(std::shared_ptr<PlayerBullet>playerBullet);
 
 	std::vector<std::shared_ptr<EnemyBullet>> GetEnemyList() { return m_enemyList; }

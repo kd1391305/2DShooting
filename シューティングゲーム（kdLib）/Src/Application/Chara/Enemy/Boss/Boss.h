@@ -36,15 +36,15 @@ private:
 	//通常弾のカウンター
 	int m_shotCnt;
 	int m_shotCntMax;				//最大になったら倍のクールタイムを設ける
-	float m_shotSpeed;				//弾速
+	float m_bulletSpeed;				//弾速
 
 
 	//３６０度に弾を発射する時のクールタイム
-	float m_circleShotWait;
-	float m_circleShotWaitTimer;
+	float m_circleshotCoolTime;
+	float m_circleshotCoolTimer;
 	int m_circleShotCnt;			
 	int m_circleShotCntMax;			//最大になったら倍のクールタイムを設ける
-	float m_circleShotSpeed;		//弾速
+	float m_circlebulletSpeed;		//弾速
 	const int m_circleShotBulletNum = 30;
 
 	float m_endPosX = 200;		//移動するときX座標２００以下にはいかない（）

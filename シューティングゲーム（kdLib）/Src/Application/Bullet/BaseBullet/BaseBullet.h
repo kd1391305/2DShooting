@@ -21,7 +21,7 @@ public:
 	virtual void Draw() {}
 
 	//’e‚ðŒ‚‚Â
-	void Shot(Math::Vector2 pos, Math::Vector2 move)
+	void Shoot(Math::Vector2 pos, Math::Vector2 move)
 	{
 		m_pos = pos;
 		m_move = move;

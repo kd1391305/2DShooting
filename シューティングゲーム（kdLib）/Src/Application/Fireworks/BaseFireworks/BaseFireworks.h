@@ -220,7 +220,7 @@ public:
 	virtual void Draw(float backScale) = 0;
 
 	//‰Ô‰Î‚ğ‘Å‚¿ã‚°‚é
-	virtual void Shot(Math::Vector2& startPos, Math::Vector2&startMove, float beforeScale, float afterScale, Math::Color& color) = 0;
+	virtual void Shoot(Math::Vector2& startPos, Math::Vector2&startMove, float beforeScale, float afterScale, Math::Color& color) = 0;
 
 	//‰Ô‰Î‚ğ’e‚¯‚³‚¹‚é
 	virtual void Explode() = 0;

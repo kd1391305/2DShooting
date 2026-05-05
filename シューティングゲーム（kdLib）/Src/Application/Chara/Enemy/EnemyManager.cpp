@@ -3,17 +3,15 @@
 #include"../../Tools/RandEx/RandEx.h"
 #include"../../Timer/Timer.h"
 #include"../../Scene/GameScene/GameScene.h"
-#include"Enemies/Enemy1.h"
-#include"Enemies/Enemy2.h"
-#include"Enemies/Enemy3.h"
 #include"Boss/Boss.h"
 #include"../Player/Player.h"
+#include"Enemies/Enemies.h"
 
 //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 EnemyManager::EnemyManager()
 {
-	//4•bŠÔ‚Í“G‚ğƒXƒ|[ƒ“‚µ‚È‚¢
-	m_spawnWaitTimer = 4.0f;
+	//ƒQ[ƒ€ŠJn‚©‚ç8•bŠÔ‚Í“G‚ğƒXƒ|[ƒ“‚µ‚È‚¢
+	m_spawnCoolTimer = 8.0f;
 
 	//“G‚ÌƒXƒ|[ƒ“Šm—¦
 	m_spawnProbability[SpawnPutturn::Circle]	= 0.3f;
@@ -25,23 +23,23 @@ EnemyManager::EnemyManager()
 void EnemyManager::Update(float deltaTime)
 {
 	//ƒXƒ|[ƒ“ƒ^ƒCƒ}[‚ği‚ß‚é
-	m_spawnWaitTimer -= deltaTime;
-	if (m_spawnWaitTimer < 0)
+	m_spawnCoolTimer -= deltaTime;
+	if (m_spawnCoolTimer < 0)
 	{
-		m_spawnWaitTimer = 0;
+		m_spawnCoolTimer = 0;
 		m_bEmptySpawnFlg = true;
 	}
 	if (m_bEmptySpawnFlg)
 	{
-		if (m_enemyList.empty())m_spawnWaitTimer = 0;
+		if (m_enemyList.empty())m_spawnCoolTimer = 0;
 	}
-	if (m_spawnWaitTimer <= 0)
+	if (m_spawnCoolTimer <= 0)
 	{
 		//“G‚ğƒXƒ|[ƒ“‚·‚é
-		Spawn(deltaTime);
+		Spawn();
 
 		float noise = randRange(0.0f, 5.0f);
-		m_spawnWaitTimer = m_spawnWait + noise;
+		m_spawnCoolTimer = m_spawnCoolTime + noise;
 	}
 
 	for (auto itr = m_enemyList.begin(); itr != m_enemyList.end();)
@@ -62,17 +60,17 @@ void EnemyManager::Update(float deltaTime)
 	}
 
 
+	//ƒ{ƒXoŒ»‚ÌğŒ
 	if (Timer::Instance().GetTime() > 60)
 	{
 		if (!m_boss)
 		{
+			//ƒ{ƒX‚ğoŒ»‚³‚¹‚é
 			m_boss = std::make_shared<Boss>(m_pGame);
 			m_boss->Init();
 			m_boss->Spawn({ SCREEN_RIGHT + m_boss->GetRadius().x,0 }, { -200, 0 });
 		}
-
 	}
-
 
 	//ƒ{ƒX‚ÌXV
 	if (m_boss)
@@ -90,7 +88,7 @@ void EnemyManager::Draw()
 
 
 //ƒXƒ|[ƒ“‚·‚é
-void EnemyManager::Spawn(float deltaTime)
+void EnemyManager::Spawn()
 {
 	//ƒXƒ|[ƒ“‚·‚éƒ^ƒCƒv‚ğŒˆ‚ß‚é
 	SpawnPutturn spawnPutturn = SpawnPutturn::Circle;
@@ -138,16 +136,16 @@ void EnemyManager::Spawn_Circle()
 
 	for (int i = 0; i < spawnNum; i++)
 	{
-		float radian = DirectX::XMConvertToRadians((360 / (float)spawnNum) * i);
+		//float radian = DirectX::XMConvertToRadians((360 / (float)spawnNum) * i);
 
-		std::shared_ptr<Enemy2> temp = std::make_shared<Enemy2>();
-		temp->Init();
-		temp->InitSpawn(startPos, endPos, centerMoveSpeed, radian, deltaRadian, gapCenter);
+		//std::shared_ptr<appearPos2> temp = std::make_shared<appearPos2>();
+		//temp->Init();
+		//temp->InitSpawn(startPos, endPos, centerMoveSpeed, radian, deltaRadian, gapCenter);
 
-		//V‚µ‚­“G‚ğì¬‚·‚é
-		m_enemyList.push_back(temp);
-		//“G‚ÌƒXƒ|[ƒ“
-		m_enemyList.back()->Spawn();
+		////V‚µ‚­“G‚ğì¬‚·‚é
+		//m_appearPosList.push_back(temp);
+		////“G‚ÌƒXƒ|[ƒ“
+		//m_appearPosList.back()->Spawn(startPos, centerMoveSpeed);
 	}
 
 	m_spawnPutturnHistory.push(SpawnPutturn::Circle);
@@ -155,50 +153,60 @@ void EnemyManager::Spawn_Circle()
 
 void EnemyManager::Spawn_Row()
 {
-	//“G‚ª—ñó‚É‚È‚Á‚Ä“G‚ªoŒ»
-		//			ZZZZZ
-		//		ZZZZZ
-		//	ZZZZZ
-		//		ZZZZZ
-		//			ZZZZZ
+	//“G‚ª—ñó‚É‚È‚Á‚ÄoŒ»
+	//			ZZZZZ
+	//		ZZZZZ
+	//	ZZZZZ
+	//		ZZZZZ
+	//			ZZZZZ
 
 	const int groupNum = 5;
-	const int enemyNum = 5;
+	const int appearPosNum = 5;		//‚PƒOƒ‹[ƒv‚ ‚½‚è‚Ì“G‚Ì”
 
-	std::shared_ptr<Enemy1>enemy[groupNum][enemyNum];
-	for (int i = 0; i < groupNum; i++)
-	{
-		for (int j = 0; j < enemyNum; j++)
-		{
-			enemy[i][j] = std::make_shared<Enemy1>();
-			enemy[i][j]->Init();
-		}
-	}
+	//ƒXƒ|[ƒ“‚É•K—v‚È‹¤’Ê‚Ì•Ï”‚Ì‰Šú‰»
+	SpawnData spawnData;	
+	spawnData.pos;						//oŒ»À•W
+	spawnData.radius;					//oŒ»‚·‚é‘å‚«‚³
+	spawnData.moveSpeed;				//ˆÚ“®‘¬“x
+	spawnData.moveDeg;					//ˆÚ“®‚·‚é•ûŒü
+	spawnData.normalColor;				//’Êí‚ÌF
+	spawnData.hitColor;					//“–‚½‚Á‚½‚ÌF
+	spawnData.hp;						//HP
+	spawnData.bulletSpeed;				//’e‚Ì‘¬“x
+	spawnData.shotCoolTime;				//’e‚ğŒ‚‚ÂƒN[ƒ‹ƒ^ƒCƒ€
+	spawnData.shotCoolTimeNoiseMax;		//’e‚ğŒ‚‚ÂƒN[ƒ‹ƒ^ƒCƒ€‚Ìƒ‰ƒ“ƒ_ƒ€’l
+	spawnData.spawnShotCoolTime;		//ishotCoolTime@+ spawnShotCoolTime = ƒXƒ|[ƒ“‚µ‚Ä‚©‚ç‰‚ß‚Ä’e‚ğŒ‚‚Â‚Ü‚Å‚ÌŠÔj
+
+	Math::Vector2 appearPos[groupNum][appearPosNum];
+
 
 	//ŠeƒOƒ‹[ƒv‚²‚Æ‚ÌÀ•W‚ğ‹‚ß‚é
-	float baseX = SCREEN_WIDTH + enemy[0][0]->GetRadius().x;
-	enemy[0][0]->SetPos({ baseX,0 });
-	enemy[1][0]->SetPos({ baseX + 100,100 });
-	enemy[2][0]->SetPos({ baseX + 100 ,-100 });
-	enemy[3][0]->SetPos({ baseX + 200,200 });
-	enemy[4][0]->SetPos({ baseX + 200,-200 });
+	float baseX = SCREEN_WIDTH + spawnData.radius.x;;
+	appearPos[0][0]={ baseX,		   0 };
+	appearPos[1][0]={ baseX + 100,	 100 };
+	appearPos[2][0]={ baseX + 100,	-100 };
+	appearPos[3][0]={ baseX + 200,	 200 };
+	appearPos[4][0]={ baseX + 200,	-200 };
 
 	//ƒOƒ‹[ƒv‚Ìæ“ªÀ•W‚ğ‚à‚Æ‚ÉAŒã‘±‚Ì“G‚ÌÀ•W‚ğƒZƒbƒg
-	float gapX = enemy[0][0]->GetRadius().x * 2;
+	float gapX = spawnData.radius.x * 2;
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 1; j < 5; j++)
 		{
-			enemy[i][j]->SetPos({ enemy[i][0]->GetPos().x + gapX * j, enemy[i][0]->GetPos().y });
+			appearPos[i][j] = { appearPos[i][0].x + gapX * j, appearPos[i][0].y };
 		}
 	}
 
+	std::shared_ptr<Enemy1>enemy;
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 5; j++)
 		{
-			enemy[i][j]->Spawn();
-			m_enemyList.push_back(enemy[i][j]);
+			enemy = std::make_shared<Enemy1>();
+			enemy->Init();
+			enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
+			m_enemyList.push_back(enemy);
 		}
 	}
 
@@ -212,13 +220,7 @@ void EnemyManager::Spawn_Square()
 	{
 		for (int j = 0; j < 5; j++)
 		{
-			std::shared_ptr<Enemy3> enemy;
-			enemy = std::make_shared<Enemy3>();
-			enemy->Init();
-			enemy->SetPos(Math::Vector2{ SCREEN_RIGHT + (200.0f * i + 1),0 + 150.0f * (j - 2) });
-			enemy->SetMove(Math::Vector2{ -100,0 });
-			enemy->Spawn();
-			m_enemyList.push_back(enemy);
+			
 		}
 	}
 }

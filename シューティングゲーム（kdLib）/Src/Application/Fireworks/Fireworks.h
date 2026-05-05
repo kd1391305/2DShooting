@@ -21,7 +21,7 @@ public:
 	void Draw(float backScale)override;
 
 	//‰Ô‰Î‚ğ‘Å‚¿ã‚°‚é
-	void Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
+	void Shoot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
 
 	//‰Ô‰Î‚ğ’e‚¯‚³‚¹‚é
 	void Explode();
@@ -56,7 +56,7 @@ public:
 	void Draw(float backScale)override;
 
 	//‰Ô‰Î‚ğ‘Å‚¿ã‚°‚é
-	void Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
+	void Shoot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
 
 	//‰Ô‰Î‚ğ’e‚¯‚³‚¹‚é
 	void Explode()override;
@@ -93,7 +93,7 @@ public:
 	void Draw(float backScale)override;
 
 	//‰Ô‰Î‚ğ‘Å‚¿ã‚°‚é
-	void Shot( Math::Vector2& startPos, Math::Vector2&startMove, float beforeScale, float afterScale, Math::Color& color)override;
+	void Shoot( Math::Vector2& startPos, Math::Vector2&startMove, float beforeScale, float afterScale, Math::Color& color)override;
 
 	//‰Ô‰Î‚ğ’e‚¯‚³‚¹‚é
 	void Explode()override;
@@ -129,7 +129,7 @@ public:
 	void Draw(float backScale)override;
 
 	//‰Ô‰Î‚ğ‘Å‚¿ã‚°‚é
-	void Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
+	void Shoot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
 
 	//‰Ô‰Î‚ğ’e‚¯‚³‚¹‚é
 	void Explode()override;
@@ -164,7 +164,7 @@ public:
 	void Draw(float backScale)override;
 
 	//‰Ô‰Î‚ğ‘Å‚¿ã‚°‚é
-	void Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
+	void Shoot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)override;
 
 	//‰Ô‰Î‚ğ’e‚¯‚³‚¹‚é
 	void Explode()override;

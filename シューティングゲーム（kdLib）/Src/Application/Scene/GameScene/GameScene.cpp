@@ -158,7 +158,5 @@ void Game::GameClear()
 void Game::Release()
 {
 	MOUSE.ShowCursorTex(true);
-	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav",SoundCache::SoundState::Playing);
-	bgm->Stop();
 }
 

@@ -68,14 +68,14 @@ void BulletManager::Draw()
 	}
 }
 
-void BulletManager::Shot(Math::Vector2 pos, Math::Vector2 move)
+void BulletManager::Shoot(Math::Vector2 pos, Math::Vector2 move)
 {
 	//非活性状態の弾を探す
 	for (auto& e : m_enemyList)
 	{
 		if (!e->IsActive())
 		{
-			e->Shot(pos, move);
+			e->Shoot(pos, move);
 			//発射できたので処理を終了する
 			return;
 		}
@@ -83,7 +83,7 @@ void BulletManager::Shot(Math::Vector2 pos, Math::Vector2 move)
 	//もし見つからなかったら
 	//オブジェクト作成（このオブジェクトは非活性状態になったらこのクラス（BulletManager）のUpdate()で削除される）
 	m_enemyList.push_back(std::make_shared<EnemyBullet>());
-	m_enemyList.back()->Shot(pos, move);
+	m_enemyList.back()->Shoot(pos, move);
 }
 
 void BulletManager::Add(std::shared_ptr<PlayerBullet> playerBullet)

@@ -318,14 +318,8 @@
     <ClInclude Include="Src\Application\TextureCache\TextureCache.h">
       <Filter>Src\Application\TextureCache</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy1.h">
-      <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.h">
       <Filter>Src\Application\Chara\Enemy\BaseEnemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy2.h">
-      <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Src\Application\Animtion\ChargeAnim\ChargeAnim.h">
       <Filter>Src\Application\Animtion\ChargeAnim</Filter>
@@ -354,7 +348,7 @@
     <ClInclude Include="Src\Application\Chara\Enemy\Boss\Boss.h">
       <Filter>Src\Application\Chara\Enemy\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy3.h">
+    <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemies.h">
       <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
@@ -479,14 +473,8 @@
     <ClCompile Include="Src\Application\Scene\GameOverScene\GameOverScene.cpp">
       <Filter>Src\Application\Scene\GameOverScene</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy1.cpp">
-      <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.cpp">
       <Filter>Src\Application\Chara\Enemy\BaseEnemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy2.cpp">
-      <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Animtion\ChargeAnim\ChargeAnim.cpp">
       <Filter>Src\Application\Animtion\ChargeAnim</Filter>
@@ -512,14 +500,14 @@
     <ClCompile Include="Src\Application\Chara\Enemy\Boss\Boss.cpp">
       <Filter>Src\Application\Chara\Enemy\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy3.cpp">
-      <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\Font\DWriteCustom.cpp">
       <Filter>Src\Application\Font</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Scene\SceneManager.cpp">
       <Filter>Src\Application\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemies.cpp">
+      <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

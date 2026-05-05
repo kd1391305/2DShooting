@@ -32,15 +32,15 @@ void Boss::Init()
 	m_animCntMax = 8;				//アニメーションの終わり（何コマか？）
 	m_animSpeed = 5.0f;				//アニメーションスピード
 		
-	m_shotWaitTimer = 1;			//撃つまでのクールタイムを測る
-	m_shotWait = 0.15f;				//クールタイム
+	m_shotCoolTimer = 1;			//撃つまでのクールタイムを測る
+	m_shotCoolTime = 0.15f;				//クールタイム
 	m_shotCnt = 0;
 	m_shotCntMax = 5;				//通常弾を５回まで連続で撃てる
-	m_shotSpeed = 250;
-	m_circleShotSpeed = 220;
+	m_bulletSpeed = 250;
+	m_circlebulletSpeed = 220;
 
-	m_circleShotWait = 0.2f;
-	m_circleShotWaitTimer = 10.0f;
+	m_circleshotCoolTime = 0.2f;
+	m_circleshotCoolTimer = 10.0f;
 	m_circleShotCnt = 0;
 	m_circleShotCntMax = 5;			//３６０°に飛ばす弾を連続で３回撃てる
 }
@@ -48,11 +48,11 @@ void Boss::Init()
 void Boss::Update(float deltaTime)
 {
 	//ショットのクールタイム
-	m_shotWaitTimer -= deltaTime;
-	if (m_shotWaitTimer < 0)m_shotWaitTimer = 0;
+	m_shotCoolTimer -= deltaTime;
+	if (m_shotCoolTimer < 0)m_shotCoolTimer = 0;
 
-	m_circleShotWaitTimer -= deltaTime;
-	if (m_circleShotWaitTimer < 0)m_circleShotWaitTimer = 0;
+	m_circleshotCoolTimer -= deltaTime;
+	if (m_circleshotCoolTimer < 0)m_circleshotCoolTimer = 0;
 
 
 	//ボスの行動
@@ -87,46 +87,46 @@ void Boss::Action(float deltaTime)
 
 
 	//通常弾はプレイヤーに向けて発射
-	if (m_shotWaitTimer == 0)
+	if (m_shotCoolTimer == 0)
 	{
 		const Math::Vector2 playerPos = m_pGame->GetPlayer()->GetPos();
 		Math::Vector2 pos = { m_pos.x - m_radius.x, m_pos.y };
 		Math::Vector2 move;
 		float radian = atan2f(playerPos.y - pos.y, playerPos.x - pos.x);
-		move.x = cosf(radian) * m_shotSpeed;
-		move.y = sinf(radian) * m_shotSpeed;
-		m_pGame->GetBulletManager()->Shot(pos, move);
+		move.x = cosf(radian) * m_bulletSpeed;
+		move.y = sinf(radian) * m_bulletSpeed;
+		m_pGame->GetBulletManager()->Shoot(pos, move);
 		m_shotCnt++;
 		if (m_shotCnt >= m_shotCntMax)
 		{
-			m_shotWaitTimer = m_shotWait * m_shotCntMax;
+			m_shotCoolTimer = m_shotCoolTime * m_shotCntMax;
 			m_shotCnt = 0;
 		}
 		else
 		{
-			m_shotWaitTimer = m_shotWait;
+			m_shotCoolTimer = m_shotCoolTime;
 		}
 	}
 
 
-	if (m_circleShotWaitTimer == 0)
+	if (m_circleshotCoolTimer == 0)
 	{
 		for (int i = 0; i < m_circleShotBulletNum; i++)
 		{
 			float radian = DirectX::XMConvertToRadians(360 / m_circleShotBulletNum * i);
 			Math::Vector2 move;
-			move.x = cosf(radian) * m_circleShotSpeed;
-			move.y = sinf(radian) * m_circleShotSpeed;
-			m_pGame->GetBulletManager()->Shot(m_pos, move);
+			move.x = cosf(radian) * m_circlebulletSpeed;
+			move.y = sinf(radian) * m_circlebulletSpeed;
+			m_pGame->GetBulletManager()->Shoot(m_pos, move);
 		}
 		if (m_circleShotCnt >= m_circleShotCntMax)
 		{
-			m_circleShotWaitTimer = m_circleShotWait * m_circleShotCntMax * m_circleShotBulletNum;
+			m_circleshotCoolTimer = m_circleshotCoolTime * m_circleShotCntMax * m_circleShotBulletNum;
 			m_circleShotCnt = 0;
 		}
 		else
 		{
-			m_circleShotWaitTimer = m_circleShotWait;
+			m_circleshotCoolTimer = m_circleshotCoolTime;
 		}
 		m_circleShotCnt++;
 	}

@@ -37,7 +37,7 @@ public:
 	void Draw(float backScale);
 
 	//‰Ô‰Î‚ğŒ‚‚Â
-	void Shot(Type name, Math::Vector2& pos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color, const float seVolume = 0.0f);
+	void Shoot(Type name, Math::Vector2& pos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color, const float seVolume = 0.0f);
 
 	//‰Ô‰Î‚ğ’e‚¯‚³‚¹‚éi’e‚¯‚½ó‘Ô‚Ì‚Ü‚ÜoŒ»j
 	void Explode(Type name, Math::Vector2& pos, float afterScale, Math::Color& color, const float seVolume = 0.0f);

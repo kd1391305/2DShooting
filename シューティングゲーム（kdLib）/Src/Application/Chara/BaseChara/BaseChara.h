@@ -33,7 +33,7 @@ protected:
 
 public:
 	//ダメージ
-	void Damage(float damage) {
+	virtual void Damage(float damage) {
 		m_hp -= damage;
 		if (m_hp <= 0)
 		{
@@ -68,6 +68,8 @@ protected:
 	float m_animCntMax;			//アニメーションの終わり（何コマか？）
 	float m_animSpeed;			//アニメーションスピード
 
-	float	m_shotWaitTimer;	//撃つまでのクールタイムを測る
-	float   m_shotWait;			//クールタイム
+	float	m_shotCoolTimer;	//撃つまでのクールタイムを測る
+	float   m_shotCoolTime;			//クールタイム
+
+	
 };

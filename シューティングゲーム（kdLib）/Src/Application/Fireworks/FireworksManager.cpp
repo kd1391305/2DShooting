@@ -36,10 +36,10 @@ void FireworksManager::Draw(float backScale)
 }
 
 //‰Ô‰Î‚ð‘Å‚¿ã‚°‚é
-void FireworksManager::Shot(FireworksManager::Type name, Math::Vector2& pos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color,const float seVolume)
+void FireworksManager::Shoot(FireworksManager::Type name, Math::Vector2& pos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color,const float seVolume)
 {
 	m_list.push_back(PopPool(name));
-	m_list.back()->Shot(pos, startMove, beforeScale, afterScale, color);
+	m_list.back()->Shoot(pos, startMove, beforeScale, afterScale, color);
 	
 	if (seVolume > 0)
 	{

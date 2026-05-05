@@ -29,11 +29,11 @@ void Player::Init()
 	m_invincibleTime = 0;
 	m_sumDeltaTime = 0;
 
-	m_shotWait = 0.2f;
-	m_chargeShotWait = 0.7f;		//チャージショットのクールタイム
+	m_shotCoolTime = 0.2f;
+	m_chargeshotCoolTime = 0.7f;		//チャージショットのクールタイム
 	m_bChargeMaxFlg = false;
 	//次の弾を撃つまでに一秒経ってから（シーン切り替え後すぐに弾を撃つのは少しおかしいから）
-	m_shotWaitTimer = 1.0f;
+	m_shotCoolTimer = 1.0f;
 
 	//アニメーションの初期化
 	m_animCnt = 0;
@@ -227,9 +227,9 @@ void Player::Action(float deltaTime)
 	}
 
 	//弾
-	m_shotWaitTimer -= deltaTime;
-	if (m_shotWaitTimer < 0)m_shotWaitTimer = 0;
-	if (m_shotWaitTimer == 0)
+	m_shotCoolTimer -= deltaTime;
+	if (m_shotCoolTimer < 0)m_shotCoolTimer = 0;
+	if (m_shotCoolTimer == 0)
 	{
 		//クリックしていないとき
 		if (!KEY.IsHeld(VK_LBUTTON))
@@ -238,23 +238,23 @@ void Player::Action(float deltaTime)
 			{
 				//速射弾を発射
 				m_bullet = std::make_shared<PlayerBullet>();
-				Math::Vector2 shotPos,shotSpeed; 
+				Math::Vector2 shotPos,bulletSpeed; 
 				float power = 1;
 				shotPos = m_pos + m_shotPosOffset;
-				shotSpeed.x = m_bulletSpeed + (m_chargeSpeedMax - m_bulletSpeed)/m_chargePowerMax *( power-1);
-				shotSpeed.y = 0;
+				bulletSpeed.x = m_bulletSpeed + (m_chargeSpeedMax - m_bulletSpeed)/m_chargePowerMax *( power-1);
+				bulletSpeed.y = 0;
 				m_bullet->SetPower(power);
-				m_bullet->Shot(shotPos, shotSpeed);
+				m_bullet->Shoot(shotPos, bulletSpeed);
 				m_pBulletManager->Add(m_bullet);
 				m_bullet = nullptr;
 
 				//クールタイム
-				m_shotWaitTimer = m_shotWait;
+				m_shotCoolTimer = m_shotCoolTime;
 			}
 			//チャージしたものを発射
 			else
 			{
-				Math::Vector2 shotPos,shotSpeed;
+				Math::Vector2 shotPos,bulletSpeed;
 				//パワーを求める
 				float power = (m_chargeTime / m_chargeTimeMax) * 10;
 				if (power > m_chargePowerMax)
@@ -264,17 +264,17 @@ void Player::Action(float deltaTime)
 				m_bullet->SetPower(power);
 				
 				shotPos = { m_pos.x + m_radius.x, m_pos.y };
-				shotSpeed.x = m_bulletSpeed + (m_chargeSpeedMax - m_bulletSpeed) / m_chargePowerMax * power;
-				shotSpeed.y = 0;
+				bulletSpeed.x = m_bulletSpeed + (m_chargeSpeedMax - m_bulletSpeed) / m_chargePowerMax * power;
+				bulletSpeed.y = 0;
 				
 				//弾を撃つ
-				m_bullet->Shot(shotPos, shotSpeed);
+				m_bullet->Shoot(shotPos, bulletSpeed);
 
 				//アニメーションの座標も更新
 				m_chargeAnim->SetPos(shotPos);
 
 				//クールタイム
-				m_shotWaitTimer = m_chargeShotWait;				
+				m_shotCoolTimer = m_chargeshotCoolTime;				
 
 				//プレイヤークラスではチャージした弾の情報は保有しない
 				m_bullet = nullptr;
@@ -296,7 +296,7 @@ void Player::Action(float deltaTime)
 					m_bullet = nullptr;
 					m_chargeAnim = nullptr;
 					m_bChargeMaxFlg = false;
-					m_shotWaitTimer = m_chargeShotWait;
+					m_shotCoolTimer = m_chargeshotCoolTime;
 					return;
 				}
 

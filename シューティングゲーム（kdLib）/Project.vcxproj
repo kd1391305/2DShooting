@@ -168,9 +168,7 @@
     <ClInclude Include="Src\Application\Chara\BaseChara\BaseChara.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\Boss\Boss.h" />
-    <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy1.h" />
-    <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy2.h" />
-    <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemy3.h" />
+    <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemies.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\EnemyManager.h" />
     <ClInclude Include="Src\Application\Chara\Player\Player.h" />
     <ClInclude Include="Src\Application\Fireworks\BaseFireworks\BaseFireworks.h" />
@@ -229,9 +227,7 @@
     <ClCompile Include="Src\Application\Bullet\PlayerBullet\PlayerBullet.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\Boss\Boss.cpp" />
-    <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy1.cpp" />
-    <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy2.cpp" />
-    <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemy3.cpp" />
+    <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemies.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Src\Application\Chara\Player\Player.cpp" />
     <ClCompile Include="Src\Application\Fireworks\BaseFireworks\BaseFireworks.cpp" />

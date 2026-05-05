@@ -43,8 +43,8 @@ void TitleScene::Init()
 		m_back->Init();
 	}
 
-	m_shotWaitTimer = 2;
-	m_shotWait = 10;
+	m_shotCoolTimer = 2;
+	m_shotCoolTime = 10;
 
 	//BGMを流す
 	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");
@@ -75,8 +75,8 @@ void TitleScene::Update()
 	{
 
 		//花火を打ち上げるランダムで
-		m_shotWaitTimer -= deltaTime;
-		if (m_shotWaitTimer <= 0)
+		m_shotCoolTimer -= deltaTime;
+		if (m_shotCoolTimer <= 0)
 		{
 			{
 				int shotNum = 15;
@@ -97,17 +97,17 @@ void TitleScene::Update()
 					FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
 					for (int i = 0; i < 3; i++)
 					{
-						m_back->GetFireworks()->Shot(type,
+						m_back->GetFireworks()->Shoot(type,
 							startPos, startMove, beforeScale, afterScale, color);
 					}
 					//二重花火にする（花火の中にちいさな花火を追加）
-					m_back->GetFireworks()->Shot(type,
+					m_back->GetFireworks()->Shoot(type,
 						startPos, startMove, beforeScale, afterScale / 1.5f, color);
 				}
 			}
 			//クールタイムを設ける
 			float noise = randRange(0, 6);
-			m_shotWaitTimer = m_shotWait + noise;
+			m_shotCoolTimer = m_shotCoolTime + noise;
 
 			//タイトル専用の花火効果音を流す
 			std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Fireworks_Title.wav");

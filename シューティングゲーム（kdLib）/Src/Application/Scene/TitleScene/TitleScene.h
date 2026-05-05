@@ -28,8 +28,8 @@ private:
 	Math::Matrix m_nameMat;
 
 	//花火を撃つクールタイム
-	float m_shotWait;
-	float m_shotWaitTimer;
+	float m_shotCoolTime;
+	float m_shotCoolTimer;
 
 	//カーソルが当たっているか？
 	bool m_bHitCursor;

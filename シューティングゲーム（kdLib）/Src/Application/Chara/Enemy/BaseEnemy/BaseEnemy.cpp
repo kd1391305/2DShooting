@@ -13,30 +13,19 @@ Math::Vector2* BaseEnemy::s_pPlayerPos = nullptr;
 
 void BaseEnemy::Init()
 {
-	m_pos = {};						//座標
-	m_move = {};					//移動量
-	m_moveSpeed = 50;
-	m_radius = { 32,32 };			//半径	
-	m_scale = 0.5f;					//画像の拡縮
+	m_radian = 0;					//敵画像の回転角度
 
 	m_animCnt = 0;					//現在のアニメーション
 	m_animCntMax = 4;				//アニメーションのコマ数
 	m_animSpeed = 5;				//アニメーションのスピード
 
-	m_color = { 1,1,1,1 };			//色
-
 	m_bActive = true;				//活性状態
-
-	m_hpMax = 10;					//最大HP
-	m_hp = m_hpMax;					//HPを初期化
-
-	m_timer = 0;					//出現している時間
-
-	m_shotWait = 3;					//敵が弾を撃つクールタイム
-	m_shotWaitTimer = m_shotWait;	//敵が弾を撃つクールタイムを初期化
 
 	m_bDead_ScreenOut = false;		//画面外に出たら敵を倒すフラグ
 }
+
+
+
 
 //更新
 void BaseEnemy::Update(float deltaTime)
@@ -46,8 +35,19 @@ void BaseEnemy::Update(float deltaTime)
 	if (m_animCnt >= m_animCntMax)m_animCnt = 0;
 
 	//クールタイムを減らす
-	m_shotWaitTimer -= deltaTime;
-	if (m_shotWaitTimer < 0)m_shotWaitTimer = 0;
+	m_shotCoolTimer -= deltaTime;
+	if (m_shotCoolTimer < 0)m_shotCoolTimer = 0;
+
+	if (m_bHitFlg)
+	{
+		m_hitEffectTimer -= deltaTime;
+		if (m_hitEffectTimer <= 0)
+		{
+			m_hitEffectTimer = 0;
+			m_color = m_normalColor;
+			m_bHitFlg = false;
+		}
+	}
 
 	//敵の行動パターン通りに動く
 	Action(deltaTime);
@@ -80,8 +80,56 @@ void BaseEnemy::Update(float deltaTime)
 
 	//行列作成
 	Math::Matrix scale = Math::Matrix::CreateScale(m_scale, m_scale, 0);
+	Math::Matrix rotation = Math::Matrix::CreateRotationZ(m_radian);
 	Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scale * trans;
+}
+
+
+
+//敵を出現させる
+void BaseEnemy::Spawn(Math::Vector2& pos, Math::Vector2& radius, float moveSpeed, float moveDeg, Math::Color& normalColor, Math::Color& hitColor, float hp, float bulletSpeed, float shotCoolTime, const float shotCoolTimeNoiseMax,const float spawnShotCoolTime)
+{
+	//座標
+	m_pos = pos;
+
+	//敵の大きさ
+	m_radius = radius;
+	{
+		KdTexture* tex = TextureCache::Instance().Get("Texture/Enemy/Enemy0.png").get();
+		float texRadius = tex->GetRadius().x;
+		m_scale = radius.x / texRadius;
+	}
+
+	//行列作成
+	Math::Matrix scaleMat, rotationMat, transMat;
+	scaleMat = Math::Matrix::CreateScale(m_scale);
+	rotationMat = Math::Matrix::CreateRotationZ(m_radian);
+	transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	m_mat = scaleMat * rotationMat * transMat;
+
+	//移動量
+	m_moveSpeed = moveSpeed;
+	{
+		float radian = DirectX::XMConvertToRadians(moveDeg);
+		m_move.x = cosf(radian) * moveSpeed;
+		m_move.y = sinf(radian) * moveSpeed;
+	}
+
+	//色
+	m_color = normalColor;
+	m_normalColor = normalColor;
+	m_hitColor = hitColor;
+
+	//HP
+	m_hpMax = hp;
+	m_hp = hp;
+
+	//弾
+	m_bulletSpeed = bulletSpeed;
+	m_shotCoolTime = shotCoolTime;
+	m_shotCoolTimeNoiseMax = shotCoolTimeNoiseMax;				//クールタイムのずれる時間
+	m_shotCoolTimer = shotCoolTime + spawnShotCoolTime;			//スポーン時の弾発射のクールタイム
 }
 
 //描画
@@ -93,34 +141,18 @@ void BaseEnemy::Draw()
 	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get(path), m_color);
 }
 
-//敵をスポーンさせる（画面右端からランダムで出現、敵はまっすぐに動く）
-void BaseEnemy::Spawn()
+void BaseEnemy::Damage(float damage)
 {
-	float x = SCREEN_RIGHT + m_radius.x;
-	float y = randRange(
-		SCREEN_BOTTOM + m_radius.y,	//最小値
-		SCREEN_TOP - m_radius.y);	//最大値
-
-	m_pos = { x,y };				//出現位置
-	m_move = { -200,0 };			//移動量
-
-	//行列作成
-	Math::Matrix scale = Math::Matrix::CreateScale(m_scale, m_scale, 0);
-	Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	m_mat = scale * trans;
-}
-
-//敵の行動パターン通りに動く
-void BaseEnemy::Action(float deltaTime)
-{
-	//クールタイムが終わったら
-	if (m_shotWaitTimer <= 0)
+	m_hp -= damage;
+	if (m_hp <= 0)
 	{
-		//確率で弾を発射
-		if (HitGacha(0.01))		//1000分の１の確率で弾を発射
-		{
-			s_pBulletManager->Shot(m_pos, m_move * 2);
-			m_shotWait = 3;			//3秒間のクールタイムを設ける
-		}
+		m_hp = 0;
+		Dead();			//倒れた時の処理を呼び出す
 	}
+	if (m_hp > m_hpMax)m_hp = m_hpMax;
+
+	m_bHitFlg = true;
+	m_hitEffectTimer = m_hitEffectTime;
+	m_color = m_hitColor;
 }
+

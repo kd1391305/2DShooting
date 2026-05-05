@@ -144,7 +144,7 @@ void Fireworks1::Draw(float backScale)
 }
 
 //花火を撃つ
-void Fireworks1::Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)
+void Fireworks1::Shoot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)
 {
 	m_pos = startPos;
 	m_move = startMove;
@@ -421,7 +421,7 @@ void Fireworks2::Draw(float backScale)
 }
 
 //花火を撃つ
-void Fireworks2::Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)
+void Fireworks2::Shoot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)
 {
 	m_pos = startPos; 
 	m_move = startMove;
@@ -661,7 +661,7 @@ void Fireworks3::Draw(float backScale)
 }
 
 //花火を打ち上げる
-void Fireworks3::Shot(Math::Vector2& startPos, Math::Vector2&startMove, float beforeScale, float afterScale, Math::Color& color)
+void Fireworks3::Shoot(Math::Vector2& startPos, Math::Vector2&startMove, float beforeScale, float afterScale, Math::Color& color)
 {
 	m_pos = startPos;
 	m_move = startMove;
@@ -892,7 +892,7 @@ void Fireworks4::Draw(float backScale)
 }
 
 //花火を撃つ
-void Fireworks4::Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)
+void Fireworks4::Shoot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)
 {
 	m_pos = startPos; 
 	m_move = startMove;
@@ -1108,7 +1108,7 @@ void Fireworks5::Draw(float backScale)
 	}
 }
 
-void Fireworks5::Shot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)
+void Fireworks5::Shoot(Math::Vector2& startPos, Math::Vector2& startMove, float beforeScale, float afterScale, Math::Color& color)
 {
 	m_pos = startPos;
 	m_move = startMove;
