@@ -43,9 +43,6 @@
     <Filter Include="Src\System\Audio">
       <UniqueIdentifier>{667d1cb1-5ae5-476f-acd5-14b7d294a95a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Mouse">
-      <UniqueIdentifier>{4b5f4ae8-b2f5-44b8-a386-27107573b211}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\Background">
       <UniqueIdentifier>{3fb7303b-90c1-4db3-a0c4-3f2ea8e7cc86}</UniqueIdentifier>
     </Filter>
@@ -73,18 +70,6 @@
     <Filter Include="Src\Application\Bullet">
       <UniqueIdentifier>{ab12ab2b-9b62-48d7-9f2c-ebb0b23edde3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Chara">
-      <UniqueIdentifier>{2fd917a0-497b-4550-9830-858c3433f369}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Chara\Player">
-      <UniqueIdentifier>{9879a9dd-0aa3-40cc-80de-66aec72a73de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Chara\Enemy">
-      <UniqueIdentifier>{66fbf0a9-f30c-4354-a45f-fba4e3dc6091}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Chara\BaseChara">
-      <UniqueIdentifier>{42a79b72-87dc-4e42-ad3a-1af006abc9d2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\Light">
       <UniqueIdentifier>{f6f4445b-55d4-474c-9f1d-09e4194b92fc}</UniqueIdentifier>
     </Filter>
@@ -93,12 +78,6 @@
     </Filter>
     <Filter Include="Src\Application\TextureCache">
       <UniqueIdentifier>{5921333c-c76c-4154-93eb-744ad5306298}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Chara\Enemy\BaseEnemy">
-      <UniqueIdentifier>{f07f15fa-dc90-439d-83ed-c4f1abe65787}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Src\Application\Chara\Enemy\Enemies">
-      <UniqueIdentifier>{9bc01bf4-2b64-44c4-b557-a14cee1112e0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Src\Application\Animtion">
       <UniqueIdentifier>{28fc3c64-e873-4528-b63c-bcaa05d3512d}</UniqueIdentifier>
@@ -139,9 +118,6 @@
     <Filter Include="Src\Application\Scene\GameClearScene">
       <UniqueIdentifier>{f673c016-892b-49d1-b704-4018fadbed8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Chara\Enemy\Boss">
-      <UniqueIdentifier>{bfb4f42d-8b24-4415-b35a-0004bf62024e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\Tools\Timer">
       <UniqueIdentifier>{5aa50e1b-923a-431b-a5b9-4b4afb52588e}</UniqueIdentifier>
     </Filter>
@@ -150,6 +126,36 @@
     </Filter>
     <Filter Include="Src\Application\Fireworks\BaseFireworks">
       <UniqueIdentifier>{1d6a2b2e-4368-4756-9b26-f8f98539a7d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Animtion\HItEffect">
+      <UniqueIdentifier>{8ffa101c-e78e-461d-87cd-507c0c6e5b43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara">
+      <UniqueIdentifier>{2fd917a0-497b-4550-9830-858c3433f369}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Player">
+      <UniqueIdentifier>{9879a9dd-0aa3-40cc-80de-66aec72a73de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Enemy">
+      <UniqueIdentifier>{66fbf0a9-f30c-4354-a45f-fba4e3dc6091}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Enemy\BaseEnemy">
+      <UniqueIdentifier>{f07f15fa-dc90-439d-83ed-c4f1abe65787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Enemy\Enemies">
+      <UniqueIdentifier>{9bc01bf4-2b64-44c4-b557-a14cee1112e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\Enemy\Boss">
+      <UniqueIdentifier>{bfb4f42d-8b24-4415-b35a-0004bf62024e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Chara\BaseChara">
+      <UniqueIdentifier>{42a79b72-87dc-4e42-ad3a-1af006abc9d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Key">
+      <UniqueIdentifier>{a93a58f7-cd93-42f2-be2a-2e013798a3e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Mouse">
+      <UniqueIdentifier>{e101341c-1c8d-42d1-9d30-8ed1b67374ed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -245,9 +251,6 @@
     </ClInclude>
     <ClInclude Include="Src\Application\Scene.h">
       <Filter>Src\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\Mouse\Mouse.h">
-      <Filter>Src\Application\Mouse</Filter>
     </ClInclude>
     <ClInclude Include="Src\Application\Fireworks\Fireworks.h">
       <Filter>Src\Application\Fireworks</Filter>
@@ -351,6 +354,18 @@
     <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemies.h">
       <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Animtion\HitEffect\HitEffect.h">
+      <Filter>Src\Application\Animtion\HItEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Animtion\HitEffect\HitEffectManager.h">
+      <Filter>Src\Application\Animtion\HItEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Key\KeyManager.h">
+      <Filter>Src\Application\Key</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Mouse\Mouse.h">
+      <Filter>Src\Application\Mouse</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -415,9 +430,6 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Scene.cpp">
       <Filter>Src\Application</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Mouse\Mouse.cpp">
-      <Filter>Src\Application\Mouse</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Fireworks\Fireworks.cpp">
       <Filter>Src\Application\Fireworks</Filter>
@@ -508,6 +520,15 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemies.cpp">
       <Filter>Src\Application\Chara\Enemy\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Animtion\HitEffect\HitEffect.cpp">
+      <Filter>Src\Application\Animtion\HItEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Animtion\HitEffect\HitEffectManager.cpp">
+      <Filter>Src\Application\Animtion\HItEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Mouse\Mouse.cpp">
+      <Filter>Src\Application\Mouse</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

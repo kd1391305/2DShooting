@@ -20,15 +20,17 @@ public:
 
 	std::shared_ptr<Score>& GetScoreInst() { return m_score; }
 
-	
+	void CreateBossGauge(float* hpMax,float* hp);
 
 private:
 
 	std::shared_ptr<Score> m_score;
 
-	std::shared_ptr<Gauge> m_gauge;
+	std::shared_ptr<Gauge> m_playerGauge;
 
-	std::shared_ptr<Explan>m_explan;
+	std::shared_ptr<Gauge>m_bossGauge = nullptr;
+
+	std::shared_ptr<Explan>m_explan = nullptr;
 
 	Math::Vector2* m_pPlayerPos;		//プレイヤーの座標アドレス
 

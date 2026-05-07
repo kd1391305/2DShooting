@@ -72,7 +72,7 @@ private:
 		//ìoò^Ç∑ÇÈÉLÅ[àÍóó
 		char registerKeys[] = {
 			VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,
-			'W','A','S','D',
+			'Z',
 			VK_SPACE,
 			VK_LBUTTON,
 			VK_RETURN

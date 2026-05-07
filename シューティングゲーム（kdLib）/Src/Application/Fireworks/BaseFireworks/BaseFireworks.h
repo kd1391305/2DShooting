@@ -192,6 +192,9 @@ struct Particle4
 	}
 };
 
+
+class River;
+
 //‰Ô‰ÎƒNƒ‰ƒX
 class BaseFireworks
 {
@@ -256,7 +259,7 @@ protected:
 
 	//‰Ô‰ÎƒNƒ‰ƒX‚ÍKdTexture‚É•`‰æ‚µ‚Ä‚©‚çKdtexture‚ğBuckbuffer‚É•`‰æ‚·‚é
 	//‚»‚Ì‚½‚ß‚Ì•Ï”
-	std::shared_ptr< KdTexture> m_tex;		//‰æ‘œ	
+	std::shared_ptr< KdTexture> m_tex;				//‰æ‘œ
 	float m_texRadius;		//‰æ‘œ”¼Œa
 	float m_beforeScale;	//‰Ô‰Î‚ª’e‚¯‚é‚Ü‚Å‚ÌŠgk
 	float m_afterScale;		//‰Ô‰Î‚ª’e‚¯‚½Œã‚ÌŠgk

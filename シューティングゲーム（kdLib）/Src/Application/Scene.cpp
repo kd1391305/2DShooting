@@ -9,6 +9,7 @@
 #include"Background/Back.h"
 #include"Scene/GameClearScene/GameClearScene.h"
 #include"Scene/GameOverScene/GameOverScene.h"
+#include"Scene/GameScene/GameScene.h"
 
 void Scene::Draw2D()
 {
@@ -29,9 +30,16 @@ void Scene::Init()
 {
 	srand(timeGetTime());
 	DWriteCustom::Instance().Init();
-	//std::shared_ptr<Back>back = std::make_shared<Back>();
-	//back->Init();
-	//SceneManager::Instance().ChangeState(new GameClearScene(back));]
+
+	/*std::shared_ptr<Back>back = std::make_shared<Back>();
+	back->Init();
+	SceneManager::Instance().ChangeState(std::make_shared< GameClearScene>(back));*/
+
+	/*std::shared_ptr<Back>back = std::make_shared<Back>();
+	back->Init();
+	std::shared_ptr<Game> game = std::make_shared<Game>(back);
+	SceneManager::Instance().ChangeState(std::make_shared< GameOverScene>(game));*/
+
 	SceneManager::Instance().ChangeState(std::make_shared<TitleScene>());
 	Timer::Instance().Reset();
 }

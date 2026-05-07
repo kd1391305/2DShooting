@@ -35,7 +35,7 @@ void TitleScene::Init()
 	m_start->SetColor({ 1,1,1,1 });			//通常の色	
 	m_start->SetSelectScale({ 1.01f,1.01f });	//選択時の拡縮
 	m_start->SetSelectColor({ 1,1,0.8,1 });	//選択時の色
-	m_start->SetTex("Texture/Start.png");
+	m_start->SetTex("Texture/Title/StartButton.png");
 
 	if (!m_back)
 	{
@@ -43,8 +43,7 @@ void TitleScene::Init()
 		m_back->Init();
 	}
 
-	m_shotCoolTimer = 2;
-	m_shotCoolTime = 10;
+	m_shotCoolTimer = 5;
 
 	//BGMを流す
 	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");
@@ -52,6 +51,12 @@ void TitleScene::Init()
 	bgm->Play(true);
 
 	m_bChangeScene = false;
+
+	m_start->SetSelect(true);
+
+	m_enterKeyAlpha = 0.4f;
+	m_enterKeyDeltaAlpha = 0.2f;
+	m_enterKeyMat = Math::Matrix::CreateScale(0.8f, 0.8f, 0) * Math::Matrix::CreateTranslation(280, -100, 0);
 }
 
 void TitleScene::Update()
@@ -69,6 +74,9 @@ void TitleScene::Update()
 		{
 			//ゲーム画面へ移行
 			SceneManager::Instance().ChangeState(std::make_shared<Game>(m_back));
+
+			std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav", SoundCache::SoundState::Playing);
+			bgm->Stop();
 		}
 	}
 	else
@@ -79,8 +87,8 @@ void TitleScene::Update()
 		if (m_shotCoolTimer <= 0)
 		{
 			{
-				int shotNum = 15;
-				int noise = randRange(-2, 2);
+				int shotNum = 11;
+				int noise = randRange(-4, 4);
 				shotNum += noise;
 				for (int i = 0; i < shotNum; i++)
 				{
@@ -91,7 +99,7 @@ void TitleScene::Update()
 					Math::Vector2 startPos = { startX,SCREEN_BOTTOM - 30 - randRange(0,200) };
 					Math::Vector2 startMove = { 0,randRange(270,370) };
 					float beforeScale = randRange(0.3f, 0.5f);
-					float afterScale = randRange(0.7f, 1.3f);
+					float afterScale = randRange(0.7f, 1.1f);
 					Math::Color color = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
 					Math::Color color2 = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
 					FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
@@ -106,8 +114,8 @@ void TitleScene::Update()
 				}
 			}
 			//クールタイムを設ける
-			float noise = randRange(0, 6);
-			m_shotCoolTimer = m_shotCoolTime + noise;
+			
+			m_shotCoolTimer = randRange(10, 20);
 
 			//タイトル専用の花火効果音を流す
 			std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Fireworks_Title.wav");
@@ -127,9 +135,9 @@ void TitleScene::Update()
 				se->Play(false);
 			}
 
-			if (KEY.IsDown(VK_LBUTTON))
+			if ((KEY.IsDown(VK_LBUTTON) && m_start->GetActionType() == Button::ActionType::Mouse) ||
+				(KEY.IsDown(VK_RETURN)))
 			{
-
 				//効果音発生
 				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Click.wav");
 				se->SetVolume(0.1f);
@@ -145,6 +153,26 @@ void TitleScene::Update()
 			m_bHitCursor = false;
 		}
 	}
+
+	if (KEY.IsDown(VK_UP))
+	{
+		m_start->SetSelect(true);
+	}
+	if (KEY.IsDown(VK_DOWN))
+	{
+		m_start->SetSelect(false);
+	}
+
+	//エンターキー画像の処理
+	m_enterKeyAlpha += m_enterKeyDeltaAlpha * deltaTime;
+	if (m_enterKeyAlpha > 1.0f)
+	{
+		m_enterKeyDeltaAlpha *= -1;
+	}
+	if(m_enterKeyAlpha < 0.4f)
+	{
+		m_enterKeyDeltaAlpha *= -1;
+	}
 }
 
 void TitleScene::Draw()
@@ -154,11 +182,15 @@ void TitleScene::Draw()
 	m_start->Draw();
 
 	SHADER.m_spriteShader.SetMatrix(m_nameMat);
-	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Title.png"));
+	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Title/TitleName.png"));
+
+	D3D.SetBlendState(BlendMode::Add);
+	SHADER.m_spriteShader.SetMatrix(m_enterKeyMat);
+	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Title/EnterKey.png"),Math::Color{1,1,1,m_enterKeyAlpha});
+	D3D.SetBlendState(BlendMode::Alpha);
 }
 
 void TitleScene::Release()
 {
-	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav",SoundCache::SoundState::Playing);
-	bgm->Stop();
+	
 }

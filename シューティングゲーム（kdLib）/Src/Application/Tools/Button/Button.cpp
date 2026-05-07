@@ -4,17 +4,31 @@
 
 void Button::Update()
 {
-	Math::Matrix scaleMat, transMat;
-		
-	//マウスと当たったらサイズを変更する
 	if (MOUSE.Hit(m_pos, m_radius))
 	{
-		m_bSelect = true;
+		if (MOUSE.IsMove())
+		{
+			m_bSelect = true;
+			m_actionType = ActionType::Mouse;
+		}
+	}
+	else
+	{
+		if (m_actionType == ActionType::Mouse)
+		{
+			m_bSelect = false;
+		}
+	}
+
+	Math::Matrix scaleMat, transMat;
+		
+	//選択中であるなら
+	if (m_bSelect)
+	{
 		scaleMat = Math::Matrix::CreateScale(m_selectScale.x, m_selectScale.y, 0);
 	}
 	else
 	{
-		m_bSelect= false;
 		scaleMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
 	}
 	transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
@@ -24,8 +38,14 @@ void Button::Update()
 void Button::Draw()
 {
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	if (m_bSelect )		SHADER.m_spriteShader.DrawBox(0, 0, m_radius.x, m_radius.y, & m_selectColor, true);
-	else						SHADER.m_spriteShader.DrawBox(0, 0, m_radius.x, m_radius.y, &m_color,				true);
+	if (m_bSelect)		SHADER.m_spriteShader.DrawBox(0, 0, m_radius.x, m_radius.y, & m_selectColor, true);
+	else							SHADER.m_spriteShader.DrawBox(0, 0, m_radius.x, m_radius.y, &m_color,				true);
+}
+
+void Button::SetSelect(bool set)
+{
+	m_bSelect = set;
+	m_actionType = ActionType::Key;
 }
 
 void ButtonEx::SetTex(std::string path)

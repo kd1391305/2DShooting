@@ -3,7 +3,6 @@
 #include"../../Bullet/BulletManager.h"
 #include"../../Key/KeyManager.h"
 #include"../../Timer/Timer.h"
-#include"../../Mouse/Mouse.h"
 #include"../../Tools/RandEx/RandEx.h"
 #include"../../Scene/GameScene/GameScene.h"
 #include"../../Fireworks/Fireworks.h"
@@ -11,7 +10,8 @@
 #include"../../Light/Light.h"
 #include"../../Animtion/ChargeAnim/ChargeAnim.h"
 #include"../../main.h"
-#include"../../Bullet/PlayerBullet/PlayerBullet.h"
+#include"../../Bullet/PlayerBullet/PlayerBullet.h"7
+#include"../../SoundCache/SoundCache.h"
 
 //初期化
 void Player::Init()
@@ -21,7 +21,7 @@ void Player::Init()
 	m_moveSpeed = 500;
 	m_hpMax = 100;
 	m_hp = m_hpMax;
-	m_scale = 0.5f;
+	m_scale = { 0.5f,0.5f };
 	m_color = { 1,1,1,1 };
 
 	//無敵時間の初期化
@@ -49,11 +49,11 @@ void Player::Init()
 
 	//プレイヤーの大きさを求める（半径）
 	KdTexture* tex = TextureCache::Instance().Get("Texture/Player/Player0.png").get();
-	m_radius.x = tex->GetInfo().Width / 2.0f * m_scale;
-	m_radius.y = tex->GetInfo().Height / 2.0f * m_scale;
+	m_radius.x = tex->GetInfo().Width / 2.0f * m_scale.x;
+	m_radius.y = tex->GetInfo().Height / 2.0f * m_scale.y;
 
 	//行列作成
-	Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale, m_scale, 0);
+	Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
 	Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scaleMat * transMat;
 }
@@ -150,7 +150,7 @@ void Player::Update(float deltaTime)
 	}
 
 	//行列作成
-	Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale, m_scale, 0);
+	Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
 	Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scaleMat* transMat;
 }
@@ -190,11 +190,11 @@ void Player::Action(float deltaTime)
 	{
 		Math::Vector2 vec;
 		//キー判定
-		if (KEY.IsHeld(VK_LEFT) || KEY.IsHeld('A'))
+		if (KEY.IsHeld(VK_LEFT))
 		{
 			vec.x = -1;
 		}
-		else if (KEY.IsHeld(VK_RIGHT) || KEY.IsHeld('D'))
+		else if (KEY.IsHeld(VK_RIGHT))
 		{
 			vec.x = 1;
 		}
@@ -203,11 +203,11 @@ void Player::Action(float deltaTime)
 			m_move.x = 0;
 		}
 
-		if (KEY.IsHeld(VK_UP) || KEY.IsHeld('W'))
+		if (KEY.IsHeld(VK_UP))
 		{
 			vec.y = 1;
 		}
-		else if (KEY.IsHeld(VK_DOWN) || KEY.IsHeld('S'))
+		else if (KEY.IsHeld(VK_DOWN))
 		{
 			vec.y = -1;
 		}
@@ -232,7 +232,7 @@ void Player::Action(float deltaTime)
 	if (m_shotCoolTimer == 0)
 	{
 		//クリックしていないとき
-		if (!KEY.IsHeld(VK_LBUTTON))
+		if (!KEY.IsHeld('Z'))
 		{
 			if (!m_bullet)
 			{
@@ -248,6 +248,13 @@ void Player::Action(float deltaTime)
 				m_pBulletManager->Add(m_bullet);
 				m_bullet = nullptr;
 
+				//効果音
+				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Shoot.wav");
+				if (!se->IsPlay())
+				{
+					se->SetVolume(0.00005f);
+					se->Play(false);
+				}
 				//クールタイム
 				m_shotCoolTimer = m_shotCoolTime;
 			}
@@ -280,6 +287,10 @@ void Player::Action(float deltaTime)
 				m_bullet = nullptr;
 				m_chargeAnim = nullptr;
 				m_bChargeMaxFlg = false;
+
+				//効果音を止める
+				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
+				se->Stop();
 			}
 		}
 		//クリックしたとき
@@ -301,14 +312,21 @@ void Player::Action(float deltaTime)
 				}
 
 				m_chargeTime += deltaTime;
+				//チャージマックスになったら
 				if (m_chargeTime >= m_chargeTimeMax)
 				{
 					m_chargeTime = m_chargeTimeMax;
+
+					//このフレームでチャージマックスになったら
 					if (!m_bChargeMaxFlg)
 					{
 						m_bullet->SetPower(m_chargePowerMax);
 						m_chargeAnim->StartChargeMaxAnim();
 						m_bChargeMaxFlg = true;
+
+						//効果音を止める
+						std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
+						se->Stop();
 					}
 				}
 				else
@@ -321,6 +339,7 @@ void Player::Action(float deltaTime)
 					}
 					m_bullet->SetPower(power);
 				}
+
 				//座標更新
 				Math::Vector2 shotPos = m_pos + m_shotPosOffset;
 				m_bullet->SetPos(shotPos);
@@ -342,6 +361,11 @@ void Player::Action(float deltaTime)
 				m_chargeAnim->Init();
 				m_chargeAnim->Start(m_pos + m_shotPosOffset, { 70,70 }, 200, 350);
 				m_pBulletManager->Add(m_bullet);
+
+				//効果音発生
+				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
+				se->SetVolume(0.001f);
+				se->Play(false);
 			}
 		}
 	}
@@ -365,8 +389,6 @@ void Player::InitDeadAnim()
 			m_bDraw[h].emplace_back(true);
 		}
 	}
-
-	
 
 	m_deadTimer = 0;
 }

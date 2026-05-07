@@ -25,5 +25,7 @@ private:
 	std::shared_ptr<Back> m_back;
 
 	std::shared_ptr<ButtonEx> m_titleButton;		//タイトルへ行くボタン
-	std::shared_ptr<ButtonEx> m_gameButton;		//ゲームへ戻るボタン
+	std::shared_ptr<ButtonEx> m_gameButton;			//ゲームへ戻るボタン
+
+	float m_shotCoolTimer;
 };

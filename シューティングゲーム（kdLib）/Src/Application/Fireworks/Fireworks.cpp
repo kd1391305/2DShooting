@@ -14,7 +14,7 @@ void Fireworks1::Init()
 {
 	m_type = Type::Circle;
 
-	m_texRadius = 150;
+	m_texRadius = 200;
 	m_tex = std::make_shared<KdTexture>();
 	m_tex->CreateRenderTarget(m_texRadius * 2, m_texRadius * 2);
 
@@ -182,6 +182,8 @@ void Fireworks1::Shoot(Math::Vector2& startPos, Math::Vector2& startMove, float 
 		//寿命は途中（爆発するまでに）で尽きることの無いように
 		p.m_life = 10;
 	}
+
+	
 }
 
 //花火を弾けさせる
@@ -244,7 +246,7 @@ void Fireworks2::Init()
 {
 	m_type = Type::Circle_Line;
 
-	m_texRadius = 150;
+	m_texRadius = 200;
 	m_tex = std::make_shared<KdTexture>();
 	m_tex->CreateRenderTarget(m_texRadius * 2, m_texRadius * 2);
 
@@ -461,6 +463,7 @@ void Fireworks2::Shoot(Math::Vector2& startPos, Math::Vector2& startMove, float 
 		p.m_life = 10;
 	}
 	//================================================
+
 }
 
 //花火を弾けさせる
@@ -748,6 +751,7 @@ void Fireworks3::Explode()
 
 		p.m_life = randRange(2.0f,3.5f);
 	}
+	
 }
 
 //===================================================
@@ -761,7 +765,7 @@ void Fireworks4::Init()
 {
 	m_type = Type::Petal;
 
-	m_texRadius = 150;
+	m_texRadius = 200;
 	m_tex = std::make_shared<KdTexture>();
 	m_tex->CreateRenderTarget(m_texRadius * 2, m_texRadius * 2);
 
@@ -968,6 +972,8 @@ void Fireworks4::Explode()
 		//寿命
 		p.m_life = randRange(2.0f,3.5f);		//0.45秒～0.6秒
 	}
+	
+
 }
 
 //解放
@@ -984,7 +990,7 @@ void Fireworks5::Init()
 {
 	m_type = Type::Trail;
 
-	m_texRadius = 150;
+	m_texRadius = 200;
 	m_tex = std::make_shared<KdTexture>();
 	m_tex->CreateRenderTarget(m_texRadius * 2, m_texRadius * 2);
 
@@ -1188,7 +1194,7 @@ void Fireworks5::Explode()
 		//寿命
 		trail.m_life = randRange(2.0f, 3.5f);		//0.45秒～0.6秒
 	}
-
+	
 }
 
 void Fireworks5::Release()

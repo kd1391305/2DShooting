@@ -47,7 +47,7 @@ public:
 
 	void CreateMatrix()
 	{
-		Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale, m_scale, 0);
+		Math::Matrix scaleMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
 		Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 		m_mat = scaleMat * transMat;
 	}
@@ -77,7 +77,7 @@ private:
 	float m_chargeTime;								//チャージ時間
 	const float m_chargeTimeMax = 0.8f;				//チャージ最大時間
 	const float m_chargeSpeedMax = 800.0f;			//チャージ最大スピード
-	const float m_chargePowerMax = 5;				//チャージ最大パワー（敵を倒せる量）
+	const float m_chargePowerMax = 10;				//チャージ最大パワー（敵を倒せる量）
 	float m_chargeshotCoolTime;							//チャージショットのクールタイム
 	bool m_bChargeMaxFlg;							//チャージマックスになったらtrue
 	std::shared_ptr<ChargeAnim> m_chargeAnim=nullptr;		//チャージショットのアニメーション

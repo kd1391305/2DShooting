@@ -59,7 +59,7 @@ protected:
 	Math::Vector2 m_move;		//移動量
 	float m_moveSpeed;			//移動スピード
 	Math::Vector2 m_radius;		//半径（当たり判定、画面端判定）
-	float m_scale;				//画像の拡縮
+	Math::Vector2 m_scale;				//画像の拡縮
 	Math::Matrix m_mat;			//行列
 	Math::Color m_color;		//色
 	float m_hp;					//体力

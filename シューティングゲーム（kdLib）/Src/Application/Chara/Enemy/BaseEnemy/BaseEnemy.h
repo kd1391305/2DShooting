@@ -17,7 +17,7 @@ protected:
 
 public:
 
-	BaseEnemy(){}
+	BaseEnemy() {}
 	virtual~BaseEnemy()override {}
 
 	//初期化
@@ -30,7 +30,7 @@ public:
 	virtual void Draw()override;
 
 	//出現させるときの処理
-	void Spawn(
+	virtual void Spawn(
 		Math::Vector2& pos,						//出現する場所
 		Math::Vector2& radius,					//敵の大きさ
 		float moveSpeed,						//移動スピード
@@ -52,12 +52,18 @@ public:
 
 	void SetActive(bool set) { m_bActive = set; }
 
+	void SetFireworksNum(int set) { m_fireworksNum = set; }
+
+	void SetDeadScreenOutFlg(bool set) { m_bDead_ScreenOut = set; }
+
 	Math::Vector2 GetPos() { return m_pos; }
 
 	static void SetBulletManager(BulletManager* set) { s_pBulletManager = set; }
 	static void SetPlayerPos(Math::Vector2* set) { s_pPlayerPos = set; }
 
 	Math::Color GetColor()override { return m_normalColor; }
+
+	int GetFireworksNum() { return m_fireworksNum; }
 
 protected:
 
@@ -81,4 +87,6 @@ protected:
 	bool m_bHitFlg;								//当たったか？
 	float m_hitEffectTimer;						//ヒットエフェクト発生中のタイマー（０になったらエフェクトを切る）
 	const float m_hitEffectTime = 0.1f;			//ヒットエフェクトの時間
+
+	int m_fireworksNum = 1;						//倒したときに出現させる花火の数
 };

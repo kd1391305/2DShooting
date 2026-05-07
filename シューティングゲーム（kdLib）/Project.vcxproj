@@ -160,6 +160,8 @@
     <ClInclude Include="..\Library\tinygltf\stb_image_write.h" />
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
     <ClInclude Include="Src\Application\Animtion\ChargeAnim\ChargeAnim.h" />
+    <ClInclude Include="Src\Application\Animtion\HitEffect\HitEffect.h" />
+    <ClInclude Include="Src\Application\Animtion\HitEffect\HitEffectManager.h" />
     <ClInclude Include="Src\Application\Background\Back.h" />
     <ClInclude Include="Src\Application\Bullet\BaseBullet\BaseBullet.h" />
     <ClInclude Include="Src\Application\Bullet\BulletManager.h" />
@@ -176,6 +178,7 @@
     <ClInclude Include="Src\Application\Fireworks\FireworksManager.h" />
     <ClInclude Include="Src\Application\Font\DirectWriteCustomFont.h" />
     <ClInclude Include="Src\Application\Font\DWriteCustom.h" />
+    <ClInclude Include="Src\Application\Key\KeyManager.h" />
     <ClInclude Include="Src\Application\Light\Light.h" />
     <ClInclude Include="Src\Application\Mouse\Mouse.h" />
     <ClInclude Include="Src\Application\Scene.h" />
@@ -220,6 +223,8 @@
     <ClCompile Include="..\Library\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Application\Animtion\ChargeAnim\ChargeAnim.cpp" />
+    <ClCompile Include="Src\Application\Animtion\HitEffect\HitEffect.cpp" />
+    <ClCompile Include="Src\Application\Animtion\HitEffect\HitEffectManager.cpp" />
     <ClCompile Include="Src\Application\Background\Back.cpp" />
     <ClCompile Include="Src\Application\Bullet\BaseBullet\BaseBullet.cpp" />
     <ClCompile Include="Src\Application\Bullet\BulletManager.cpp" />

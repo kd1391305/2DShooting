@@ -7,6 +7,7 @@ class Player;
 class EnemyManager;
 class BulletManager;
 class UI;
+class HitEffectManager;
 
 class Game :public BaseScene
 {
@@ -39,6 +40,7 @@ private:
 	std::shared_ptr<BulletManager> m_bulletManager=nullptr;		//弾
 	std::shared_ptr<Back> m_back = nullptr;						//背景
 	std::shared_ptr<UI> m_UI = nullptr;							//UI
+	std::shared_ptr<HitEffectManager> m_hitEffectManager;		//ヒットエフェクト
 	
 	//スタート時のフラグ
 	//スタート時にはプレイヤーが画面外から出現する。その時の処理用変数

@@ -3,8 +3,9 @@
 #include"../main.h"
 #include"../Tools/Gauge/Gauge.h"
 #include"../Chara/Player/Player.h"
-#include"../Mouse/Mouse.h"
 #include"Explan/Explan.h"
+#include"../TextureCache/TextureCache.h"
+#include"../Font/DWriteCustom.h"
 
 //初期化
 void UI::Init(Player* player)
@@ -14,25 +15,31 @@ void UI::Init(Player* player)
 	m_score->Init();
 
 	//ゲージの初期化
-	m_gauge = std::make_shared<Gauge>();
-	m_gauge->Init(
-		{ -470,300 },					//ゲージの中心座標
-		{ 80,8 },						//ゲージの半径
+	m_playerGauge = std::make_shared<Gauge>();
+	m_playerGauge->Init(
+		{ -515,310 },					//ゲージの中心座標
+		{ 60,6 },						//ゲージの半径
 		player->GetHPMaxAddress(),		//MaxHPのアドレス
 		player->GetHPAddress(),			//HPのアドレス
 		1);								//ゲージが減るスピード
 
 	m_pPlayerPos = player->GetPosAddress();
 
-	m_explan = std::make_shared<Explan>();
-	m_explan->Init(m_pPlayerPos);
+	if (!m_explan)
+	{
+		m_explan = std::make_shared<Explan>();
+		m_explan->Init(m_pPlayerPos);
+	}
 }
 
 //更新
 void UI::Update(float deltaTime)
 {
-	//ゲージの更新
-	m_gauge->Update();
+	//プレイヤーのゲージの更新
+	m_playerGauge->Update();
+
+	//ボスのゲージの更新
+	if (m_bossGauge)m_bossGauge->Update();
 
 	if (m_explan)
 	{
@@ -46,12 +53,11 @@ void UI::Update(float deltaTime)
 	m_score->Update();
 }
 
-//初期化
 void UI::Draw()
 {
 	//UI背景描画
 	SHADER.m_spriteShader.ClearMatrix();
-	Math::Vector2 radius = { 250,40 };
+	Math::Vector2 radius = { 220,32 };
 	Math::Color color = { 0.1f,0.1f,0.1f,0.7f };
 	float cx = SCREEN_LEFT + radius.x;
 	float cy = SCREEN_TOP - radius.y;
@@ -68,12 +74,39 @@ void UI::Draw()
 	SHADER.m_spriteShader.DrawLine(x2, y2, x3, y3, &gray);
 	SHADER.m_spriteShader.DrawLine(x2, y2, SCREEN_LEFT, y2, &gray);
 
+	//プレイヤーアイコンの描画
+	{
+		Math::Matrix scaleMat, transMat;
+		scaleMat = Math::Matrix::CreateScale(1.3f, 1.1f, 0);
+		transMat = Math::Matrix::CreateTranslation(-610, 330,0);
+
+		SHADER.m_spriteShader.SetMatrix(scaleMat *transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Player/PlayerIcon.png"));
+	}
 	//スコアの描画
 	m_score->Draw();
 
+	DWriteCustom::Instance().SetShadow({ -1,-1 }, { 0.0f, 0.7f, 0.7f, 0.7f });
+	DWriteCustom::Instance().Draw("Life", { -575, 350 },20);
+	DWriteCustom::Instance().SetShadow({}, {});
 	//ゲージの描画
-	m_gauge->Draw();
+	m_playerGauge->Draw();
+
+	//ボスのゲージの描画
+	if (m_bossGauge)m_bossGauge->Draw();
 
 	if (m_explan)m_explan->Draw();
 
+}
+
+void UI::CreateBossGauge(float* hpMax, float* hp)
+{
+	m_bossGauge = std::make_shared<Gauge>();
+	m_bossGauge->Init(
+		Math::Vector2{ 0,SCREEN_BOTTOM + 12 },					//ゲージの中心座標
+		Math::Vector2{ 400,6 },									//ゲージの半径
+		hpMax,										//MaxHPのアドレス
+		hp,											//HPのアドレス
+		1);											//ゲージが減るスピード
+	m_bossGauge->SetColor(Math::Color{ 0.5f,0,0.5f,0.7f });
 }

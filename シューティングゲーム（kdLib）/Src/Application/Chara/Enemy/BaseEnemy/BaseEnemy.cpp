@@ -24,9 +24,6 @@ void BaseEnemy::Init()
 	m_bDead_ScreenOut = false;		//画面外に出たら敵を倒すフラグ
 }
 
-
-
-
 //更新
 void BaseEnemy::Update(float deltaTime)
 {
@@ -79,34 +76,17 @@ void BaseEnemy::Update(float deltaTime)
 	}
 
 	//行列作成
-	Math::Matrix scale = Math::Matrix::CreateScale(m_scale, m_scale, 0);
+	Math::Matrix scale = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
 	Math::Matrix rotation = Math::Matrix::CreateRotationZ(m_radian);
 	Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	m_mat = scale * trans;
+	m_mat = scale *rotation *  trans;
 }
-
-
 
 //敵を出現させる
 void BaseEnemy::Spawn(Math::Vector2& pos, Math::Vector2& radius, float moveSpeed, float moveDeg, Math::Color& normalColor, Math::Color& hitColor, float hp, float bulletSpeed, float shotCoolTime, const float shotCoolTimeNoiseMax,const float spawnShotCoolTime)
 {
 	//座標
 	m_pos = pos;
-
-	//敵の大きさ
-	m_radius = radius;
-	{
-		KdTexture* tex = TextureCache::Instance().Get("Texture/Enemy/Enemy0.png").get();
-		float texRadius = tex->GetRadius().x;
-		m_scale = radius.x / texRadius;
-	}
-
-	//行列作成
-	Math::Matrix scaleMat, rotationMat, transMat;
-	scaleMat = Math::Matrix::CreateScale(m_scale);
-	rotationMat = Math::Matrix::CreateRotationZ(m_radian);
-	transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	m_mat = scaleMat * rotationMat * transMat;
 
 	//移動量
 	m_moveSpeed = moveSpeed;
@@ -115,6 +95,26 @@ void BaseEnemy::Spawn(Math::Vector2& pos, Math::Vector2& radius, float moveSpeed
 		m_move.x = cosf(radian) * moveSpeed;
 		m_move.y = sinf(radian) * moveSpeed;
 	}
+
+	//敵の大きさ
+	m_radius = radius;
+	{
+		KdTexture* tex = TextureCache::Instance().Get("Texture/Enemy/Enemy0.png").get();
+		float texRadiusX = tex->GetRadius().x;
+		float texRadiusY = tex->GetRadius().y;
+		m_scale.x = radius.x / texRadiusX;
+		m_scale.y = radius.y / texRadiusY;
+	}
+
+	//敵の向き
+	if (m_move.x > 0)m_scale.x *= -1;
+
+	//行列作成
+	Math::Matrix scaleMat, rotationMat, transMat;
+	scaleMat = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
+	rotationMat = Math::Matrix::CreateRotationZ(m_radian);
+	transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	m_mat = scaleMat * rotationMat * transMat;
 
 	//色
 	m_color = normalColor;

@@ -20,10 +20,16 @@ public:
 		m_bShow = show;
 	}
 
+	bool IsMove() { return m_bMove; }
+
 private:
-	POINT m_pos;				//座標
+	POINT m_pos;			//座標
 	Math::Matrix m_mat;		//行列
 	bool m_bShow;
+
+	bool m_bMove;			//マウスが動いたか？
+	int m_stopCnt = 0;			//止まっているカウントを数える
+	POINT m_beforePos;		//前のフレームの座標
 
 	//シングルトン
 private:

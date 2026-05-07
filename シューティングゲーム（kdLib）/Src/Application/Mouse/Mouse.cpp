@@ -18,6 +18,25 @@ void Mouse::Update()
 	Math::Matrix scale = Math::Matrix::CreateScale(0.12f, 0.12f, 0);
 	Math::Matrix trans = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scale * trans;
+	
+	//ƒ}ƒEƒX‚ªŽ~‚Ü‚Á‚Ä‚¢‚é‚©‚ð’²‚×‚é
+	if (m_beforePos.x == m_pos.x && m_beforePos.y == m_pos.y)
+	{
+		m_stopCnt++;
+	}
+	else
+	{
+		m_stopCnt = 0;
+		m_bMove = true;
+	}
+
+	//Ž~‚Ü‚Á‚½‚Æ”»’f‚·‚éƒtƒŒ[ƒ€”‚ð‰z‚µ‚½‚ç
+	if (m_stopCnt >= 10)
+	{
+		m_bMove = false;
+	}
+
+	m_beforePos = m_pos;
 }
 
 void Mouse::Draw()

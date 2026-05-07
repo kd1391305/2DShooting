@@ -8,6 +8,7 @@ void Gauge::Init(const Math::Vector2& pos, const Math::Vector2& radius,const flo
 	m_pPoint = pPoint;
 	m_formerPoint = *m_pPoint;
 	m_speed = speed;
+	m_color = { 0,1,0,1 };
 }
 
 void Gauge::Update()
@@ -39,13 +40,13 @@ void Gauge::Draw()
 	//Œ»İ‚ÌƒQ[ƒW—Ê‚ğ•`‰æ
 	float left = m_pos.x - m_radius.x;						//¶’[À•W	
 	float radiusX = m_radius.x * (*m_pPoint / *m_pPointMax);	//•`‰æ‚·‚é”¼Œa(x)
-	SHADER.m_spriteShader.DrawBox(left + radiusX, m_pos.y, radiusX, m_radius.y, &Math::Color{ 0,1,0,1 }, true);		//•`‰æ
+	SHADER.m_spriteShader.DrawBox(left + radiusX, m_pos.y, radiusX, m_radius.y, &m_color, true);		//•`‰æ
 
 	//‘Œ¸’†‚ÌƒQ[ƒW—Ê‚ğ•`‰æ
 	if (m_formerPoint != *m_pPoint)
 	{
-		float right = left + radiusX * 2;			//æ‚Ù‚Ç•`‰æ‚µ‚½ƒQ[ƒW‚Ì‰E’[À•W
-		float gap = m_formerPoint - *m_pPoint;		//Œ»İ‚Æ‘O‚Ì’l‚Ì·
+		float right = left + radiusX * 2;				//æ‚Ù‚Ç•`‰æ‚µ‚½ƒQ[ƒW‚Ì‰E’[À•W
+		float gap = m_formerPoint - *m_pPoint;			//Œ»İ‚Æ‘O‚Ì’l‚Ì·
 		radiusX = m_radius.x * (gap / *m_pPointMax);	//•`‰æ‚·‚é”¼Œa(x)
 		SHADER.m_spriteShader.DrawBox(right + radiusX, m_pos.y, radiusX, m_radius.y, &Math::Color{ 1,0,0,1 }, true);
 	}

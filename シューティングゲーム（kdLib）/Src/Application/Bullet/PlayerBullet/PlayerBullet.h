@@ -8,6 +8,7 @@ public:
 	PlayerBullet() { 
 		m_bActive = true; 
 		m_pierceNum = 0;
+		m_radius = 4;
 	}
 	~PlayerBullet()override{}
 
@@ -28,7 +29,7 @@ public:
 
 	void SetPos(Math::Vector2 pos) { m_pos = pos; }
 
-	float GetRadius()override { return m_radius + m_power * 2; }
+	float GetRadius()override { return m_radius + m_power; }
 private:
 
 	int m_power;			//チャージしたパワー（パワー１ = 敵を一体倒す）

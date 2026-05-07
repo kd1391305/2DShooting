@@ -4,6 +4,12 @@ class Button
 {
 public:
 
+	enum ActionType
+	{
+		Key,
+		Mouse,
+	};
+
 	Button() :
 		m_pos(0, 0), m_radius(10, 10), m_color(1, 1, 1, 1), m_bSelect(false), m_selectScale(1.2f,1.2f)
 	{
@@ -35,21 +41,25 @@ public:
 	void SetScale(Math::Vector2 set) { m_scale = set; }
 	void SetSelectColor(Math::Color set) { m_selectColor = set; }
 	void SetSelectScale(Math::Vector2 set) { m_selectScale = set; }
-	void SetSelect(bool set) { m_bSelect = set;}
+	void SetSelect(bool set);
 
 	Math::Vector2 GetPos() { return m_pos; }
 	Math::Vector2 GetRadius() { return m_radius; }
 	Math::Vector2 GetSelectScale() { return m_selectScale; }
+	ActionType GetActionType() { return m_actionType; }
+
 protected:
 	
-	Math::Vector2 m_pos;				//座標
-	Math::Vector2 m_radius;			//半径
+	Math::Vector2 m_pos;					//座標
+	Math::Vector2 m_radius;					//半径
 	Math::Color m_color;					//色（通常）
-	Math::Color m_selectColor;		//選択時の色
+	Math::Color m_selectColor;				//選択時の色
 	Math::Vector2 m_scale;					//通常時の拡縮
 	Math::Vector2 m_selectScale;			//選択時の拡縮
-	Math::Matrix m_mat;					//行列
-	bool m_bSelect;							//選択中フラグ
+	Math::Matrix m_mat;						//行列
+	bool m_bSelect = false;					//選択中フラグ
+
+	ActionType m_actionType = ActionType::Key;
 };
 
 class ButtonEx :public Button

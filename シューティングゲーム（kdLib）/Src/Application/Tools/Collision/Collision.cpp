@@ -9,6 +9,7 @@
 #include"../RandEx/RandEx.h"
 #include"../../Fireworks/FireworksManager.h"
 #include"../../Chara/Enemy/Boss/Boss.h"
+#include"../../Animtion/HitEffect/HitEffectManager.h"
 
 //ÉvÉåÉCÉÑÅ[Å@Ç∆Å@ìG
 bool CollisionPlayer_Enemy(std::shared_ptr<Player> player, std::vector<std::shared_ptr<BaseEnemy>>& enemyList)
@@ -67,7 +68,6 @@ bool CollisionPlayer_Boss(std::shared_ptr<Player> player, std::shared_ptr<Boss> 
 		//ñ≥ìGéûä‘
 		player->Invincible(1.5f);			//1.5ïbä‘ñ≥ìG
 		
-		
 		Timer::Instance().Stop(0.35f);		//0.35ïbí‚é~
 		return true;
 	}
@@ -75,9 +75,9 @@ bool CollisionPlayer_Boss(std::shared_ptr<Player> player, std::shared_ptr<Boss> 
 }
 
 //ÉvÉåÉCÉÑÅ[ÇÃíeÅ@Ç∆Å@ìG
-bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& playerList, std::vector<std::shared_ptr<BaseEnemy>>& enemyList,std::shared_ptr<FireworksManager> fireworksManager, std::shared_ptr<Score> score)
+bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::vector<std::shared_ptr<BaseEnemy>>& enemyList, std::shared_ptr<FireworksManager> fireworksManager, std::shared_ptr<HitEffectManager> hitEffectManager, std::shared_ptr<Score> score)
 {
-	for (auto& p : playerList)
+	for (auto& p : playerBullet)
 	{
 		if (p->IsActive() && p->GetPower() > 0)
 		{
@@ -97,7 +97,21 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 					//ÉXÉRÉAÇâ¡éZÇ∑ÇÈ
 					score->Add(100);
 
-					//â‘âŒÇíeÇØÇ≥ÇπÇÈ
+					//íeÇÃóÕÇ™ÇOÇ»ÇÁíeÇè¡Ç∑Å@orÅ@ìGÇ™ê∂Ç´écÇ¡ÇƒÇ¢ÇƒÇ‡è¡Ç∑
+					if (p->GetPower() <= 0 || e->GetHp() > 0)
+					{
+						p->SetActive(false);
+					}
+
+					//ÉqÉbÉgÉGÉtÉFÉNÉg
+					{
+						Math::Vector2 emitPos;
+						emitPos.y = p->GetPos().y;
+						emitPos.x = e->GetPos().x - (e->GetRadius().y - fabs(e->GetPos().y - emitPos.y));
+
+						hitEffectManager->Emit(emitPos, e->GetMove());
+					}
+					//ìGÇ™ì|ÇÍÇΩÇÁÅAâ‘âŒÇíeÇØÇ≥ÇπÇÈ
 					if (!e->IsActive())
 					{
 						int type = fireworksManager->GetRandomType_Quick();
@@ -105,35 +119,32 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 						float seVolume = 0.005f;
 						fireworksManager->Explode((FireworksManager::Type)type, e->GetPos(), afterScale, e->GetColor(), seVolume);
 
-						//íeÇ™è¡Ç¶ÇÈÇ∆Ç´ÅiÇ±ÇÃíeÇ™ìGÇì|ÇµÇΩêîÅAâ‘âŒÇåÇÇ¬Åj
-						if (p->GetPower() <= 0)
+
+						Math::Vector2 shotPos;
+						float r, g, b, a;
+						//ÇQÇ¬à»è„ÇÃâ‘âŒÇíeÇØÇ≥ÇπÇÈìGÇÕÅAâ‘âŒÇÃêFÇ‚ëÂÇ´Ç≥ÅAèoåªèÍèäÇè≠ÇµÉâÉìÉ_ÉÄÇ…ïœçXÇ∑ÇÈ
+						for (int i = 1; i < e->GetFireworksNum(); i++)
 						{
-							p->SetActive(false);
-							Math::Vector2 shotPos;
-							float r, g, b, a, afterScale;
-							for (int i = 1; i < p->GetPierceNum(); i++)
-							{
-								//â‘âŒÇíeÇØÇ≥ÇπÇÈ
-								shotPos = e->GetPos();
-								shotPos.x += randRange(-100, 100);
-								shotPos.y += randRange(-100, 100);
+							//â‘âŒÇíeÇØÇ≥ÇπÇÈ
+							shotPos = e->GetPos();
+							shotPos.x += randRange(-100, 100);
+							shotPos.y += randRange(-100, 100);
 
-								afterScale = { randRange(0.3f,0.5f) };
+							afterScale = { randRange(0.3f,0.5f) };
 
-								r = randRange(0.0f, 0.9f);
-								g = randRange(0.0f, 0.9f);
-								b = randRange(0.0f, 0.9f);
-								a = randRange(0.6f, 0.8f);
+							r = randRange(0.0f, 0.9f);
+							g = randRange(0.0f, 0.9f);
+							b = randRange(0.0f, 0.9f);
+							a = randRange(0.6f, 0.8f);
 
-								type = fireworksManager->GetRandomType_Quick();
+							type = fireworksManager->GetRandomType_Quick();
 
-								fireworksManager->Explode((FireworksManager::Type)type, shotPos, afterScale, Math::Color{ r,g,b,a }, seVolume);
-							}
-							break;
+							fireworksManager->Explode((FireworksManager::Type)type, shotPos, afterScale, Math::Color{ r,g,b,a }, seVolume);
 						}
+						break;
 					}
-					
 				}
+
 			}
 		}
 	}
@@ -141,7 +152,7 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 }
 
 //ÉvÉåÉCÉÑÅ[ÇÃíeÅ@Ç∆Å@É{ÉX
-bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss> boss, std::shared_ptr<FireworksManager> fireworksManager)
+bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss> boss, std::shared_ptr<FireworksManager> fireworksManager, std::shared_ptr<HitEffectManager>hitEffectManager)
 {
 	if (!boss)return false;
 
@@ -157,6 +168,12 @@ bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& play
 			boss->Damage(10 * bullet->GetPower());
 
 			bullet->SetActive(false);
+
+			//ÉqÉbÉgÉGÉtÉFÉNÉg
+			Math::Vector2 emitPos;
+			emitPos.y = bullet->GetPos().y;
+			emitPos.x = boss->GetPos().x - boss->GetRadius().x;
+			hitEffectManager->Emit(emitPos, boss->GetMove());
 
 			//ìñÇΩÇ¡ÇΩéûÇÃèàóù
 			boss->OnHit();

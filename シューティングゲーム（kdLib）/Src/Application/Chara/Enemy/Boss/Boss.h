@@ -1,9 +1,9 @@
 #pragma once
-#include"../../BaseChara/BaseChara.h"
+#include"../BaseEnemy/BaseEnemy.h"
 
 class Game;
 
-class Boss:public BaseChara
+class Boss:public BaseEnemy
 
 {
 public:
@@ -12,41 +12,52 @@ public:
 	Boss(Game*game);
 	~Boss()override {}
 
+	void InitOriginal();
 
-	void Init()override;
+	//出現させるときの処理
+	void Spawn(
+		Math::Vector2& pos,								//出現する場所
+		Math::Vector2& radius,							//敵の大きさ
+		float moveSpeed,								//移動スピード
+		float moveDeg,									//移動方向
+		Math::Color& normalColor,						//通常の色
+		Math::Color& hitColor,							//当たった時の色
+		float hp,										//HP
+		float bulletSpeed,								//弾のスピード
+		float shotCoolTime,								//クールタイム
+		const float shotCoolTimeNoiseMax = 0.3f,		//クールタイムのノイズ
+		const float spawnShotCoolTime = 0.0f)override;	//スポーン時の追加クールタイム
 
-	void Update(float deltaTime)override;
 	void Draw()override;
 
+	void Action(float deltaTime)override;
 
-	void Spawn(Math::Vector2 pos,Math::Vector2 move);
-
-	void Action(float deltaTime);
-
-	void Dead();
-
-	void OnHit()override;
+	void Dead() override;
 
 private:
 
 	Game* m_pGame;
 
-	void Release()override;
-
-	//通常弾のカウンター
 	int m_shotCnt;
-	int m_shotCntMax;				//最大になったら倍のクールタイムを設ける
-	float m_bulletSpeed;				//弾速
-
 
 	//３６０度に弾を発射する時のクールタイム
-	float m_circleshotCoolTime;
-	float m_circleshotCoolTimer;
+	float m_circleShotCoolTimer;
 	int m_circleShotCnt;			
-	int m_circleShotCntMax;			//最大になったら倍のクールタイムを設ける
-	float m_circlebulletSpeed;		//弾速
-	const int m_circleShotBulletNum = 30;
 
-	float m_endPosX = 200;		//移動するときX座標２００以下にはいかない（）
+	float m_endPosX = 300;		//移動するときX座標２００以下にはいかない（）
+
+	void Action1();
+	void Action2();
+	void Action3();
+	void Action4();
+
+	enum MovePutturn
+	{
+		Appear,
+		Up,
+		Down,
+	};
+
+	MovePutturn m_movePutturn = MovePutturn::Appear;		//出現状態からスタート
 
 };

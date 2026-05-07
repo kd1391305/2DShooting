@@ -4,6 +4,7 @@
 #include"../TextureCache/TextureCache.h"
 #include"../Tools/RandEx/RandEx.h"
 #include"../Fireworks/FireworksManager.h"
+#include"../Fireworks/BaseFireworks/BaseFireworks.h"
 
 void LightParticle::Update(float deltaTime)
 {
@@ -109,16 +110,6 @@ void Back::Init()
 //XV
 void Back::Update(float deltaTime)
 {
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
-	{
-		StartZoomIn();
-	}
-	else if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-	{
-		StartZoomOut();
-	}
-
-
 	if (m_bZoomingFlg)
 	{
 		UpdateZooming(deltaTime);
@@ -127,13 +118,13 @@ void Back::Update(float deltaTime)
 	{
 		UpdateNormal(deltaTime);
 	}
+
 	m_fireworks->Update(deltaTime);
 }
 
 //•`‰æ
 void Back::Draw()
 {
-
 	//Å”w–Ê‚Ì”wŒi‰æ‘œ‚ğ•`‰æ
 	std::shared_ptr<KdTexture> tex =  TextureCache::Instance().Get("Texture/Back.png");
 	for (auto&farBg:m_farBg)

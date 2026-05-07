@@ -88,12 +88,12 @@ private:
 	void UpdateNormal(float deltaTime);
 
 	
-	std::list<FarBackground> m_farBg;	//最背面の背景用リスト
-	float m_farBgWidth;					//最背面の背景の横幅
+	std::list<FarBackground> m_farBg;			//最背面の背景用リスト
+	float m_farBgWidth;							//最背面の背景の横幅
 	const float m_scrollSpeed = 40.0f;
 
 	float m_allScale;
-	const float m_zoomInBackScale = 1.0f;			//ゲーム画面でのスケール
+	const float m_zoomInBackScale = 1.0f;		//ゲーム画面でのスケール
 	const float m_zoomOutBackScale = 0.8f;		//タイトル画面でのスケール
 	const float m_zoomSpeed = 0.4f;				//ズームイン ( アウト ) するスピード
 	bool m_bZoomInFlg;							//ズームインしているか？(trueならズームイン falseならズームアウト)

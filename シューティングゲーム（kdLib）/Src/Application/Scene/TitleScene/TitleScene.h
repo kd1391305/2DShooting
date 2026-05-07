@@ -28,7 +28,6 @@ private:
 	Math::Matrix m_nameMat;
 
 	//花火を撃つクールタイム
-	float m_shotCoolTime;
 	float m_shotCoolTimer;
 
 	//カーソルが当たっているか？
@@ -38,4 +37,9 @@ private:
 	const float m_changeSceneWait = 1.0f;
 	float m_changeSceneWaitTimer;
 	bool m_bChangeScene;
+
+	//エンターキー表示用の変数（選択中はエンターキーを）
+	Math::Matrix m_enterKeyMat;
+	float m_enterKeyAlpha;
+	float m_enterKeyDeltaAlpha;
 };

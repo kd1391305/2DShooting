@@ -12,10 +12,11 @@
 #include"../GameOverScene/GameOverScene.h"
 #include"../GameClearScene/GameClearScene.h"
 #include"../../Font/DWriteCustom.h"
-#include"../../Mouse/Mouse.h"
 #include"../../main.h"
 #include"../../UI/Score/Score.h"
 #include"../../SoundCache/SoundCache.h"
+#include"../../Animtion/HitEffect/HitEffectManager.h"
+#include"../../Mouse/Mouse.h"
 
 //コンストラクタ
 Game::Game(std::shared_ptr<Back> back)
@@ -26,6 +27,7 @@ Game::Game(std::shared_ptr<Back> back)
 	m_enemyManager = std::make_shared<EnemyManager>();
 	m_bulletManager = std::make_shared<BulletManager>();
 	m_UI = std::make_shared<UI>();
+	m_hitEffectManager = std::make_shared<HitEffectManager>();
 
 	BaseEnemy::SetBulletManager(m_bulletManager.get());
 	BaseEnemy::SetPlayerPos(m_player->GetPosAddress());
@@ -34,17 +36,15 @@ Game::Game(std::shared_ptr<Back> back)
 	m_player->SetBulletManager(m_bulletManager);
 	m_player->Init();
 
-	//UIの初期化
-	m_UI->Init(m_player.get());
-
 	m_enemyManager->SetGame(this);
+
+	//プレイヤーの初期化
+	m_player->Init();
 }
 
 //初期化
 void Game::Init()
 {
-	Mouse::Instance().ShowCursorTex(false);
-
 	//タイマークラスをリセット
 	Timer::Instance().Reset();
 
@@ -54,11 +54,10 @@ void Game::Init()
 	bgm->SetVolume(0.002f);
 	bgm->Play(true);
 
-	//プレイヤーの初期化
-	m_player->Init();
-
 	//スタート直後のフラグを立てる
 	m_bStartFlg = true;
+
+	MOUSE.ShowCursorTex(false);
 }
 
 //更新
@@ -73,7 +72,9 @@ void Game::Update()
 		if (m_player->GetPos().x >= m_StartPosX)
 		{
 			m_bStartFlg = false;
-			
+
+			//UIの初期化
+			m_UI->Init(m_player.get());
 		}
 		else
 		{
@@ -94,7 +95,7 @@ void Game::Update()
 	CollisionPlayer_EBullet(m_player, m_bulletManager->GetEnemyList());
 
 	//プレイヤーの弾　と　敵
-	CollisionPlayerBullet_Enemy(m_bulletManager->GetPlayerList(), m_enemyManager->GetEnemyList(), m_back->GetFireworks(), m_UI->GetScoreInst());
+	CollisionPlayerBullet_Enemy(m_bulletManager->GetPlayerList(), m_enemyManager->GetEnemyList(), m_back->GetFireworks(),m_hitEffectManager ,m_UI->GetScoreInst());
 	{
 		std::shared_ptr<Boss> boss = m_enemyManager->GetBoss();
 		if (boss)
@@ -103,7 +104,7 @@ void Game::Update()
 			CollisionPlayer_Boss(m_player, boss);
 
 			//プレイヤー　と　ボス
-			CollisionPlayerBullet_Boss(m_bulletManager->GetPlayerList(), boss, m_back->GetFireworks());
+			CollisionPlayerBullet_Boss(m_bulletManager->GetPlayerList(), boss, m_back->GetFireworks(),m_hitEffectManager);
 		}
 	}
 	//背景の更新
@@ -118,6 +119,9 @@ void Game::Update()
 	//全ての弾の更新
 	m_bulletManager->Update(deltaTime);
 
+	//全てのヒットエフェクトの更新
+	m_hitEffectManager->Update(deltaTime);
+
 	//HeadUpDisplay（UI）の更新
 	m_UI->Update(deltaTime);
 }
@@ -129,9 +133,11 @@ void Game::Draw()
 
 	m_player->Draw();
 
-	m_bulletManager->Draw();
-
 	m_enemyManager->Draw();
+
+	m_hitEffectManager->Draw();
+
+	m_bulletManager->Draw();
 
 	if (!m_bStartFlg)
 	{
@@ -144,19 +150,23 @@ void Game::GameOver()
 	//ゲームオーバーシーンへ
 	SceneManager::Instance().ChangeState(std::make_shared<GameOverScene>(
 		std::dynamic_pointer_cast<Game> (SceneManager::Instance().GetCurrentState())));
+	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav");
+	bgm->Stop();
+	MOUSE.ShowCursorTex(true);
 }
 
 void Game::GameClear()
 {
-	SceneManager::Instance().ChangeState(std::make_shared<GameClearScene>(
-		m_back
-	)
-	);
+	SceneManager::Instance().ChangeState(std::make_shared<GameClearScene>(m_back));
+
+	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav");
+	bgm->Stop();
+
+	MOUSE.ShowCursorTex(true);
 }
 
 //解放
 void Game::Release()
 {
-	MOUSE.ShowCursorTex(true);
 }
 

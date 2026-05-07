@@ -19,17 +19,20 @@ void GameOverScene::Init()
 
 	m_gameButton = std::make_shared<Button>();
 	m_gameButton->SetPos({ 150,-100 });						//座標
-	m_gameButton->SetRadius({ 100,50 });					//半径
+	m_gameButton->SetRadius({ 90,40 });					//半径
 	m_gameButton->SetColor({ 0.2f,0.2f,0.2f,1.0f });		//通常の色	
 	m_gameButton->SetSelectScale({ 1.01f,1.01f });			//選択時の拡縮
 	m_gameButton->SetSelectColor({ 0.4f,0.4f,0.4f,1.0f });	//選択時の色
 
 	m_titleButton = std::make_shared<Button>();
 	m_titleButton->SetPos({ -150,-100 });					//座標
-	m_titleButton->SetRadius({100,50 });					//半径
+	m_titleButton->SetRadius({90,40 });					//半径
 	m_titleButton->SetColor({ 0.2f,0.2f,0.2f,1.0f });		//通常の色	
 	m_titleButton->SetSelectScale({1.01f,1.01f});			//選択時の拡縮
 	m_titleButton->SetSelectColor({0.4f,0.4f,0.4f,1.0f });	//選択時の色
+
+	//ゲームに戻るボタンを選択中でゲームオーバーシーンを始める
+	m_gameButton->SetSelect(true);
 }
 
 void GameOverScene::Update()
@@ -45,20 +48,37 @@ void GameOverScene::Update()
 	m_gameButton->Update();
 	if (m_gameButton->IsSelect())
 	{
-		if (KEY.IsDown(VK_LBUTTON))
-		{
+		if ((KEY.IsDown(VK_LBUTTON)&&m_gameButton->GetActionType()==Button::ActionType::Mouse)||
+			(KEY.IsDown(VK_RETURN)))
+			{
 			SceneManager::Instance().ChangeState(m_game);
+			m_game->GetPlayer()->Init();
+			m_game->GetPlayer()->Invincible(1.0f);
 		}
 	}
 
 	m_titleButton->Update();
 	if (m_titleButton->IsSelect())
 	{
-		if (KEY.IsDown(VK_LBUTTON))
+		if ((KEY.IsDown(VK_LBUTTON) && m_titleButton->GetActionType() == Button::ActionType::Mouse) ||
+			(KEY.IsDown(VK_RETURN)))
 		{
 			SceneManager::Instance().ChangeState(std::make_shared<TitleScene>(m_game->GetBack()));
 		}
 	}
+
+	if (KEY.IsDown(VK_RIGHT))
+	{
+		m_titleButton	->SetSelect(false);
+		m_gameButton	->SetSelect(true);
+	}
+
+	if (KEY.IsDown(VK_LEFT))
+	{
+		m_titleButton->SetSelect(true);
+		m_gameButton->SetSelect(false);
+	}
+
 }
 
 void GameOverScene::Draw()
@@ -78,10 +98,10 @@ void GameOverScene::Draw()
 	float posY = -80;
 
 	DWriteCustom::Instance().SetShadow({ -2. - 2 }, { 0.8f,0.2f,0.2f,0.8f });
-	DWriteCustom::Instance().Draw("Game Over", { -120,100 }, 100, { 0.8f,0.8f,0.8f,1.0f });
+	DWriteCustom::Instance().Draw("Game Over", { -310,250 }, 120, { 0.8f,0.8f,0.8f,1.0f });
 	DWriteCustom::Instance().SetShadow({}, {});
-	DWriteCustom::Instance().Draw("タイトルへ", Math::Vector2{ -240,posY }, 30);
-	DWriteCustom::Instance().Draw("リトライ", { 60,posY }, 30);
+	DWriteCustom::Instance().Draw("タイトルへ", Math::Vector2{ -230,posY }, 30);
+	DWriteCustom::Instance().Draw("リトライ", { 90,posY }, 30);
 }
 
 void GameOverScene::Release()
