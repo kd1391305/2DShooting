@@ -23,13 +23,10 @@ void UI::Init(Player* player)
 		player->GetHPAddress(),			//HPのアドレス
 		1);								//ゲージが減るスピード
 
-	m_pPlayerPos = player->GetPosAddress();
 
-	if (!m_explan)
-	{
-		m_explan = std::make_shared<Explan>();
-		m_explan->Init(m_pPlayerPos);
-	}
+
+	m_explan = std::make_shared<Explan>();
+	m_explan->Init();
 }
 
 //更新

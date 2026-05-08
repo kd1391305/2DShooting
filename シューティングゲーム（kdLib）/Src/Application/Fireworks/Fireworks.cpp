@@ -141,6 +141,15 @@ void Fireworks1::Draw(float backScale)
 		SHADER.m_spriteShader.SetMatrix(scale * rotation * trans);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex);
 	}
+
+	if (m_nowExplode)
+	{
+		m_nowExplode = false;
+		float radius = m_texRadius * m_afterScale;
+		Math::Color color = m_color * 2;
+		color.A(0.1f);
+		Light::Instance().Draw(m_pos * backScale, Math::Vector2{ radius,radius }, color);
+	}
 }
 
 //花火を撃つ
@@ -191,6 +200,7 @@ void Fireworks1::Explode()
 {
 	//活性状態にする
 	m_bActive = true;
+	m_nowExplode = true;
 	m_circleActiveNum = m_circleList.size();
 
 	//爆発したフラグを立てる
@@ -418,7 +428,16 @@ void Fireworks2::Draw(float backScale)
 		rotation = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(360 / 10 * i));
 		SHADER.m_spriteShader.SetMatrix(scale * rotation * trans);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex);
+	}
 
+	//一瞬だけ光る処理
+	if (m_nowExplode)
+	{
+		m_nowExplode = false;
+		float radius = m_texRadius * m_afterScale;
+		Math::Color color = m_color * 2;
+		color.A(0.1f);
+		Light::Instance().Draw(m_pos * backScale, Math::Vector2{ radius,radius }, color);
 	}
 }
 
@@ -471,6 +490,7 @@ void Fireworks2::Explode()
 {
 	//花火を活性状態にする
 	m_bActive = true;
+	m_nowExplode = true;
 	m_circleActiveNum = m_circleList.size();
 	m_lineActiveNum = m_lineList.size();
 
@@ -661,6 +681,16 @@ void Fireworks3::Draw(float backScale)
 		SHADER.m_spriteShader.DrawTex_Src(m_tex);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex, Math::Color{ 0.8f,0.8f,0.8f,1 });
 	}
+
+	//一瞬だけ光る処理
+	if (m_nowExplode)
+	{
+		m_nowExplode = false;
+		float radius = m_texRadius * m_afterScale;
+		Math::Color color = m_color * 2;
+		color.A(0.1f);
+		Light::Instance().Draw(m_pos * backScale, Math::Vector2{ radius,radius }, color);
+	}
 }
 
 //花火を打ち上げる
@@ -715,9 +745,11 @@ void Fireworks3::Explode()
 {
 	//花火を活性状態にする
 	m_bActive = true;
+	m_bExploded = true;
+	m_nowExplode = true;
 	m_circleActiveNum = m_circleList.size();
 
-	m_bExploded = true;
+	
 
 	Math::Vector2 texPos;
 	Math::Vector2 vec;
@@ -893,6 +925,15 @@ void Fireworks4::Draw(float backScale)
 		SHADER.m_spriteShader.DrawTex_Src(m_tex, Math::Color{ 0.8f,0.8f,0.8f,1 });
 
 	}
+	//一瞬だけ光る処理
+	if (m_nowExplode)
+	{
+		m_nowExplode = false;
+		float radius = m_texRadius * m_afterScale;
+		Math::Color color = m_color * 2;
+		color.A(0.1f);
+		Light::Instance().Draw(m_pos * backScale, Math::Vector2{ radius,radius }, color);
+	}
 }
 
 //花火を撃つ
@@ -944,6 +985,7 @@ void Fireworks4::Explode()
 	//爆発したフラグを立てる
 	m_bActive = true;
 	m_bExploded = true;
+	m_nowExplode = true;
 	m_petalActiveNum = m_petalList.size();
 
 	Math::Vector2 texPos;
@@ -981,7 +1023,6 @@ void Fireworks4::Release()
 {
 	m_petalList.clear();
 }
-
 
 //===================================================
 //花火5（トレイル（軌跡）付き）
@@ -1110,7 +1151,15 @@ void Fireworks5::Draw(float backScale)
 		SHADER.m_spriteShader.SetMatrix(scale * rotation * trans);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex, Math::Color{ 0.8f,0.8f,0.8f,1 });
-
+	}
+	//一瞬だけ光る処理
+	if (m_nowExplode)
+	{
+		m_nowExplode = false;
+		float radius = m_texRadius * m_afterScale;
+		Math::Color color = m_color * 2;
+		color.A(0.1f);
+		Light::Instance().Draw(m_pos * backScale, Math::Vector2{ radius,radius }, color);
 	}
 }
 
@@ -1163,6 +1212,7 @@ void Fireworks5::Explode()
 	//爆発したフラグを立てる
 	m_bActive = true;
 	m_bExploded = true;
+	m_nowExplode = true;
 	m_trailActiveNum = m_trailList.size();
 
 	Math::Vector2 texPos;

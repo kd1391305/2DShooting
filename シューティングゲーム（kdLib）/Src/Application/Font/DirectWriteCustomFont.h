@@ -43,6 +43,7 @@ enum FontName
 {
 	KleeOne,
 	Orbitron,
+	Kind,
 };
 
 

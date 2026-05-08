@@ -46,7 +46,7 @@ public:
 	std::vector<std::shared_ptr<BaseFireworks>>& GetList() { return m_list; }
 
 	//ˆ—‘¬“x‚ª‘‚¢‰Ô‰Î‚Ìí—Ş‚ğƒ‰ƒ“ƒ_ƒ€‚Å•Ô‚·
-	Type GetRandomType_Quick()
+	static Type GetRandomType_Quick()
 	{
 		switch (rand() % 3)
 		{

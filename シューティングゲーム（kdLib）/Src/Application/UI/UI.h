@@ -10,7 +10,7 @@ class UI
 public:
 
 	//初期化
-	void Init(Player* player);
+	void Init(Player*player);
 
 	//更新
 	void Update(float deltaTime);
@@ -31,7 +31,5 @@ private:
 	std::shared_ptr<Gauge>m_bossGauge = nullptr;
 
 	std::shared_ptr<Explan>m_explan = nullptr;
-
-	Math::Vector2* m_pPlayerPos;		//プレイヤーの座標アドレス
 
 };

@@ -18,7 +18,6 @@
 #include"../../Animtion/HitEffect/HitEffectManager.h"
 #include"../../Mouse/Mouse.h"
 
-//コンストラクタ
 Game::Game(std::shared_ptr<Back> back)
 {
 	m_back = back;
@@ -31,7 +30,7 @@ Game::Game(std::shared_ptr<Back> back)
 
 	BaseEnemy::SetBulletManager(m_bulletManager.get());
 	BaseEnemy::SetPlayerPos(m_player->GetPosAddress());
-	
+
 	m_player->SetGame(this);
 	m_player->SetBulletManager(m_bulletManager);
 	m_player->Init();
@@ -40,6 +39,8 @@ Game::Game(std::shared_ptr<Back> back)
 
 	//プレイヤーの初期化
 	m_player->Init();
+
+	m_UI->Init(m_player.get());
 }
 
 //初期化
@@ -72,9 +73,7 @@ void Game::Update()
 		if (m_player->GetPos().x >= m_StartPosX)
 		{
 			m_bStartFlg = false;
-
-			//UIの初期化
-			m_UI->Init(m_player.get());
+			if(!m_bContinue)m_UI->Init(m_player.get());
 		}
 		else
 		{

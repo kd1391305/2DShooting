@@ -125,7 +125,7 @@ void TitleScene::Update()
 
 		//スタートボタンの更新
 		m_start->Update();
-		if (m_start->IsSelect())
+		if (m_start->IsSelect() || KEY.IsDown(VK_RETURN))
 		{
 			if (!m_bHitCursor)
 			{
@@ -152,15 +152,6 @@ void TitleScene::Update()
 		{
 			m_bHitCursor = false;
 		}
-	}
-
-	if (KEY.IsDown(VK_UP))
-	{
-		m_start->SetSelect(true);
-	}
-	if (KEY.IsDown(VK_DOWN))
-	{
-		m_start->SetSelect(false);
 	}
 
 	//エンターキー画像の処理

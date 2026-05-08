@@ -4,6 +4,9 @@
 #include"../../../Scene/GameScene/GameScene.h"
 #include"../../Player/Player.h"
 #include"../../../UI/UI.h"
+#include"../../../Background/Back.h"
+#include"../../../Fireworks/FireworksManager.h"
+#include"../../../Tools/RandEx/RandEx.h"
 
 Boss::Boss(Game*game):
 	m_pGame(game)
@@ -86,6 +89,7 @@ void Boss::Action(float deltaTime)
 		m_pos.x = m_endPosX;
 	}
 
+	
 	m_circleShotCoolTimer -= deltaTime;
 
 	float hpRatio = m_hp / m_hpMax;
@@ -111,6 +115,25 @@ void Boss::Dead()
 {
 	//ボスが倒れたらゲームクリア
 	m_pGame->GameClear();
+}
+
+void Boss::ExplodeFireworks(float power)
+{
+	for (int i = 0; i < power; i++)
+	{
+		//毎フレームボスの周りに花火を射出
+		float radian = DirectX::XMConvertToRadians(randRange(0, 360));
+		Math::Vector2 vec;
+		vec.x = cosf(radian) * m_radius.x;
+		vec.y = sinf(radian) * m_radius.y;
+
+		Math::Color color = { randRange(0,1),randRange(0,1),randRange(0,1),randRange(0.5,1.0f) };
+		FireworksManager::Type type = FireworksManager::GetRandomType_Quick();
+		for (int j = 0; j < 3; j++)
+		{
+			m_pGame->GetBack()->GetFireworks()->Explode(type, m_pos + vec, 0.5f, color);
+		}
+	}
 }
 
 void Boss::Action1()
@@ -251,12 +274,11 @@ void Boss::Action3()
 		}
 	}
 
-
 	if (m_circleShotCoolTimer <= 0)
 	{
 		//弾を30発出す
-		int bulletNum = 20;
-		float bulletSpeed = 200;
+		int bulletNum = 30;
+		float bulletSpeed = 250;
 		Math::Vector2 vec;
 		//一発目はプレイヤー目掛けて撃つ
 		float startRadian = atan2(s_pPlayerPos->y - m_pos.y, s_pPlayerPos->x - m_pos.x);
@@ -269,9 +291,9 @@ void Boss::Action3()
 			m_pGame->GetBulletManager()->Shoot(m_pos, vec);
 		}
 		//circleShotを3回撃ったら長めのクールタイム
-		if (m_circleShotCnt >= 3)
+		if (m_circleShotCnt >= 5)
 		{
-			m_circleShotCoolTimer = 10;
+			m_circleShotCoolTimer = 3.5;
 			m_circleShotCnt = 0;
 		}
 		//普通のクールタイム
@@ -298,7 +320,7 @@ void Boss::Action4()
 		move.y = sinf(radian) * m_bulletSpeed;
 		m_pGame->GetBulletManager()->Shoot(pos, move);
 		m_shotCnt++;
-		if (m_shotCnt >= 5)
+		if (m_shotCnt >= 6)
 		{
 			m_shotCoolTimer = m_shotCoolTime * 3;
 			m_shotCnt = 0;
@@ -309,12 +331,11 @@ void Boss::Action4()
 		}
 	}
 
-
 	if (m_circleShotCoolTimer <= 0)
 	{
 		//弾を30発出す
-		int bulletNum = 20;
-		float bulletSpeed = 200;
+		int bulletNum = 25;
+		float bulletSpeed = 280;
 		Math::Vector2 vec;
 		//一発目はプレイヤー目掛けて撃つ
 		float startRadian = atan2(s_pPlayerPos->y - m_pos.y, s_pPlayerPos->x - m_pos.x);
@@ -327,9 +348,9 @@ void Boss::Action4()
 			m_pGame->GetBulletManager()->Shoot(m_pos, vec);
 		}
 		//circleShotを3回撃ったら長めのクールタイム
-		if (m_circleShotCnt >= 3)
+		if (m_circleShotCnt >= 10)
 		{
-			m_circleShotCoolTimer = 10;
+			m_circleShotCoolTimer = 2;
 			m_circleShotCnt = 0;
 		}
 		//普通のクールタイム

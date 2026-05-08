@@ -83,7 +83,7 @@ void GameClearScene::Update()
 	{
 		{
 			int shotNum = 12;
-			int noise = randRange(-4, 4);
+			int noise = randRange(-4, 0);
 			shotNum += noise;
 			FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
 			for (int i = 0; i < shotNum; i++)
@@ -99,7 +99,7 @@ void GameClearScene::Update()
 				Math::Color color = { randRange(0,1),randRange(0.0f,1),randRange(0.0f,1),randRange(0.5f,1) };
 				Math::Color color2 = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
 			
-				for (int i = 0; i < 6; i++)
+				for (int i = 0; i < 5; i++)
 				{
 					m_back->GetFireworks()->Shoot(type,
 						startPos, startMove, beforeScale, afterScale, color);
@@ -113,7 +113,7 @@ void GameClearScene::Update()
 		}
 		//クールタイムを設ける
 		
-		m_shotCoolTimer = randRange(8, 16);
+		m_shotCoolTimer = randRange(9, 16);
 
 		//タイトル専用の花火効果音を流す
 		std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Fireworks_Title.wav");

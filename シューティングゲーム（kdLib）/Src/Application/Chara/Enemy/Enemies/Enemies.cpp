@@ -98,7 +98,6 @@ void Enemy3::Action(float deltaTime)
 			spawnData.moveDeg = startDeg + offsetDeg * i;
 			enemy = std::make_shared<Enemy1>();
 			enemy->Init();
-			enemy->SetDeadScreenOutFlg(true);
 			enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 			m_pEnemyManager->GetEnemyList().push_back(enemy);
 		}
@@ -161,7 +160,6 @@ void Enemy4::Action(float deltaTime)
 			spawnData.moveDeg = startDeg + offsetDeg * i;
 			enemy = std::make_shared<Enemy1>();
 			enemy->Init();
-			enemy->SetDeadScreenOutFlg(true);
 			enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 			m_pEnemyManager->GetEnemyList().push_back(enemy);
 		}
@@ -228,8 +226,6 @@ void Enemy5::InitOriginal(float deltaRadian, float shotNum, float shotArcRadian)
 
 void Enemy6::Action(float deltaTime)
 {
-	if(m_bDead_ScreenOut)
-	{ 
 	if (m_reflectNum > 0)
 	{
 		bool bReflect = false;
@@ -286,7 +282,6 @@ void Enemy6::Action(float deltaTime)
 		{
 			m_reflectNum--;
 		}
-	}
 	}
 }
 

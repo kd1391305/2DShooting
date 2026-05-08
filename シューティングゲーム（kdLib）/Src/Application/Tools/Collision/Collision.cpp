@@ -177,6 +177,7 @@ bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& play
 
 			//“–‚½‚Á‚½Žž‚Ìˆ—
 			boss->OnHit();
+			boss->ExplodeFireworks(bullet->GetPower());
 		}
 	}
 	return false;

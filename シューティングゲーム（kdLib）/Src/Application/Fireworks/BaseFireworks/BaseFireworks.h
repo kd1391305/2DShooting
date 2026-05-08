@@ -242,6 +242,13 @@ public:
 	}
 
 	Type GetType() { return m_type; }
+
+	Math::Color& GetColor() { return m_color; }
+	Math::Vector2& GetPos() { return m_pos; }
+	float GetBeforeScale() { return m_beforeScale; }
+	float GetAfterScale() { return m_afterScale; }
+	bool GetExplodeFlg() { return m_bExploded; }
+
 protected:
 
 	//解放する
@@ -270,6 +277,8 @@ protected:
 	const float m_shotGravity = 70;				//撃ちあがる時の重力
 	const float m_particleGravity = 20;			//パーティクルの重力
 	Type m_type;
+
+	bool m_nowExplode = false;		//今弾けたか？
 };
 
 

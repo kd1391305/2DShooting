@@ -1,118 +1,68 @@
 #include"Explan.h"
 #include"../../TextureCache/TextureCache.h"
 #include"../../Font/DWriteCustom.h"
-void Explan::Init(Math::Vector2* pPlayerPos)
+void Explan::Init()
 {
-	m_pPlayerPos = pPlayerPos;
-
 	m_timer = 0;
 	m_endTime = 8.0f;
 
-	m_deltaAlpha = 4;
-
-	m_color = { 0.9f,0.9f,0.9f,0.8f };
-
-
-	fontSize = 15;
-
-	{
-		std::shared_ptr<KdTexture>tex = TextureCache::Instance().Get("Texture/UI/Back.png");
-		m_moveExplan.m_playerOffset = { -150,80 };
-		m_moveExplan.m_pos = *m_pPlayerPos + m_moveExplan.m_playerOffset;
-		m_moveExplan.m_backPos = m_moveExplan.m_pos;
-		m_moveExplan.m_backPos.y -= fontSize;
-
-		m_moveExplan.m_radius = { 100,45 };
-		m_moveExplan.m_backRadius = m_moveExplan.m_radius;
-		m_moveExplan.m_backRadius.y += fontSize;
-
-		m_moveExplan.m_scale.x = m_moveExplan.m_radius.x  / tex->GetRadius().x;
-		m_moveExplan.m_scale.y = m_moveExplan.m_radius.y / tex->GetRadius().y;
-		m_moveExplan.m_backScale.x = m_moveExplan.m_backRadius.x / tex->GetRadius().x;
-		m_moveExplan.m_backScale.y = m_moveExplan.m_backRadius.y / tex->GetRadius().y;
-
-		m_chargeExplan.m_playerOffset = { -150,-80 };
-		m_chargeExplan.m_pos = *m_pPlayerPos + m_chargeExplan.m_playerOffset;
-		m_chargeExplan.m_backPos = m_chargeExplan.m_pos;
-		m_chargeExplan.m_backPos.y -= fontSize;
-
-		m_chargeExplan.m_radius = { 100,45 };
-		m_chargeExplan.m_backRadius = m_chargeExplan.m_radius;
-		m_chargeExplan.m_backRadius.y += fontSize;
-		m_chargeExplan.m_scale.x = m_chargeExplan.m_radius.x / tex->GetRadius().x;
-		m_chargeExplan.m_scale.y = m_chargeExplan.m_radius.y / tex->GetRadius().y;
-		m_chargeExplan.m_backScale.x = m_chargeExplan.m_backRadius.x / tex->GetRadius().x;
-		m_chargeExplan.m_backScale.y = m_chargeExplan.m_backRadius.y / tex->GetRadius().y;
-	}
-
-	//行列作成
-	{
-		Math::Matrix scaleMat, transMat;
-
-		scaleMat = Math::Matrix::CreateScale(m_moveExplan.m_scale.x, m_moveExplan.m_scale.y, 0);
-		transMat = Math::Matrix::CreateTranslation(m_moveExplan.m_pos.x, m_moveExplan.m_pos.y, 0);
-		m_moveExplan.m_mat = scaleMat * transMat;
-		scaleMat = Math::Matrix::CreateScale(m_moveExplan.m_backScale.x, m_moveExplan.m_backScale.y, 0);
-		transMat = Math::Matrix::CreateTranslation(m_moveExplan.m_backPos.x, m_moveExplan.m_backPos.y, 0);
-		m_moveExplan.m_backMat = scaleMat * transMat;
-
-		scaleMat = Math::Matrix::CreateScale(m_chargeExplan.m_scale.x, m_chargeExplan.m_scale.y, 0);
-		transMat = Math::Matrix::CreateTranslation(m_chargeExplan.m_pos.x, m_chargeExplan.m_pos.y, 0);
-		m_chargeExplan.m_mat = scaleMat * transMat;
-		scaleMat = Math::Matrix::CreateScale(m_chargeExplan.m_backScale.x, m_chargeExplan.m_backScale.y, 0);
-		transMat = Math::Matrix::CreateTranslation(m_chargeExplan.m_backPos.x, m_chargeExplan.m_backPos.y, 0);
-		m_chargeExplan.m_backMat = scaleMat * transMat;
-	}
-	
+	m_color = { 0.9f,0.9f,0.9f,0.7f };
+	m_fontColor = { 1,1,1,0.7f };
 }
 
-void Explan::Update(float deltaTime)
+bool Explan::Update(float deltaTime)
 {
 	m_timer += deltaTime;
 	if (m_timer >= m_endTime)
 	{
-		m_color.A(m_color.A() - m_deltaAlpha * deltaTime);
+		//透明度を減らす
+		m_color.A(m_color.A() - 2 * deltaTime);
+		m_fontColor.A(m_fontColor.A() - 2 * deltaTime);
+		if (m_color.A() <= 0.05f)return false;
 	}
 
-	Math::Matrix scaleMat, transMat;
-
-	scaleMat = Math::Matrix::CreateScale(m_moveExplan.m_scale.x, m_moveExplan.m_scale.y, 0);
-	transMat = Math::Matrix::CreateTranslation(m_moveExplan.m_pos.x, m_moveExplan.m_pos.y, 0);
-	m_moveExplan.m_mat = scaleMat * transMat;
-	scaleMat = Math::Matrix::CreateScale(m_moveExplan.m_backScale.x, m_moveExplan.m_backScale.y, 0);
-	transMat = Math::Matrix::CreateTranslation(m_moveExplan.m_backPos.x, m_moveExplan.m_backPos.y, 0);
-	m_moveExplan.m_backMat = scaleMat * transMat;
-
-	scaleMat = Math::Matrix::CreateScale(m_chargeExplan.m_scale.x, m_chargeExplan.m_scale.y, 0);
-	transMat = Math::Matrix::CreateTranslation(m_chargeExplan.m_pos.x, m_chargeExplan.m_pos.y, 0);
-	m_chargeExplan.m_mat = scaleMat * transMat;
-	scaleMat = Math::Matrix::CreateScale(m_chargeExplan.m_backScale.x, m_chargeExplan.m_backScale.y, 0);
-	transMat = Math::Matrix::CreateTranslation(m_chargeExplan.m_backPos.x, m_chargeExplan.m_backPos.y, 0);
-	m_chargeExplan.m_backMat = scaleMat * transMat;
+	return true;
 }
 
 void Explan::Draw()
 {
-	std::shared_ptr<KdTexture> tex = TextureCache::Instance().Get("Texture/UI/Back.png");
+	Math::Matrix scaleMat, transMat;
+	
+	int fontSize = 25;
+	//背景の描画
+	{
+		std::shared_ptr<KdTexture> backTex = TextureCache::Instance().Get("Texture/UI/ExplanBack.png");
 
-	SHADER.m_spriteShader.SetMatrix(m_moveExplan.m_backMat);
-	SHADER.m_spriteShader.DrawTex_Src(tex, m_color);
-	SHADER.m_spriteShader.SetMatrix(m_moveExplan.m_mat);
-	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/TransKey.png"), m_color);
-	Math::Vector2 pos;
-	pos.x = m_moveExplan.m_pos.x - 20;
-	pos.y = m_moveExplan.m_pos.y - m_moveExplan.m_radius.y;
-	DWriteCustom::Instance().Draw("移動", pos, fontSize);
+		Math::Vector2 backScale = { 1.0f,0.95f };
+		//移動キーの背景
+		scaleMat = Math::Matrix::CreateScale(backScale.x, backScale.y, 0);
+		transMat = Math::Matrix::CreateTranslation(-500, -190, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(backTex, m_color);
 
+		//チャージキー背景
+		scaleMat = Math::Matrix::CreateScale(backScale.x, backScale.y, 0);
+		transMat = Math::Matrix::CreateTranslation(-290, -190, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(backTex, m_color);
+	}
 
+	//キーの描画
+	{
+		//移動キー
+		scaleMat = Math::Matrix::CreateScale(0.21f, 0.21f, 1);
+		transMat = Math::Matrix::CreateTranslation(-500, -170, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/TransKey.png"), m_color);
 
-	SHADER.m_spriteShader.SetMatrix(m_chargeExplan.m_backMat);
-	SHADER.m_spriteShader.DrawTex_Src(tex, m_color);
-	SHADER.m_spriteShader.SetMatrix(m_chargeExplan.m_mat);
-	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/ZKey.png"), m_color);
+		DWriteCustom::Instance().Draw("移動", { -525, -220 }, fontSize, m_fontColor);
 
-	pos;
-	pos.x = m_chargeExplan.m_pos.x - 61;
-	pos.y = m_chargeExplan.m_pos.y - m_chargeExplan.m_radius.y;
-	DWriteCustom::Instance().Draw("長押し : チャージ", pos, fontSize);
+		//チャージキー
+		scaleMat = Math::Matrix::CreateScale(0.22f, 0.22f, 0);
+		transMat = Math::Matrix::CreateTranslation(-290, -170, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/ZKey.png"), m_color);
+		
+		DWriteCustom::Instance().Draw("チャージ", { -338,-220 }, fontSize, m_fontColor);
+	}
 }

@@ -54,8 +54,6 @@ public:
 
 	void SetFireworksNum(int set) { m_fireworksNum = set; }
 
-	void SetDeadScreenOutFlg(bool set) { m_bDead_ScreenOut = set; }
-
 	Math::Vector2 GetPos() { return m_pos; }
 
 	static void SetBulletManager(BulletManager* set) { s_pBulletManager = set; }
@@ -69,6 +67,8 @@ protected:
 
 	virtual void Release()override{}
 
+	float m_timer;								//出現してから何秒経ったか？（画面外判定に使う）
+
 	static	BulletManager* s_pBulletManager;	//弾を打つためにアドレスをEnemy共通で持っておく
 	static Math::Vector2* s_pPlayerPos;			//プレイヤーに撃つためにプレイヤーの座標
 
@@ -76,10 +76,8 @@ protected:
 
 	float m_radian;								//敵画像の回転角度
 
-	bool	m_bDead_ScreenOut;					//スクリーンアウトしたときに非活性状態にするか？
-
-	float m_bulletSpeed = 200.0f;					//敵の弾速
-	float m_shotCoolTimeNoiseMax;					//弾発射のクールタイムのランダムなずれ時間の最大値
+	float m_bulletSpeed = 200.0f;				//敵の弾速
+	float m_shotCoolTimeNoiseMax;				//弾発射のクールタイムのランダムなずれ時間の最大値
 
 	Math::Color m_normalColor;					//通常時の色
 	Math::Color m_hitColor;						//当たった時の色
@@ -88,5 +86,5 @@ protected:
 	float m_hitEffectTimer;						//ヒットエフェクト発生中のタイマー（０になったらエフェクトを切る）
 	const float m_hitEffectTime = 0.1f;			//ヒットエフェクトの時間
 
-	int m_fireworksNum = 1;						//倒したときに出現させる花火の数
+	int m_fireworksNum = 10;					//倒したときに出現させる花火の数
 };

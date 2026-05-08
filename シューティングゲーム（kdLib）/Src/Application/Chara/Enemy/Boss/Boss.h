@@ -34,6 +34,8 @@ public:
 
 	void Dead() override;
 
+	void ExplodeFireworks(float power);
+
 private:
 
 	Game* m_pGame;
@@ -42,9 +44,10 @@ private:
 
 	//‚R‚U‚O“x‚É’e‚ğ”­Ë‚·‚é‚ÌƒN[ƒ‹ƒ^ƒCƒ€
 	float m_circleShotCoolTimer;
-	int m_circleShotCnt;			
+	int m_circleShotCnt;		
 
-	float m_endPosX = 300;		//ˆÚ“®‚·‚é‚Æ‚«XÀ•W‚Q‚O‚OˆÈ‰º‚É‚Í‚¢‚©‚È‚¢ij
+	//ˆê’èŠÔ
+	float m_endPosX = 300;		//ˆÚ“®‚·‚é‚Æ‚«XÀ•W‚R‚O‚OˆÈ‰º‚É‚Í‚¢‚©‚È‚¢
 
 	void Action1();
 	void Action2();

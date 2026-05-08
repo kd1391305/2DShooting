@@ -54,6 +54,7 @@ private:
 	void Spawn_MoveLine();
 	void Spawn_Line_Upper_Lower();
 	void Spawn_Random1();
+	void Spawn_Random2();
 
 
 	//敵がスポーンするタイプ
@@ -70,6 +71,7 @@ private:
 		MoveLine,			//事前に決めたラインに沿って動く
 		Line_Upper_Lower,	//敵が上下に出てきて避けるゲーム
 		Random1,			//ランダムに敵が出てくる
+		Random2,			//ある程度の規則性の中でランダム出現
 		Kind
 	};
 
@@ -85,6 +87,7 @@ private:
 	float m_spawnProbability[SpawnPutturn::Kind];
 
 	std::shared_ptr<Boss> m_boss = nullptr;
+	bool m_bSpawnBoss = false;
 
 	bool m_bEmptySpawnFlg = false;		//敵がいないとき、スポーンするフラグ
 };

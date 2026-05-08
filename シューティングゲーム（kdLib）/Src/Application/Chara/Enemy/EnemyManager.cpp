@@ -23,9 +23,10 @@ EnemyManager::EnemyManager()
 	m_spawnProbability[SpawnPutturn::Explode]				= 2;
 	m_spawnProbability[SpawnPutturn::Explode2]				= 1;
 	m_spawnProbability[SpawnPutturn::Reflect]				= 1;
-	m_spawnProbability[SpawnPutturn::MoveLine]				= 1;
+	m_spawnProbability[SpawnPutturn::MoveLine]				= 2;
 	m_spawnProbability[SpawnPutturn::Line_Upper_Lower]		= 0.1;
 	m_spawnProbability[SpawnPutturn::Random1]				= 0.3;
+	m_spawnProbability[SpawnPutturn::Random2]				= 1;
 
 	//重みの合計を求める
 	float sum = 0;
@@ -43,7 +44,7 @@ EnemyManager::EnemyManager()
 void EnemyManager::Update(float deltaTime)
 {
 	//ボスがいないときだけ敵をスポーンさせる
-	if (!m_boss)
+	if (!m_boss && !m_bSpawnBoss)
 	{
 		//スポーンタイマーを進める
 		m_spawnCoolTimer -= deltaTime;
@@ -82,14 +83,18 @@ void EnemyManager::Update(float deltaTime)
 
 
 	//ボス出現の条件
-	if (Timer::Instance().GetTime() > 120)
+	if (Timer::Instance().GetTime() > 0)
 	{
 		if (!m_boss)
 		{
+			m_bSpawnBoss = true;
+		}
+		if (m_bSpawnBoss && m_enemyList.empty())
+		{
 			Spawn_Boss();
+			m_bSpawnBoss = false;
 		}
 	}
-
 	//ボスの更新
 	if (m_boss)
 	{
@@ -158,6 +163,9 @@ void EnemyManager::Spawn()
 		break;
 	case SpawnPutturn::Random1:
 		Spawn_Random1();
+		break;
+	case SpawnPutturn::Random2:
+		Spawn_Random2();
 		break;
 	}
 }
@@ -962,6 +970,145 @@ void EnemyManager::Spawn_Random1()
 	}
 
 	
+}
+
+void EnemyManager::Spawn_Random2()
+{
+	std::vector<int> hNumber = { 0,1,2,3,4,5,6 };
+	std::vector<int> wNumber = { 0,1,2,3,4,5,6 };
+	Math::Rectangle spawnRect = { (long)SCREEN_RIGHT + 100,(long)SCREEN_BOTTOM+100,(long)SCREEN_WIDTH / 2,(long)SCREEN_HEIGHT - 200 };
+
+	Math::Vector2 offset = { (float)spawnRect.width / wNumber.size(),(float)spawnRect.height / hNumber.size() };
+
+	//敵を３体並べてスポーンさせるか？
+	if (rand() % 2)
+	{
+		int enemyNum = 3;
+		int w = rand() % (wNumber.size() - enemyNum);
+		int h = rand() % hNumber.size();
+
+		//スポーンに必要な共通の変数の初期化
+		SpawnData spawnData;
+		spawnData.radius = { 32,32 };										//出現する大きさ
+		//spawnData.pos = { SCREEN_RIGHT + spawnData.radius.x,0 };		//出現座標
+		spawnData.moveSpeed = 120;										//移動速度
+		spawnData.moveDeg = 180;											//移動する方向
+		spawnData.normalColor = {0.7f,0.7f,1.0f,1.0f };						//通常時の色
+		spawnData.hitColor = { 0.7f,0.6f,0.8f,1.0f };							//当たった時の色
+		spawnData.hp = 20;												//HP
+		spawnData.bulletSpeed = 200;										//弾の速度
+		spawnData.shotCoolTime = 3.0f;									//弾を撃つクールタイム
+		spawnData.shotCoolTimeNoiseMax = 0;								//弾を撃つクールタイムのランダム値
+		spawnData.spawnShotCoolTime = 1.5f;								//（shotCoolTime　+ spawnShotCoolTime = スポーンしてから初めて弾を撃つまでの時間）
+
+		std::shared_ptr<Enemy2>enemy;
+		int shotNum = randRange(2, 3);
+		int shotArcRadian = DirectX::XMConvertToRadians(45);
+		for (int i = 0; i < enemyNum; i++)
+		{
+			//座標を決める
+			spawnData.pos.x = { spawnRect.x + offset.x * wNumber[w] };
+			spawnData.pos.y = { spawnRect.y + offset.y * hNumber[h] };
+
+			//出現した座標は取り出す
+			wNumber.erase(wNumber.begin() + w);
+
+			enemy = std::make_shared<Enemy2>();
+			enemy->Init();
+			enemy->InitOriginal(shotNum, shotArcRadian);
+			enemy->SetFireworksNum(i + 1);
+			enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
+			m_enemyList.push_back(enemy);
+		}
+		hNumber.erase(hNumber.begin() + h);
+	}
+	else
+	{
+		int enemyNum = 3;
+
+		//スポーンに必要な共通の変数の初期化
+		SpawnData spawnData;
+		spawnData.radius = { 40,40 };										//出現する大きさ
+		//spawnData.pos = { SCREEN_RIGHT + spawnData.radius.x,0 };		//出現座標
+		spawnData.moveSpeed = 110;										//移動速度
+		spawnData.moveDeg = 180;											//移動する方向
+		spawnData.normalColor = { 1.0f,0.5f,0.5f,1 };						//通常時の色
+		spawnData.hitColor = { 1,0.5f,0.5f,1 };							//当たった時の色
+		spawnData.hp = 20;												//HP
+		spawnData.bulletSpeed = 200;										//弾の速度
+		spawnData.shotCoolTime = 2.0f;									//弾を撃つクールタイム
+		spawnData.shotCoolTimeNoiseMax = 0;								//弾を撃つクールタイムのランダム値
+		spawnData.spawnShotCoolTime = 1.5f;								//（shotCoolTime　+ spawnShotCoolTime = スポーンしてから初めて弾を撃つまでの時間）
+
+		std::shared_ptr<Enemy2>enemy;
+		int shotNum = randRange(2, 3);
+		int shotArcRadian = DirectX::XMConvertToRadians(45);
+		for (int i = 0; i < enemyNum; i++)
+		{
+			int w = rand() % wNumber.size();
+			int h = rand() % hNumber.size();
+			//座標を決める
+			spawnData.pos.x = { spawnRect.x + offset.x * wNumber[w] };
+			spawnData.pos.y = { spawnRect.y + offset.y * hNumber[h] };
+
+			//出現した座標は取り出す
+			hNumber.erase(hNumber.begin() + h);
+			wNumber.erase(wNumber.begin() + w);
+
+			enemy = std::make_shared<Enemy2>();
+			enemy->Init();
+			enemy->InitOriginal(shotNum, shotArcRadian);
+			enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
+			m_enemyList.push_back(enemy);
+		}
+	}
+
+	//回転する敵をランダムで配置するか？
+	if (rand() % 2)
+	{
+		int enemyNum = randRange(1, 3);
+		
+		//スポーンに必要な共通の変数の初期化
+		SpawnData spawnData;
+		spawnData.radius = { 50,50 };										//出現する大きさ
+		//spawnData.pos = { SCREEN_RIGHT + spawnData.radius.x,0 };		//出現座標
+		spawnData.moveSpeed = 110;										//移動速度
+		spawnData.moveDeg = 180;											//移動する方向
+		spawnData.normalColor = { 1.0f,0.5f,0.5f,1 };						//通常時の色
+		spawnData.hitColor = { 1,0.5f,0.5f,1 };							//当たった時の色
+		spawnData.hp = 50;												//HP
+		spawnData.bulletSpeed = 200;										//弾の速度
+		spawnData.shotCoolTime = 3.0f;									//弾を撃つクールタイム
+		spawnData.shotCoolTimeNoiseMax = 0;								//弾を撃つクールタイムのランダム値
+		spawnData.spawnShotCoolTime = 1.5f;								//（shotCoolTime　+ spawnShotCoolTime = スポーンしてから初めて弾を撃つまでの時間）
+	
+		std::shared_ptr<Enemy5>enemy;
+		int shotNum = randRange(1, 2);
+		int shotArcRadian = DirectX::XMConvertToRadians(45);
+		float deltaRadian = DirectX::XMConvertToRadians(40);
+
+		for (int i = 0; i < enemyNum; i++)
+		{
+			//出現場所の縦横の番号
+			int w = rand() % wNumber.size();
+			int h = rand() % hNumber.size();
+
+			//座標を決める
+			spawnData.pos.x = { spawnRect.x + offset.x * wNumber[w] };
+			spawnData.pos.y = { spawnRect.y + offset.y * hNumber[h] };
+
+			//出現した座標は取り出す
+			hNumber.erase(hNumber.begin() + h);
+			wNumber.erase(wNumber.begin() + w);
+
+			enemy = std::make_shared<Enemy5>();
+			enemy->Init();
+			enemy->InitOriginal(deltaRadian, shotNum, shotArcRadian);
+			enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
+			m_enemyList.push_back(enemy);
+		}
+	}
+
 }
 
 

@@ -27,8 +27,8 @@ public:
 		m_data.fontWeight = DWRITE_FONT_WEIGHT_ULTRA_BLACK;
 		m_data.Color = D2D1::ColorF(D2D1::ColorF::White);
 		m_data.font = m_pWrite->GetFontName(0);
-	/*	m_data.shadowColor = D2D1::ColorF(D2D1::ColorF::Gray);
-		m_data.shadowOffset = D2D1::Point2F(5.0f, -5.0f);*/
+		/*	m_data.shadowColor = D2D1::ColorF(D2D1::ColorF::Gray);
+			m_data.shadowOffset = D2D1::Point2F(5.0f, -5.0f);*/
 		m_data.shadowColor = D2D1::ColorF(D2D1::ColorF::Gray);
 		m_data.shadowOffset = D2D1::Point2F(0, 0);
 
@@ -36,16 +36,9 @@ public:
 		m_pWrite->SetFont(m_data);
 	}
 
-	//解放
-	void Release()
-	{
-		delete m_pWrite;
-		m_pWrite = nullptr;
-	}
-
 	//描画1（登録されているフォントデータのまま描画する）
 	void Draw(const std::string str, Math::Vector2 pos);
-	
+
 	//描画2（文字サイズを変更して描画する）
 	void Draw(const std::string str, Math::Vector2 pos, const int size);
 
@@ -54,13 +47,17 @@ public:
 
 	//描画4（文字色と文字サイズを変更して描画する）
 	void Draw(const std::string str, Math::Vector2 pos, const int size, const Math::Color& color);
-	
+
 	//フォントを変更する
 	void ChangeFont(FontName name)
 	{
-		m_data.font = m_pWrite->GetFontName(name);
-		m_pWrite->SetFont(m_data); 
+		if (name >= 0 || name < FontName::Kind)
+		{
+			m_data.font = m_pWrite->GetFontName(name);
+			m_pWrite->SetFont(m_data);
+		}
 	}
+
 
 	float GetFontSize() { return m_data.fontSize; }
 	D2D1_COLOR_F GetColor() { return m_data.Color; }
@@ -86,14 +83,19 @@ public:
 		m_data.shadowColor = color;
 		m_pWrite->SetFont(m_data);
 	}
-	
 
 private:
-	
+
+	//解放
+	void Release()
+	{
+		delete m_pWrite;
+		m_pWrite = nullptr;
+	}
+
 	DirectWriteCustomFont* m_pWrite;					//描画用のクラス
 	FontData m_data;									//フォントデータ用の構造体
 
-private:
 	//座標補正
 	void CorrectionPos(Math::Vector2* pos)
 	{
@@ -102,7 +104,7 @@ private:
 		pos->y -= 720.0f / 2.0f;
 		pos->y *= -1;
 	}
-
+private:
 //シングルトン
 	DWriteCustom() {}
 public:

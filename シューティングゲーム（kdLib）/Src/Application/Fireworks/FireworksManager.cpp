@@ -2,6 +2,7 @@
 #include"../Font/DWriteCustom.h"
 #include"Fireworks.h"
 #include"../SoundCache/SoundCache.h"
+#include"../Light/Light.h"
 
 //XV
 void FireworksManager::Update(float deltaTime)

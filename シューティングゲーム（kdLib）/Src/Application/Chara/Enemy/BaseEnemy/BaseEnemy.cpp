@@ -20,13 +20,13 @@ void BaseEnemy::Init()
 	m_animSpeed = 5;				//アニメーションのスピード
 
 	m_bActive = true;				//活性状態
-
-	m_bDead_ScreenOut = false;		//画面外に出たら敵を倒すフラグ
 }
 
 //更新
 void BaseEnemy::Update(float deltaTime)
 {
+	m_timer += deltaTime;
+
 	//アニメーションを進める
 	m_animCnt += m_animSpeed * deltaTime;
 	if (m_animCnt >= m_animCntMax)m_animCnt = 0;
@@ -51,18 +51,10 @@ void BaseEnemy::Update(float deltaTime)
 
 	//座標更新
 	m_pos += m_move * deltaTime;
-
-	//スクリーン内に入った敵は「スクリーン外に出ると倒れるフラグ」を立てる
-	if (!m_bDead_ScreenOut)
-	{
-		if(IsCollision_Box(m_pos, m_radius, { 0,0 }, { SCREEN_WIDTH / 2.0f,SCREEN_HEIGHT / 2.0f }))
-		{
-			m_bDead_ScreenOut = true;
-		}
-	}
-	//画面外に出たら非活性にする
-	//(スクリーンアウトすることで敵が倒れるフラグが経っていたら)
-	else
+	
+	//(スポーンから8秒経っていて、敵が画面外にいたら、敵を消す)
+	//何らかの不具合で敵がうまく発生しなかった時のためにも必要
+	if (m_timer >= 5)
 	{
 		float left = m_pos.x - m_radius.x;
 		float right = m_pos.x + m_radius.x;
@@ -87,7 +79,8 @@ void BaseEnemy::Spawn(Math::Vector2& pos, Math::Vector2& radius, float moveSpeed
 {
 	//座標
 	m_pos = pos;
-
+	
+	
 	//移動量
 	m_moveSpeed = moveSpeed;
 	{
@@ -130,6 +123,18 @@ void BaseEnemy::Spawn(Math::Vector2& pos, Math::Vector2& radius, float moveSpeed
 	m_shotCoolTime = shotCoolTime;
 	m_shotCoolTimeNoiseMax = shotCoolTimeNoiseMax;				//クールタイムのずれる時間
 	m_shotCoolTimer = shotCoolTime + spawnShotCoolTime;			//スポーン時の弾発射のクールタイム
+
+	//画面内でスポーンするなら、画面外判定を行うタイマーを判定し始める時間から開始する
+	{
+		float left = m_pos.x - m_radius.x;
+		float right = m_pos.x + m_radius.x;
+		float top = m_pos.y + m_radius.y;
+		float bottom = m_pos.y - m_radius.y;
+		if (left >SCREEN_LEFT && right < SCREEN_RIGHT && top < SCREEN_TOP && bottom > SCREEN_BOTTOM )
+		{
+			m_timer = 5;
+		}
+	}
 }
 
 //描画
