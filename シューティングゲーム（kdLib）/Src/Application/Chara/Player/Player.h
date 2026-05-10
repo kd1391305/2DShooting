@@ -33,6 +33,18 @@ public:
 		m_color = { 1,1,1,0.2f };
 	}
 
+	//デバッグ用
+	//プレイヤーが死なない
+	void Damage(float damage) override {
+		m_hp -= damage;
+		if (m_hp <= 0)
+		{
+			m_hp = 5;
+			//Dead();			//倒れた時の処理を呼び出す
+		}
+		if (m_hp > m_hpMax)m_hp = m_hpMax;
+	}
+
 	//無敵かどうか
 	bool IsInvincible() { return m_bInvincible; }
 

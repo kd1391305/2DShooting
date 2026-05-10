@@ -10,8 +10,8 @@
 //コンストラクタ
 EnemyManager::EnemyManager()
 {
-	//ゲーム開始から6秒間は敵をスポーンしない
-	m_spawnCoolTimer = 6.0f;
+	//ゲーム開始から25秒間は敵をスポーンしない
+	m_spawnCoolTimer = 25.0f;
 
 	//敵のスポーン確率
 	//重みを代入
@@ -20,7 +20,7 @@ EnemyManager::EnemyManager()
 	m_spawnProbability[SpawnPutturn::Upper_Lower]			= 2;
 	m_spawnProbability[SpawnPutturn::Lower_Quick]			= 3;
 	m_spawnProbability[SpawnPutturn::Rotation]				= 3;
-	m_spawnProbability[SpawnPutturn::Explode]				= 2;
+	m_spawnProbability[SpawnPutturn::Explode]				= 1;
 	m_spawnProbability[SpawnPutturn::Explode2]				= 1;
 	m_spawnProbability[SpawnPutturn::Reflect]				= 1;
 	m_spawnProbability[SpawnPutturn::MoveLine]				= 2;
@@ -83,7 +83,8 @@ void EnemyManager::Update(float deltaTime)
 
 
 	//ボス出現の条件
-	if (Timer::Instance().GetTime() > 0)
+	
+	if (Timer::Instance().GetTime() >120 && !m_pGame->GetGameClearFlg())
 	{
 		if (!m_boss)
 		{
@@ -175,13 +176,13 @@ void EnemyManager::Spawn_Boss()
 {
 	//スポーンに必要な共通の変数の初期化
 	SpawnData spawnData;
-	spawnData.radius = { 80,80 };									//出現する大きさ
+	spawnData.radius = {160,160 };									//出現する大きさ
 	spawnData.pos = { SCREEN_RIGHT + spawnData.pos.x,0 };			//出現座標
 	spawnData.moveSpeed = 200;										//移動速度
 	spawnData.moveDeg = 180;										//移動する方向
 	spawnData.normalColor = { 1,1,1,1 };							//通常時の色
 	spawnData.hitColor = { 1,0,0,1 };								//当たった時の色
-	spawnData.hp = 2000;											//HP
+	spawnData.hp = 3000;											//HP
 	spawnData.bulletSpeed = 300;									//弾の速度
 	spawnData.shotCoolTime = 0.2f;									//弾を撃つクールタイム
 	spawnData.shotCoolTimeNoiseMax = 0.0f;							//弾を撃つクールタイムのランダム値
@@ -190,7 +191,7 @@ void EnemyManager::Spawn_Boss()
 	m_boss = std::make_shared<Boss>(m_pGame);
 	m_boss->Init();
 	m_boss->InitOriginal();
-	m_boss->SetFireworksNum(30);
+	m_boss->AddFireworksNum(20);
 	m_boss->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 }
 
@@ -248,8 +249,9 @@ void EnemyManager::Spawn_Row()
 		{
 			enemy = std::make_shared<Enemy1>();
 			enemy->Init();
-			//列の最後の敵には花火を3発持たせる
-			if (j == enemyNum - 1)enemy->SetFireworksNum(3);
+			//列の最後の敵には追加で花火を3発持たせる
+			if (j == enemyNum - 1)enemy->AddFireworksNum(2);
+			else enemy->AddFireworksNum(-3);
 			enemy->Spawn(spawnPos[i][j], spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 			m_enemyList.push_back(enemy);
 		}
@@ -316,8 +318,16 @@ void EnemyManager::Spawn_Cross()
 		enemy = std::make_shared<Enemy2>();
 		enemy->Init();
 		enemy->InitOriginal(shotNum, shotArcRadian);
+		if(i==0)enemy->AddFireworksNum(5);
 		enemy->Spawn(spawnPos[i], spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, normalColor[i], hitColor[i], spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 		m_enemyList.push_back(enemy);
+	}
+
+	if (rand() % 2)
+	{
+		Math::Vector2 pos = { SCREEN_RIGHT + 100,250 };
+		if (rand() % 2)pos.y *= -1;
+		Spawn_Row2(randRange(1, 5.9), pos, 300, 180);
 	}
 }
 
@@ -464,7 +474,7 @@ void EnemyManager::Spawn_Upper_Lower()
 			enemy = std::make_shared<Enemy2>();
 			enemy->Init();
 			enemy->InitOriginal(shotNum, shotArcRadian);
-			if (i == 0)enemy->SetFireworksNum(3);
+			if (j == 0)enemy->AddFireworksNum(3);
 			enemy->Spawn(spawnPos[i][j], radius[i][j], spawnData.moveSpeed, moveDeg[i], normalColor[i], hitColor[i], hp[i][j], spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 			m_enemyList.push_back(enemy);
 		}
@@ -529,7 +539,6 @@ void EnemyManager::Spawn_Lower_Quick()
 		enemy = std::make_shared<Enemy2>();
 		enemy->Init();
 		enemy->InitOriginal(shotNum,shotArcRadian);
-		enemy->SetFireworksNum(2);
 		enemy->Spawn(spawnPos[i], spawnData.radius, spawnData.moveSpeed, moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 		m_enemyList.push_back(enemy);
 	}
@@ -653,6 +662,13 @@ void EnemyManager::Spawn_Rotation()
 		enemy->Spawn(spawnPos[i], spawnData.radius, spawnData.moveSpeed, moveDeg[direction], spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 		m_enemyList.push_back(enemy);
 	}
+
+	if (rand() % 2)
+	{
+		Math::Vector2 pos = { SCREEN_RIGHT + 300,randRange(-200,200)};
+		if (rand() % 2)pos.y *= -1;
+		Spawn_Row3(randRange(2, 5), pos, randRange(250, 350), 180);
+	}
 }
 
 void EnemyManager::Spawn_Explode()
@@ -720,6 +736,7 @@ void EnemyManager::Spawn_Explode2()
 		enemy = std::make_shared<Enemy4>(this);
 		enemy->Init();
 		enemy->InitOriginal(explodePosX, explodeEnemyNum, explodeEnemySpeed,life);
+		enemy->AddFireworksNum(3);
 		enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 		m_enemyList.push_back(enemy);
 	}
@@ -753,6 +770,8 @@ void EnemyManager::Spawn_Reflect()
 		enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 		m_enemyList.push_back(enemy);
 	}
+
+	
 }
 
 void EnemyManager::Spawn_MoveLine()
@@ -802,6 +821,8 @@ void EnemyManager::Spawn_MoveLine()
 
 			spawnData.pos.x = SCREEN_RIGHT + spawnData.radius.x + offset.x * j;
 			spawnData.hp = 20 * (enemyNum - j);
+			if (j == enemyNum - 1)enemy->AddFireworksNum(5);
+			else enemy->AddFireworksNum(-2);
 			enemy->Spawn(spawnData.pos,spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 			enemy->PostInit();
 			m_enemyList.push_back(enemy);
@@ -1016,7 +1037,7 @@ void EnemyManager::Spawn_Random2()
 			enemy = std::make_shared<Enemy2>();
 			enemy->Init();
 			enemy->InitOriginal(shotNum, shotArcRadian);
-			enemy->SetFireworksNum(i + 1);
+			enemy->AddFireworksNum(i * 2);
 			enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 			m_enemyList.push_back(enemy);
 		}
@@ -1110,6 +1131,56 @@ void EnemyManager::Spawn_Random2()
 	}
 
 }
+
+void EnemyManager::Spawn_Row2(int enemyNum, Math::Vector2 pos,float moveSpeed,float moveDeg)
+{
+	std::shared_ptr<Enemy1>enemy;
+
+	Math::Color normalColor = { 0,1,1,1 };
+	Math::Color	hitColor = { 0,0.8f,0.8f,1 };
+
+	//座標を求める
+	Math::Vector2 spawnPos;
+	Math::Vector2 enemyRadius = { 32,32 };
+	float radian = DirectX::XMConvertToRadians(moveDeg + 180);
+	spawnPos.x = pos.x + cosf(radian) * enemyRadius.x * 1.5;
+	spawnPos.y = pos.y + sinf(radian) * enemyRadius.y * 1.5;
+
+	for (int i = 0; i < enemyNum; i++)
+	{
+		enemy = std::make_shared<Enemy1>();
+		enemy->Init();
+		enemy->Spawn(spawnPos, enemyRadius, moveSpeed, moveDeg, normalColor, hitColor, 20, moveSpeed * 1.4f, 3, 1, randRange(0, 1.0f));
+		m_enemyList.push_back(enemy);
+	}
+}
+
+void EnemyManager::Spawn_Row3(int enemyNum, Math::Vector2 pos, float moveSpeed, float moveDeg)
+{
+	std::shared_ptr<Enemy1>enemy;
+
+	Math::Color normalColor = { 0,1,1,1 };
+	Math::Color	hitColor = { 0,0.8f,0.8f,1 };
+
+	//座標を求める
+	Math::Vector2 spawnPos;
+	Math::Vector2 enemyRadius = { 32,32 };
+	float radian = DirectX::XMConvertToRadians(moveDeg + 180);
+	
+
+	for (int i = 0; i < enemyNum; i++)
+	{
+		spawnPos.x = pos.x + cosf(radian) * enemyRadius.x * 1.5 * i;
+		spawnPos.y = pos.y + sinf(radian) * enemyRadius.y * 1.5 * i;
+
+		enemy = std::make_shared<Enemy1>();
+		enemy->Init();
+		enemy->Spawn(spawnPos, enemyRadius, moveSpeed, moveDeg, normalColor, hitColor, 20, moveSpeed * 1.4f, 3, 1, randRange(0, 1.0f));
+		m_enemyList.push_back(enemy);
+	}
+}
+
+
 
 
 

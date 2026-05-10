@@ -36,13 +36,12 @@ void Explan::Draw()
 		Math::Vector2 backScale = { 1.0f,0.95f };
 		//移動キーの背景
 		scaleMat = Math::Matrix::CreateScale(backScale.x, backScale.y, 0);
-		transMat = Math::Matrix::CreateTranslation(-500, -190, 0);
+		transMat = Math::Matrix::CreateTranslation(-500, -240, 0);
 		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
 		SHADER.m_spriteShader.DrawTex_Src(backTex, m_color);
 
 		//チャージキー背景
-		scaleMat = Math::Matrix::CreateScale(backScale.x, backScale.y, 0);
-		transMat = Math::Matrix::CreateTranslation(-290, -190, 0);
+		transMat = Math::Matrix::CreateTranslation(-290, -240, 0);
 		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
 		SHADER.m_spriteShader.DrawTex_Src(backTex, m_color);
 	}
@@ -51,18 +50,18 @@ void Explan::Draw()
 	{
 		//移動キー
 		scaleMat = Math::Matrix::CreateScale(0.21f, 0.21f, 1);
-		transMat = Math::Matrix::CreateTranslation(-500, -170, 0);
+		transMat = Math::Matrix::CreateTranslation(-500, -220, 0);
 		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
 		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/TransKey.png"), m_color);
 
-		DWriteCustom::Instance().Draw("移動", { -525, -220 }, fontSize, m_fontColor);
+		DWriteCustom::Instance().Draw("移動", { -525, -270 }, fontSize, m_fontColor);
 
 		//チャージキー
 		scaleMat = Math::Matrix::CreateScale(0.22f, 0.22f, 0);
-		transMat = Math::Matrix::CreateTranslation(-290, -170, 0);
+		transMat = Math::Matrix::CreateTranslation(-290, -220, 0);
 		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
 		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/ZKey.png"), m_color);
 		
-		DWriteCustom::Instance().Draw("チャージ", { -338,-220 }, fontSize, m_fontColor);
+		DWriteCustom::Instance().Draw("チャージ", { -338,-270 }, fontSize, m_fontColor);
 	}
 }

@@ -17,6 +17,8 @@
 #include"../../SoundCache/SoundCache.h"
 #include"../../Animtion/HitEffect/HitEffectManager.h"
 #include"../../Mouse/Mouse.h"
+#include"../../Chara/Enemy/Boss/AttackArea/AttackAreaManager.h"
+#include"../../Chara/Enemy/Boss/Boss.h"
 
 Game::Game(std::shared_ptr<Back> back)
 {
@@ -27,6 +29,8 @@ Game::Game(std::shared_ptr<Back> back)
 	m_bulletManager = std::make_shared<BulletManager>();
 	m_UI = std::make_shared<UI>();
 	m_hitEffectManager = std::make_shared<HitEffectManager>();
+	m_attackAreaManager = std::make_shared<AttackAreaManager>();
+
 
 	BaseEnemy::SetBulletManager(m_bulletManager.get());
 	BaseEnemy::SetPlayerPos(m_player->GetPosAddress());
@@ -83,6 +87,20 @@ void Game::Update()
 		}
 	}
 
+	//ゲームクリアフラグがたっているとき
+	if (m_bGameClearFlg)
+	{
+		m_changeSceneWait -= deltaTime;
+		if (m_changeSceneWait <= 0)
+		{
+			SceneManager::Instance().ChangeState(std::make_shared<GameClearScene>(m_back,m_UI->GetScoreInst()->Get(),m_UI->GetScoreInst()->GetHighScore(),m_UI->GetScoreInst()->GetExplodeNum()));
+
+			std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav");
+			bgm->Stop();
+			MOUSE.ShowCursorTex(true);
+		}
+	}
+
 	//プレイヤーの行動
 	m_player->Action(deltaTime);
 
@@ -103,7 +121,13 @@ void Game::Update()
 			CollisionPlayer_Boss(m_player, boss);
 
 			//プレイヤー　と　ボス
-			CollisionPlayerBullet_Boss(m_bulletManager->GetPlayerList(), boss, m_back->GetFireworks(),m_hitEffectManager);
+			CollisionPlayerBullet_Boss(m_bulletManager->GetPlayerList(), boss, m_back->GetFireworks(),m_hitEffectManager,m_UI->GetScoreInst());
+
+			//プレイヤー　と　攻撃範囲
+			CollisionPlayer_AttackArea(m_player, m_attackAreaManager);
+
+			//攻撃範囲の更新
+			m_attackAreaManager->Update(deltaTime);
 		}
 	}
 	//背景の更新
@@ -113,8 +137,19 @@ void Game::Update()
 	m_player->Update(deltaTime);
 
 	//すべての敵の更新
-	m_enemyManager->Update(deltaTime);
-
+	if (!m_bGameClearFlg)
+	{
+		m_enemyManager->Update(deltaTime);
+		
+	}
+	else
+	{
+		if (rand() % 6 == 0)
+		{
+			//花火を打ち上げる
+			m_enemyManager->GetBoss()->ExplodeFireworks(5);
+		}
+	}
 	//全ての弾の更新
 	m_bulletManager->Update(deltaTime);
 
@@ -128,16 +163,25 @@ void Game::Update()
 //描画
 void Game::Draw()
 {
+	//背景
 	m_back->Draw();
 
+	//攻撃範囲
+	m_attackAreaManager->Draw();
+
+	//プレイヤー
 	m_player->Draw();
 
+	//敵
 	m_enemyManager->Draw();
 
+	//ヒットエフェクト
 	m_hitEffectManager->Draw();
 
+	//弾
 	m_bulletManager->Draw();
 
+	//UI
 	if (!m_bStartFlg)
 	{
 		m_UI->Draw();
@@ -146,22 +190,41 @@ void Game::Draw()
 //ゲームオーバーにする
 void Game::GameOver()
 {
-	//ゲームオーバーシーンへ
-	SceneManager::Instance().ChangeState(std::make_shared<GameOverScene>(
-		std::dynamic_pointer_cast<Game> (SceneManager::Instance().GetCurrentState())));
-	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav");
-	bgm->Stop();
-	MOUSE.ShowCursorTex(true);
+	if (!m_bGameClearFlg)
+	{
+		//ゲームオーバーシーンへ
+		SceneManager::Instance().ChangeState(std::make_shared<GameOverScene>(
+			std::dynamic_pointer_cast<Game> (SceneManager::Instance().GetCurrentState())));
+		std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav");
+		bgm->Stop();
+		MOUSE.ShowCursorTex(true);
+	}
+	std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charage.wav");
+	if (!se->IsPlay())
+	{
+		se->SetVolume(0.0005f);
+		se->Play(false);
+	}
 }
 
 void Game::GameClear()
 {
-	SceneManager::Instance().ChangeState(std::make_shared<GameClearScene>(m_back));
+	if (!m_bGameClearFlg)
+	{
+		m_changeSceneWait = 2.0f;
+	}
+	m_bGameClearFlg = true;
 
 	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav");
 	bgm->Stop();
+	
+	std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
+	if (!se->IsPlay())
+	{
+		se->SetVolume(0.0005f);
+		se->Play(false);
+	}
 
-	MOUSE.ShowCursorTex(true);
 }
 
 //解放

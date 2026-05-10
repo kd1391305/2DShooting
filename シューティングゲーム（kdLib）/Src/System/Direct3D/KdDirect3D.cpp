@@ -310,7 +310,7 @@ void KdDirect3D::SetBlendState(BlendMode mode)
 	GetDevContext()->OMSetBlendState(state, Math::Color(0,0,0,0), 0xFFFFFFFF);
 
 	// 解放(ここでは参照カウンタが-1されるだけ)
-	state->Release();
+	if(state)state->Release();
 }
 
 void KdDirect3D::DrawVertices(D3D_PRIMITIVE_TOPOLOGY topology,int vertexCount, const void* pVertexStream, UINT stride)

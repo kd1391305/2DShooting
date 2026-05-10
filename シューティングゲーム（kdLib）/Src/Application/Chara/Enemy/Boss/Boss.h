@@ -46,8 +46,14 @@ private:
 	float m_circleShotCoolTimer;
 	int m_circleShotCnt;		
 
+	//敵が爆弾となる敵を落とす時用
+	float m_fallEnemyCoolTimer;	//落とすクールタイム
+	float m_fallEnemyCnt;
+
 	//一定時間
 	float m_endPosX = 300;		//移動するときX座標３００以下にはいかない
+
+	float m_bHitChargeMax;		//チャージマックスの弾に当たったか？
 
 	void Action1();
 	void Action2();
@@ -62,5 +68,4 @@ private:
 	};
 
 	MovePutturn m_movePutturn = MovePutturn::Appear;		//出現状態からスタート
-
 };

@@ -3,6 +3,8 @@
 #include"../BaseEnemy/BaseEnemy.h"
 
 class EnemyManager;
+class AttackArea;
+class FireworksManager;
 
 //弾を左にまっすぐ撃つだけの敵
 class Enemy1 :public BaseEnemy
@@ -116,5 +118,46 @@ private:
 	float m_radian;
 	float m_deltaRadian;
 	bool m_bRotationFlg;			//回転しているか？
+};
+
+//敵を射出する敵
+//射出した敵がまた射出
+//そして、また射出
+class Enemy9 :public BaseEnemy
+{
+public:
+	Enemy9() = delete;
+	Enemy9(EnemyManager* enemyManager) { m_pEnemyManager = enemyManager; }
+
+	void Action(float deltaTime)override;
+
+	void InitOriginal(int explodeCnt, int increaseShotNum, int shotNum, float shotArcRadian);
+private:
+	EnemyManager* m_pEnemyManager;
+
+	int m_explodeCnt;		//次の敵も爆発させるか？このキャラが爆発して倒れたら、カウントを減らして、弾けた敵に引き継ぐ
+	int m_increaseShotNum;	//次の敵に引き継ぐ際の敵発射数
+	int m_shotNum;			//敵を撃つ数
+	float m_shotArcRadian;	//敵を発射する角度
+};
+
+class Enemy10 :public BaseEnemy
+{
+public:
+
+	void Action(float deltaTime)override;
+
+	void InitOriginal(std::shared_ptr<AttackArea>area, std::shared_ptr<FireworksManager>fireworksManager) {
+		m_pAttackArea = area;
+		m_pFireworksManager = fireworksManager;
+	}
+
+private:
+
+	//攻撃場所のポインタ。基本的にここのは参照用（更新、描画は、マネージャークラスで呼び出している）
+	std::shared_ptr<AttackArea>m_pAttackArea;
+
+	std::shared_ptr<FireworksManager>m_pFireworksManager;
+
 };
 

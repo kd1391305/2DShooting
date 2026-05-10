@@ -10,6 +10,9 @@
 #include"../../Fireworks/FireworksManager.h"
 #include"../../Chara/Enemy/Boss/Boss.h"
 #include"../../Animtion/HitEffect/HitEffectManager.h"
+#include"../../Chara/Enemy/Boss/AttackArea/AttackAreaManager.h"
+#include"../../Chara/Enemy/Boss/AttackArea/AttackArea.h"
+#include"../../SoundCache/SoundCache.h"
 
 //プレイヤー　と　敵
 bool CollisionPlayer_Enemy(std::shared_ptr<Player> player, std::vector<std::shared_ptr<BaseEnemy>>& enemyList)
@@ -74,6 +77,31 @@ bool CollisionPlayer_Boss(std::shared_ptr<Player> player, std::shared_ptr<Boss> 
 	return false;
 }
 
+bool CollisionPlayer_AttackArea(std::shared_ptr<Player> player, std::shared_ptr<AttackAreaManager> attackAreaManager)
+{
+	if (player->IsInvincible())return false;
+
+	for (auto& area : attackAreaManager->GetList())
+	{
+		if (!area->GetHitFlg())continue;
+		if (IsCollision(player->GetPos(), player->GetRadius().x, area->GetPos(), area->GetRadius().x))
+		{
+			//プレイヤーにダメージ
+			player->Damage(10);
+
+			//無敵時間
+			player->Invincible(1.5f);			//1.5秒間無敵
+
+			Timer::Instance().Stop(0.35f);		//0.35秒停止
+
+			return true;
+		}
+
+	}
+
+	return false;
+}
+
 //プレイヤーの弾　と　敵
 bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::vector<std::shared_ptr<BaseEnemy>>& enemyList, std::shared_ptr<FireworksManager> fireworksManager, std::shared_ptr<HitEffectManager> hitEffectManager, std::shared_ptr<Score> score)
 {
@@ -97,6 +125,8 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 					//スコアを加算する
 					score->Add(100);
 
+					
+
 					//弾の力が０なら弾を消す　or　敵が生き残っていても消す
 					if (p->GetPower() <= 0 || e->GetHp() > 0)
 					{
@@ -114,32 +144,47 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 					//敵が倒れたら、花火を弾けさせる
 					if (!e->IsActive())
 					{
-						int type = fireworksManager->GetRandomType_Quick();
-						float afterScale = randRange(0.2f, 0.35f);
-						float seVolume = 0.005f;
-						fireworksManager->Explode((FireworksManager::Type)type, e->GetPos(), afterScale, e->GetColor(), seVolume);
-
+						//総打ち上げ数をカウント
+						score->AddExplodeNum(e->GetFireworksNum());
 
 						Math::Vector2 shotPos;
-						float r, g, b, a;
-						//２つ以上の花火を弾けさせる敵は、花火の色や大きさ、出現場所を少しランダムに変更する
-						for (int i = 1; i < e->GetFireworksNum(); i++)
+						Math::Vector2 enemyPos = e->GetPos();
+						float seVolume = 0.005f;
+						for (int i = 0; i < e->GetFireworksNum(); i++)
 						{
-							//花火を弾けさせる
-							shotPos = e->GetPos();
-							shotPos.x += randRange(-100, 100);
-							shotPos.y += randRange(-100, 100);
+							if (i < 5)
+							{
+								int type = fireworksManager->GetRandomType_Quick();
+								float afterScale = randRange(0.4f, 0.6f);
+								float seVolume = 0.01f;
+								//花火を弾けさせる
+								shotPos = enemyPos;
+								shotPos.x += randRange(-50, 50);
+								shotPos.y += randRange(-50, 50);
+								fireworksManager->Explode((FireworksManager::Type)type, shotPos, afterScale, e->GetColor(), seVolume);
+							}
+							else
+							{
+								float r, g, b, a;
+								//5つ以上の花火を弾けさせる敵は、花火の色や大きさ、出現場所を少しランダムに変更する
+								for (int i = 5; i < e->GetFireworksNum(); i++)
+								{
+									//花火を弾けさせる
+									shotPos = enemyPos;
+									shotPos.x += randRange(-100, 100);
+									shotPos.y += randRange(-100, 100);
 
-							afterScale = { randRange(0.3f,0.5f) };
+									float afterScale = { randRange(0.3f,0.5f) };
 
-							r = randRange(0.0f, 0.9f);
-							g = randRange(0.0f, 0.9f);
-							b = randRange(0.0f, 0.9f);
-							a = randRange(0.6f, 0.8f);
+									r = randRange(0.0f, 0.9f);
+									g = randRange(0.0f, 0.9f);
+									b = randRange(0.0f, 0.9f);
+									a = randRange(0.6f, 0.8f);
 
-							type = fireworksManager->GetRandomType_Quick();
-
-							fireworksManager->Explode((FireworksManager::Type)type, shotPos, afterScale, Math::Color{ r,g,b,a }, seVolume);
+									int type = fireworksManager->GetRandomType_Quick();
+									fireworksManager->Explode((FireworksManager::Type)type, shotPos, afterScale, Math::Color{ r,g,b,a }, seVolume);
+								}
+							}
 						}
 						break;
 					}
@@ -152,7 +197,7 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 }
 
 //プレイヤーの弾　と　ボス
-bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss> boss, std::shared_ptr<FireworksManager> fireworksManager, std::shared_ptr<HitEffectManager>hitEffectManager)
+bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss> boss, std::shared_ptr<FireworksManager> fireworksManager, std::shared_ptr<HitEffectManager>hitEffectManager, std::shared_ptr<Score> score)
 {
 	if (!boss)return false;
 
@@ -166,6 +211,24 @@ bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& play
 		{
 			//ダメージ
 			boss->Damage(10 * bullet->GetPower());
+			//チャージマックスで攻撃したら
+			if (bullet->GetPower() == 10)
+			{
+				//追加ダメージ
+				boss->Damage(100);
+				//花火を発生
+				boss->ExplodeFireworks(bullet->GetPower());
+
+				//総打ち上げ数を増やす
+				score->AddExplodeNum(5);
+			}
+			//チャージマックスではなかったら、ダメージ音発生
+			else
+			{
+				std::shared_ptr<KdSoundInstance>se = SoundCache::Instance().Get("Sound/SE/Damage.wav");
+				se->SetVolume(0.01f);
+				se->Play(false);
+			}
 
 			bullet->SetActive(false);
 
@@ -177,7 +240,6 @@ bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& play
 
 			//当たった時の処理
 			boss->OnHit();
-			boss->ExplodeFireworks(bullet->GetPower());
 		}
 	}
 	return false;

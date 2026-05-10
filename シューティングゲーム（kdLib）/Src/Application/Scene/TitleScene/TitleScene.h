@@ -42,4 +42,6 @@ private:
 	Math::Matrix m_enterKeyMat;
 	float m_enterKeyAlpha;
 	float m_enterKeyDeltaAlpha;
+
+	void ExplodeFireworks();
 };

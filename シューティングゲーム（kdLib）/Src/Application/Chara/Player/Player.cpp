@@ -234,6 +234,9 @@ void Player::Action(float deltaTime)
 		//クリックしていないとき
 		if (!KEY.IsHeld('Z'))
 		{
+			std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
+			se->Stop();
+
 			if (!m_bullet)
 			{
 				//速射弾を発射
@@ -252,7 +255,7 @@ void Player::Action(float deltaTime)
 				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Shoot.wav");
 				if (!se->IsPlay())
 				{
-					se->SetVolume(0.00005f);
+					se->SetVolume(0.0005f);
 					se->Play(false);
 				}
 				//クールタイム
@@ -287,10 +290,6 @@ void Player::Action(float deltaTime)
 				m_bullet = nullptr;
 				m_chargeAnim = nullptr;
 				m_bChargeMaxFlg = false;
-
-				//効果音を止める
-				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
-				se->Stop();
 			}
 		}
 		//クリックしたとき
@@ -364,7 +363,7 @@ void Player::Action(float deltaTime)
 
 				//効果音発生
 				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
-				se->SetVolume(0.001f);
+				se->SetVolume(0.01f);
 				se->Play(false);
 			}
 		}

@@ -7,6 +7,18 @@
 //更新
 void FireworksManager::Update(float deltaTime)
 {
+	//花火が消されない場合、６秒経つごとに自動的に削除
+	m_timer += deltaTime;
+	if (m_timer >= 6)
+	{
+		m_timer = 0;
+		if (!m_list.empty())
+		{
+			PushPool((Type)m_list.front()->GetType(), m_list.front());
+			m_list.erase(m_list.begin());
+		}
+	}
+
 	//花火
 	for (int i = m_list.size() - 1; i >= 0; i--)
 	{
@@ -70,14 +82,10 @@ void FireworksManager::Init()
 	{
 		m_pool1.push_back(std::make_shared<Fireworks1>());
 		m_pool1.back()->Init();
-		m_pool2.push_back(std::make_shared<Fireworks2>());
-		m_pool2.back()->Init();
 		m_pool3.push_back(std::make_shared<Fireworks3>());
 		m_pool3.back()->Init();
 		m_pool4.push_back(std::make_shared<Fireworks4>());
 		m_pool4.back()->Init();
-		m_pool5.push_back(std::make_shared<Fireworks5>());
-		m_pool5.back()->Init();
 	}
 }
 
@@ -97,11 +105,6 @@ std::shared_ptr<BaseFireworks> FireworksManager::PopPool(Type type)
 		fireworks = m_pool1.back();
 		m_pool1.pop_back();
 		return fireworks;
-	case Type::Circle_Line:
-		if (m_pool2.empty())break;
-		fireworks = m_pool2.back();
-		m_pool2.pop_back();
-		return fireworks;
 	case Type::NewCircle:
 		if (m_pool3.empty())break;
 		fireworks = m_pool3.back();
@@ -112,11 +115,6 @@ std::shared_ptr<BaseFireworks> FireworksManager::PopPool(Type type)
 		fireworks = m_pool4.back();
 		m_pool4.pop_back();
 		return fireworks;
-	case Type::Trail:
-		if (m_pool5.empty())break;
-		fireworks = m_pool5.back();
-		m_pool5.pop_back();
-		return fireworks;
 	}
 
 	//オブジェクトプールが空だったら、新しく作成する
@@ -126,20 +124,12 @@ std::shared_ptr<BaseFireworks> FireworksManager::PopPool(Type type)
 		fireworks = std::make_shared<Fireworks1>();
 		fireworks->Init();
 		return fireworks;
-	case Type::Circle_Line:
-		fireworks = std::make_shared<Fireworks2>();
-		fireworks->Init();
-		return fireworks;
 	case Type::NewCircle:
 		fireworks = std::make_shared<Fireworks3>();
 		fireworks->Init();
 		return fireworks;
 	case Type::Petal:
 		fireworks = std::make_shared<Fireworks4>();
-		fireworks->Init();
-		return fireworks;
-	case Type::Trail:
-		fireworks = std::make_shared<Fireworks5>();
 		fireworks->Init();
 		return fireworks;
 	}
@@ -152,11 +142,6 @@ void FireworksManager::PushPool(Type type, std::shared_ptr<BaseFireworks> firewo
 		auto p = std::dynamic_pointer_cast<Fireworks1>(fireworks);
 		m_pool1.push_back(p);
 	}
-	else if (type == Type::Circle_Line)
-	{
-		auto p = std::dynamic_pointer_cast<Fireworks2>(fireworks);
-		m_pool2.push_back(p);
-	}
 	else if (type == Type::NewCircle)
 	{
 		auto p = std::dynamic_pointer_cast<Fireworks3>(fireworks);
@@ -166,10 +151,5 @@ void FireworksManager::PushPool(Type type, std::shared_ptr<BaseFireworks> firewo
 	{
 		auto p = std::dynamic_pointer_cast<Fireworks4>(fireworks);
 		m_pool4.push_back(p);
-	}
-	else if (type == Type::Trail)
-	{
-		auto p = std::dynamic_pointer_cast<Fireworks5>(fireworks);
-		m_pool5.push_back(p);
 	}
 }

@@ -52,7 +52,7 @@ public:
 
 	void SetActive(bool set) { m_bActive = set; }
 
-	void SetFireworksNum(int set) { m_fireworksNum = set; }
+	void AddFireworksNum(int add) { m_fireworksNum += add; }
 
 	Math::Vector2 GetPos() { return m_pos; }
 
@@ -86,5 +86,5 @@ protected:
 	float m_hitEffectTimer;						//ヒットエフェクト発生中のタイマー（０になったらエフェクトを切る）
 	const float m_hitEffectTime = 0.1f;			//ヒットエフェクトの時間
 
-	int m_fireworksNum = 10;					//倒したときに出現させる花火の数
+	int m_fireworksNum = 3;					//倒したときに出現させる花火の数
 };

@@ -3,6 +3,8 @@
 #include"../../../Bullet/BulletManager.h"
 #include"../EnemyManager.h"
 #include"../../../main.h"
+#include"../Boss/AttackArea/AttackArea.h"
+#include"../../../Fireworks/FireworksManager.h"
 
 //敵の行動パターン通りに動く
 
@@ -345,5 +347,94 @@ void Enemy8::PostInit(Math::Vector2 rotationPos, float rotationRadius, float del
 {
 }
 
+void Enemy9::Action(float deltaTime)
+{
+	if (m_explodeCnt > 0)
+	{
+		//プレイヤー方向に敵を複数（m_shotNum分）発射
+		if (m_shotCoolTimer <= 0)
+		{
+			if (m_shotNum <= 0)return;
 
+			float centerRadian, startRadian, offsetRadian;
 
+			//敵を撃つ中心角、最小角度、弾ごとの角度の差
+			centerRadian = atan2f(s_pPlayerPos->y - m_pos.y, s_pPlayerPos->x - m_pos.x);
+			startRadian = centerRadian - m_shotArcRadian / 2.0f;
+			if (m_shotNum > 1)	offsetRadian = m_shotArcRadian / (float)(m_shotNum - 1);
+			else				offsetRadian = 0;
+
+			float radian;
+
+			std::shared_ptr<Enemy9>enemy;
+			for (int i = 0; i < m_shotNum; i++)
+			{
+				radian = startRadian + offsetRadian * i;
+
+				//敵を発射する
+				enemy = std::make_shared<Enemy9>(m_pEnemyManager);
+				enemy->Init();
+				enemy->InitOriginal(m_explodeCnt - 1, m_increaseShotNum, m_shotNum + m_increaseShotNum, m_shotArcRadian);
+				enemy->Spawn(m_pos, m_radius, m_moveSpeed * 1.1f, DirectX::XMConvertToDegrees(radian), m_normalColor, m_hitColor, m_hp, m_bulletSpeed, m_shotCoolTime);
+				m_pEnemyManager->GetEnemyList().push_back(enemy);
+			}
+
+			m_bActive = false;
+		}
+	}
+}
+
+void Enemy9::InitOriginal(int explodeCnt, int increaseShotNum, int shotNum, float shotArcRadian)
+{
+	m_explodeCnt = explodeCnt;
+	m_increaseShotNum = increaseShotNum;
+	m_shotNum = shotNum;
+	m_shotArcRadian = shotArcRadian;
+}
+
+void Enemy10::Action(float deltaTime)
+{
+	m_timer = 0;
+
+	
+	if (m_move.y < -400)m_move.y = -400;
+	
+	if (m_pos.y - m_radius.y >= SCREEN_TOP)
+	{
+		if (m_pos.x < m_pAttackArea->GetPos().x)
+		{
+			m_pos.x = m_pAttackArea->GetPos().x;
+			m_move.x = 0;
+			m_move.y = -10;
+		}
+		m_pos.y = SCREEN_TOP + m_radius.y;
+	}
+	
+	//重力にしたがって落ちていく
+	if (m_move.y <= 0)
+	{
+		m_move.y -= 300 * deltaTime;
+		if (m_pAttackArea)
+		{
+			if (m_pos.y + m_move.y * deltaTime < m_pAttackArea->GetPos().y)
+			{
+				m_pAttackArea->SetHitFlg(true, 0.5f);	//フラグと当たり判定の時間
+				m_bActive = false;
+
+				//花火を発生させる
+				Math::Vector2 pos;
+				Math::Color color;
+				float scale;
+				float seVolume = 0.05f;
+				color = { randRange(0,1),randRange(0,1),randRange(0,1),randRange(0.7,1.0f) };
+				for (int i = 0; i < 5; i++)
+				{
+					pos = m_pos;
+					pos += {randRange(-50, 50), randRange(-50, 50)};
+					scale = randRange(0.3f, 0.6f);
+					m_pFireworksManager->Explode(FireworksManager::GetRandomType_Quick(), pos, scale, color, seVolume);
+				}
+			}
+		}
+	}
+}

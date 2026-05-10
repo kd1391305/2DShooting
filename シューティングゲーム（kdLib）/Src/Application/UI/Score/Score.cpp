@@ -4,6 +4,11 @@
 //デストラクタ
 Score::~Score()
 {
+	while (!m_waitScore.empty())
+	{
+		m_score += m_waitScore.front();
+		m_waitScore.pop();
+	}
 	//ハイスコアを書き換える
 	if (m_score > m_highScore)
 	{
@@ -37,8 +42,8 @@ void Score::Draw()
 	D2D1_COLOR_F tempColor = DWriteCustom::Instance().GetColor();
 	DWriteCustom::Instance().SetShadow({ -1,-1 }, { 0.0f, 0.7f, 0.7f, 0.7f });
 
-	DWriteCustom::Instance().Draw("      Score :", { -440,350 });
-	DWriteCustom::Instance().Draw("HighScore :", { -440,320 });
+	DWriteCustom::Instance().Draw("      得点 :", { -440,350 });
+	DWriteCustom::Instance().Draw("最高得点 :", { -440,320 });
 	DWriteCustom::Instance().SetShadow({}, {});
 	
 
@@ -121,7 +126,7 @@ void Score::LoadHighScore()
 	FILE* fp;
 	if ((fp = fopen("Data/HighScore.csv", "r")) != nullptr)
 	{
-		//欲しいレベルのハイスコアを読み込む
+		//ハイスコアを読み込む
 		fscanf_s(fp, "%ld", &m_highScore);
 		fclose(fp);
 	}

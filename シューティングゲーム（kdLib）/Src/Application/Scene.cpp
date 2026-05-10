@@ -33,7 +33,7 @@ void Scene::Init()
 
 	/*std::shared_ptr<Back>back = std::make_shared<Back>();
 	back->Init();
-	SceneManager::Instance().ChangeState(std::make_shared< GameClearScene>(back));*/
+	SceneManager::Instance().ChangeState(std::make_shared< GameClearScene>(back,10,500,30));*/
 
 	/*std::shared_ptr<Back>back = std::make_shared<Back>();
 	back->Init();
@@ -51,7 +51,7 @@ void Scene::Release()
 
 void Scene::ImGuiUpdate()
 {
-	//return;
+	return;
 
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_Once);

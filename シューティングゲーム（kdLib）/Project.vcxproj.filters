@@ -157,6 +157,9 @@
     <Filter Include="Src\Application\Mouse">
       <UniqueIdentifier>{e101341c-1c8d-42d1-9d30-8ed1b67374ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Chara\Enemy\Boss\AttackArea">
+      <UniqueIdentifier>{61a89a24-5682-489d-a25a-1f464aced0d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -366,6 +369,12 @@
     <ClInclude Include="Src\Application\Mouse\Mouse.h">
       <Filter>Src\Application\Mouse</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\Boss\AttackArea\AttackArea.h">
+      <Filter>Src\Application\Chara\Enemy\Boss\AttackArea</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Chara\Enemy\Boss\AttackArea\AttackAreaManager.h">
+      <Filter>Src\Application\Chara\Enemy\Boss\AttackArea</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -529,6 +538,12 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Mouse\Mouse.cpp">
       <Filter>Src\Application\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\Boss\AttackArea\AttackArea.cpp">
+      <Filter>Src\Application\Chara\Enemy\Boss\AttackArea</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Chara\Enemy\Boss\AttackArea\AttackAreaManager.cpp">
+      <Filter>Src\Application\Chara\Enemy\Boss\AttackArea</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

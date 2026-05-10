@@ -169,6 +169,8 @@
     <ClInclude Include="Src\Application\Bullet\PlayerBullet\PlayerBullet.h" />
     <ClInclude Include="Src\Application\Chara\BaseChara\BaseChara.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.h" />
+    <ClInclude Include="Src\Application\Chara\Enemy\Boss\AttackArea\AttackArea.h" />
+    <ClInclude Include="Src\Application\Chara\Enemy\Boss\AttackArea\AttackAreaManager.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\Boss\Boss.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\Enemies\Enemies.h" />
     <ClInclude Include="Src\Application\Chara\Enemy\EnemyManager.h" />
@@ -231,6 +233,8 @@
     <ClCompile Include="Src\Application\Bullet\EnemyBullet\EnemyBullet.cpp" />
     <ClCompile Include="Src\Application\Bullet\PlayerBullet\PlayerBullet.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\BaseEnemy\BaseEnemy.cpp" />
+    <ClCompile Include="Src\Application\Chara\Enemy\Boss\AttackArea\AttackArea.cpp" />
+    <ClCompile Include="Src\Application\Chara\Enemy\Boss\AttackArea\AttackAreaManager.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\Boss\Boss.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\Enemies\Enemies.cpp" />
     <ClCompile Include="Src\Application\Chara\Enemy\EnemyManager.cpp" />

@@ -51,7 +51,7 @@ public:
 	//フォントを変更する
 	void ChangeFont(FontName name)
 	{
-		if (name >= 0 || name < FontName::Kind)
+		if (name >= 0 && name < FontName::Kind)
 		{
 			m_data.font = m_pWrite->GetFontName(name);
 			m_pWrite->SetFont(m_data);
@@ -86,12 +86,6 @@ public:
 
 private:
 
-	//解放
-	void Release()
-	{
-		delete m_pWrite;
-		m_pWrite = nullptr;
-	}
 
 	DirectWriteCustomFont* m_pWrite;					//描画用のクラス
 	FontData m_data;									//フォントデータ用の構造体

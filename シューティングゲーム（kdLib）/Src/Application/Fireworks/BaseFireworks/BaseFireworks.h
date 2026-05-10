@@ -28,10 +28,10 @@ struct Particle
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.98f;
+			m_color *= 0.96f;
 		}
 		//生存時間が終了したか？
-		return m_life > 0 || m_color.A() > 0.1f;
+		return m_life > 0 || m_color.A() > 0.01f;
 	}
 };
 
@@ -62,7 +62,7 @@ struct Particle2
 		m_pos += m_move * deltaTime;
 
 		//空気抵抗
-		m_move *= 0.98f;
+		m_move *= 0.95f;
 
 		//行列作成
 		Math::Matrix scale = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
@@ -73,10 +73,10 @@ struct Particle2
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.98f;
+			m_color *= 0.96f;
 		}
 		//生存時間が終了したか？
-		return m_life > 0 || m_color.A() > 0.1f;
+		return m_life > 0 || m_color.A() > 0.01f;
 	}
 };
 
@@ -107,10 +107,10 @@ struct Particle3
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.98f;
+			m_color *= 0.96f;
 		}
 		//生存時間が終了したか？
-		return m_life > 0 || m_color.A() > 0.1f;
+		return m_life > 0 || m_color.A() > 0.01f;
 	}
 
 	void Draw(std::shared_ptr<KdTexture>tex)
@@ -142,6 +142,22 @@ struct Trail
 	}
 };
 
+struct TrailBuffer
+{
+	TrailBuffer(std::shared_ptr<KdTexture>a_tex,Math::Vector2&a_pos,float a_scale,Math::Color&a_color)
+	{
+		tex = a_tex;
+		pos = a_pos;
+		scale = a_scale;
+		color = a_color;
+	}
+
+	Math::Vector2 pos;
+	std::shared_ptr<KdTexture>tex;
+	float scale;
+	Math::Color color;
+};
+
 struct Particle4
 {
 	Math::Vector2 m_pos;
@@ -166,7 +182,7 @@ struct Particle4
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.98f;
+			m_color *= 0.96f;
 		}
 		//生存時間が終了したか？
 		return m_life > 0 || m_color.A() > 0.01f;
@@ -203,10 +219,8 @@ public:
 	enum Type
 	{
 		Circle,
-		Circle_Line,
 		NewCircle,
 		Petal,
-		Trail,
 	};
 
 	BaseFireworks() {}
@@ -278,7 +292,7 @@ protected:
 	const float m_particleGravity = 20;			//パーティクルの重力
 	Type m_type;
 
-	bool m_nowExplode = false;		//今弾けたか？
+	float m_lightTimer = 0;		//弾けたときに光る用のタイマー
 };
 
 

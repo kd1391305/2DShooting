@@ -55,6 +55,11 @@ private:
 	void Spawn_Line_Upper_Lower();
 	void Spawn_Random1();
 	void Spawn_Random2();
+	
+
+	//このスポーン関数は各確率のときに呼び出す
+	void Spawn_Row2(int enemyNum, Math::Vector2 pos,float moveSpeed,float moveDeg);
+	void Spawn_Row3(int enemyNum, Math::Vector2 pos,float moveSpeed,float moveDeg);
 
 
 	//敵がスポーンするタイプ

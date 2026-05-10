@@ -52,9 +52,9 @@ void BaseEnemy::Update(float deltaTime)
 	//座標更新
 	m_pos += m_move * deltaTime;
 	
-	//(スポーンから8秒経っていて、敵が画面外にいたら、敵を消す)
+	//(スポーンから10秒経っていて、敵が画面外にいたら、敵を消す)
 	//何らかの不具合で敵がうまく発生しなかった時のためにも必要
-	if (m_timer >= 5)
+	if (m_timer >= 10)
 	{
 		float left = m_pos.x - m_radius.x;
 		float right = m_pos.x + m_radius.x;
@@ -132,7 +132,7 @@ void BaseEnemy::Spawn(Math::Vector2& pos, Math::Vector2& radius, float moveSpeed
 		float bottom = m_pos.y - m_radius.y;
 		if (left >SCREEN_LEFT && right < SCREEN_RIGHT && top < SCREEN_TOP && bottom > SCREEN_BOTTOM )
 		{
-			m_timer = 5;
+			m_timer = 10;
 		}
 	}
 }

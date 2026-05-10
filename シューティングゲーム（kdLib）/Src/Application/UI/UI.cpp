@@ -84,7 +84,7 @@ void UI::Draw()
 	m_score->Draw();
 
 	DWriteCustom::Instance().SetShadow({ -1,-1 }, { 0.0f, 0.7f, 0.7f, 0.7f });
-	DWriteCustom::Instance().Draw("Life", { -575, 350 },20);
+	DWriteCustom::Instance().Draw("体力", { -575, 345 },15);
 	DWriteCustom::Instance().SetShadow({}, {});
 	//ゲージの描画
 	m_playerGauge->Draw();
@@ -104,6 +104,6 @@ void UI::CreateBossGauge(float* hpMax, float* hp)
 		Math::Vector2{ 400,6 },									//ゲージの半径
 		hpMax,										//MaxHPのアドレス
 		hp,											//HPのアドレス
-		1);											//ゲージが減るスピード
+		2);											//ゲージが減るスピード
 	m_bossGauge->SetColor(Math::Color{ 0.5f,0,0.5f,0.7f });
 }

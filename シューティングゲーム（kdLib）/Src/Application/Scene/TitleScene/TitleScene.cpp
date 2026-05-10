@@ -43,7 +43,7 @@ void TitleScene::Init()
 		m_back->Init();
 	}
 
-	m_shotCoolTimer = 5;
+	m_shotCoolTimer = 2;
 
 	//BGMを流す
 	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");
@@ -81,46 +81,31 @@ void TitleScene::Update()
 	}
 	else
 	{
-
-		//花火を打ち上げるランダムで
 		m_shotCoolTimer -= deltaTime;
-		if (m_shotCoolTimer <= 0)
+		//マウスクリックで花火を出現
+		if (KEY.IsDown(VK_LBUTTON))
 		{
+			//花火を打ち上げる色、大きさをランダムで
+			if (m_shotCoolTimer <= 0)
 			{
-				int shotNum = 11;
-				int noise = randRange(-4, 4);
-				shotNum += noise;
-				for (int i = 0; i < shotNum; i++)
+				Math::Vector2 pos = MOUSE.GetPosf() / m_back->GetAllScale();
+				float afterScale = randRange(0.7f, 1.1f);
+				Math::Color color = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
+				Math::Color color2 = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
+				FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
+				float seVolume = 0.01f;
+				for (int i = 0; i < 3; i++)
 				{
-					//タイトル名と被らないようにタイトルの横にする
-					float startX = randRange(SCREEN_WIDTH / 4.0f, SCREEN_RIGHT / 0.8f);
-					if (i % 2)startX *= -1;
-
-					Math::Vector2 startPos = { startX,SCREEN_BOTTOM - 30 - randRange(0,200) };
-					Math::Vector2 startMove = { 0,randRange(270,370) };
-					float beforeScale = randRange(0.3f, 0.5f);
-					float afterScale = randRange(0.7f, 1.1f);
-					Math::Color color = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
-					Math::Color color2 = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
-					FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
-					for (int i = 0; i < 3; i++)
-					{
-						m_back->GetFireworks()->Shoot(type,
-							startPos, startMove, beforeScale, afterScale, color);
-					}
-					//二重花火にする（花火の中にちいさな花火を追加）
-					m_back->GetFireworks()->Shoot(type,
-						startPos, startMove, beforeScale, afterScale / 1.5f, color);
+					m_back->GetFireworks()->Explode(type,
+						pos, afterScale, color, seVolume);
 				}
-			}
-			//クールタイムを設ける
-			
-			m_shotCoolTimer = randRange(10, 20);
+				//二重花火にする（花火の中にちいさな花火を追加）
+				m_back->GetFireworks()->Explode(type,
+					pos, afterScale / 1.5f, color, seVolume);
 
-			//タイトル専用の花火効果音を流す
-			std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Fireworks_Title.wav");
-			se->SetVolume(0.05f);
-			se->Play(false);
+				//クールタイムを設ける
+				m_shotCoolTimer = randRange(0.1, 0.2);
+			}
 		}
 
 		//スタートボタンの更新
@@ -146,6 +131,25 @@ void TitleScene::Update()
 				//シーン切り替えの準備をする
 				m_bChangeScene = true;
 				m_changeSceneWaitTimer = m_changeSceneWait;
+
+
+				for (int i = 0; i < 15; i++)
+				{
+					Math::Vector2 pos = Math::Vector2{ randRange(SCREEN_LEFT,SCREEN_RIGHT),randRange(SCREEN_BOTTOM,SCREEN_TOP) };
+					float afterScale = randRange(0.4f, 0.7f);
+					Math::Color color = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
+					Math::Color color2 = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
+					FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
+					float seVolume = 0.01f;
+					for (int j = 0; j < 2; j++)
+					{
+						m_back->GetFireworks()->Explode(type,
+							pos, afterScale, color, seVolume);
+					}
+					//二重花火にする（花火の中にちいさな花火を追加）
+					m_back->GetFireworks()->Explode(type,
+						pos, afterScale / 1.5f, color, seVolume);
+				}
 			}
 		}
 		else
@@ -182,6 +186,11 @@ void TitleScene::Draw()
 }
 
 void TitleScene::Release()
+{
+	
+}
+
+void TitleScene::ExplodeFireworks()
 {
 	
 }

@@ -36,7 +36,7 @@ void GameClearScene::Init()
 	bgm->SetVolume(0.001f);
 	bgm->Play(true);
 
-	m_shotCoolTimer = 0;
+	m_shotCoolTimer = 8;
 }
 
 void GameClearScene::Update()
@@ -52,6 +52,8 @@ void GameClearScene::Update()
 			(KEY.IsDown(VK_RETURN)))
 		{
 			SceneManager::Instance().ChangeState(std::make_shared<Game>(m_back));
+			std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");
+			bgm->Stop();
 		}
 	}
 
@@ -62,6 +64,8 @@ void GameClearScene::Update()
 			(KEY.IsDown(VK_RETURN)))
 		{
 			SceneManager::Instance().ChangeState(std::make_shared<TitleScene>(m_back));
+			std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");
+			bgm->Stop();
 		}
 	}
 
@@ -82,7 +86,7 @@ void GameClearScene::Update()
 	if (m_shotCoolTimer <= 0)
 	{
 		{
-			int shotNum = 12;
+			int shotNum = 8;
 			int noise = randRange(-4, 0);
 			shotNum += noise;
 			FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
@@ -95,11 +99,11 @@ void GameClearScene::Update()
 				Math::Vector2 startPos = { startX,SCREEN_BOTTOM - 30 - randRange(0,200) };
 				Math::Vector2 startMove = { 0,randRange(270,370) };
 				float beforeScale = randRange(0.3f, 0.5f);
-				float afterScale = randRange(0.7f, 1.1f);
+				float afterScale = randRange(0.4f, 0.7f);
 				Math::Color color = { randRange(0,1),randRange(0.0f,1),randRange(0.0f,1),randRange(0.5f,1) };
 				Math::Color color2 = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
 			
-				for (int i = 0; i < 5; i++)
+				for (int i = 0; i < 2; i++)
 				{
 					m_back->GetFireworks()->Shoot(type,
 						startPos, startMove, beforeScale, afterScale, color);
@@ -113,7 +117,7 @@ void GameClearScene::Update()
 		}
 		//クールタイムを設ける
 		
-		m_shotCoolTimer = randRange(9, 16);
+		m_shotCoolTimer = randRange(10, 16);
 
 		//タイトル専用の花火効果音を流す
 		std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Fireworks_Title.wav");
@@ -127,15 +131,60 @@ void GameClearScene::Draw()
 	m_back->Draw();
 	{
 		Math::Matrix scaleMat = Math::Matrix::CreateScale(1.2f, 1.2f, 0);
-		Math::Matrix transMat = Math::Matrix::CreateTranslation(0, 150, 0);
+		Math::Matrix transMat = Math::Matrix::CreateTranslation(0, 200, 0);
 		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
 		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/GameClear/GameClear.png"));
 	}
 
+	DWriteCustom::Instance().SetShadow({ -1,-1 }, { 0,1,1,1 });
+	//スコアを描画
+	{
+		DWriteCustom::Instance().SetFontSize(40);
+		DWriteCustom::Instance().Draw("得点 :", { -160,80 });
+		DWriteCustom::Instance().Draw("最高得点 :", { -240,-20 });
+		DWriteCustom::Instance().Draw("総打ち上げ数 :", { -320,-120 });
+		DWriteCustom::Instance().Draw("点", { 320,80 });
+		DWriteCustom::Instance().Draw("点", { 320,-20 });
+		DWriteCustom::Instance().Draw("回", { 320,-120 });
+	}
+	{
+		DWriteCustom::Instance().SetFontSize(60);
+		DrawScore(m_score, { -30,100 });
+		DrawScore(m_highScore,{ -30,0 });
+		DrawScore(m_explodeNum, { -30,-100 });
+	}
+
+	DWriteCustom::Instance().SetShadow({},{});
 	m_titleButton->Draw();
 	DWriteCustom::Instance().Draw("タイトルへ", { -300 ,- 252 },40);
 	m_gameButton->Draw();
 	DWriteCustom::Instance().Draw("もう一度", { 110, -252 },40);
+}
+
+void GameClearScene::DrawScore(int score, Math::Vector2 pos)
+{
+	bool drawFlg = false;
+	char scoreStr[10];
+	sprintf_s(scoreStr, sizeof(scoreStr), "%.8ld", score);
+	float scorePosY = -160;
+	//一桁ずつ描画
+	for (int i = 0; i < 8; i++)
+	{
+		if (!drawFlg && scoreStr[i] == '0')continue;
+		else drawFlg = true;
+
+		std::string digit;
+		digit = scoreStr[i];
+		if (scoreStr[i] == '1')
+		{
+			//+4右にずらす
+			DWriteCustom::Instance().Draw(digit, { pos.x + i * 40.0f + 5,pos.y });
+		}
+		else
+		{
+			DWriteCustom::Instance().Draw(digit, { pos.x + i * 40.0f,	pos.y });
+		}
+	}
 }
 
 void GameClearScene::Release()

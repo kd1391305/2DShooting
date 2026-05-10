@@ -16,10 +16,8 @@ public:
 	enum Type
 	{
 		Circle,
-		Circle_Line,
 		NewCircle,
 		Petal,
-		Trail,
 		Kind
 	};
 
@@ -56,6 +54,8 @@ public:
 			return Type::NewCircle;
 		case 2:
 			return Type::Petal;
+		default:
+			return Type::Petal;
 		}
 	}
 
@@ -77,10 +77,10 @@ private:
 
 	//オブジェクトプールリスト
 	std::vector<std::shared_ptr<Fireworks1>> m_pool1;
-	std::vector<std::shared_ptr<Fireworks2>> m_pool2;
 	std::vector<std::shared_ptr<Fireworks3>> m_pool3;
 	std::vector<std::shared_ptr<Fireworks4>> m_pool4;
-	std::vector<std::shared_ptr<Fireworks5>> m_pool5;
 
-	const int m_poolSize = 40;
+	const int m_poolSize = 30;
+
+	float m_timer = 0;
 };

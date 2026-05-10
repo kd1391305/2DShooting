@@ -11,6 +11,7 @@ class PlayerBullet;
 class Boss;
 class FireworksManager;
 class HitEffectManager;
+class AttackAreaManager;
 
 //プレイヤー　と　敵
 bool CollisionPlayer_Enemy(std::shared_ptr<Player> player, std::vector<std::shared_ptr<BaseEnemy>>& enemyList);
@@ -21,6 +22,9 @@ bool CollisionPlayer_EBullet(std::shared_ptr<Player> player, std::vector<std::sh
 //プレイヤー　と　ボス
 bool CollisionPlayer_Boss(std::shared_ptr<Player>player, std::shared_ptr<Boss>boss);
 
+//プレイヤー　と　攻撃範囲
+bool CollisionPlayer_AttackArea(std::shared_ptr<Player>player, std::shared_ptr<AttackAreaManager>attackAreaManager);
+
 //弾　と　弾（いらなそう）
 //bool Collision(Bullets* b1,Bullets*b2);
 
@@ -28,7 +32,8 @@ bool CollisionPlayer_Boss(std::shared_ptr<Player>player, std::shared_ptr<Boss>bo
 bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::vector<std::shared_ptr<BaseEnemy>>& enemyList,std::shared_ptr<FireworksManager> fireworksManager,std::shared_ptr<HitEffectManager>hitEffectManager,std::shared_ptr<Score> score);
 
 //プレイヤーの弾　と　ボス
-bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss>boss, std::shared_ptr<FireworksManager> fireworksManager,std::shared_ptr<HitEffectManager>hitEffectManager);
+bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& playerBullet, std::shared_ptr<Boss>boss, std::shared_ptr<FireworksManager> fireworksManager,std::shared_ptr<HitEffectManager>hitEffectManager,std::shared_ptr<Score> score);
+
 
 
 //円形当たり判定

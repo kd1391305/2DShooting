@@ -77,6 +77,8 @@ public:
 
 	std::shared_ptr<FireworksManager>GetFireworks() { return m_fireworks; }
 
+	float GetAllScale() { return m_allScale; }
+
 private:
 
 	void Respawn(LightParticle* light);

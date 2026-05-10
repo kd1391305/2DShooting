@@ -133,7 +133,7 @@ void Back::Draw()
 		D3D.SetBlendState(BlendMode::Add);
 		SHADER.m_spriteShader.DrawTex_Src(tex, Math::Color{1.0f,1.0f,1.0f,1.0f});
 		D3D.SetBlendState(BlendMode::Alpha);
-		SHADER.m_spriteShader.DrawTex_Src(tex, Math::Color{ 0.6f,0.6f,0.6f,0.8f });
+		SHADER.m_spriteShader.DrawTex_Src(tex, Math::Color{ 0.4f,0.4f,0.4f,0.9f });
 	}
 
 	//ƒtƒFƒ“ƒX‚Ì•`‰æ
