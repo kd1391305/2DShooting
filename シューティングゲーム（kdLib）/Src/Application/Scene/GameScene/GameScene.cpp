@@ -227,6 +227,12 @@ void Game::GameClear()
 
 }
 
+//ボスシーンへ
+void Game::StartBossScene()
+{
+	m_enemyManager->Spawn_Boss();
+}
+
 //解放
 void Game::Release()
 {

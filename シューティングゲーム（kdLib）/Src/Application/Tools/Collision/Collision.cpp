@@ -122,11 +122,6 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 					//当たった時の処理
 					e->OnHit();
 
-					//スコアを加算する
-					score->Add(100);
-
-					
-
 					//弾の力が０なら弾を消す　or　敵が生き残っていても消す
 					if (p->GetPower() <= 0 || e->GetHp() > 0)
 					{
@@ -144,6 +139,9 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 					//敵が倒れたら、花火を弾けさせる
 					if (!e->IsActive())
 					{
+						//スコアを加算する
+						score->Add(100 * e->GetFireworksNum());
+
 						//総打ち上げ数をカウント
 						score->AddExplodeNum(e->GetFireworksNum());
 
@@ -167,23 +165,20 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 							{
 								float r, g, b, a;
 								//5つ以上の花火を弾けさせる敵は、花火の色や大きさ、出現場所を少しランダムに変更する
-								for (int i = 5; i < e->GetFireworksNum(); i++)
-								{
-									//花火を弾けさせる
-									shotPos = enemyPos;
-									shotPos.x += randRange(-100, 100);
-									shotPos.y += randRange(-100, 100);
+								//花火を弾けさせる
+								shotPos = enemyPos;
+								shotPos.x += randRange(-100, 100);
+								shotPos.y += randRange(-100, 100);
 
-									float afterScale = { randRange(0.3f,0.5f) };
+								float afterScale = { randRange(0.3f,0.5f) };
 
-									r = randRange(0.0f, 0.9f);
-									g = randRange(0.0f, 0.9f);
-									b = randRange(0.0f, 0.9f);
-									a = randRange(0.6f, 0.8f);
+								r = randRange(0.0f, 0.9f);
+								g = randRange(0.0f, 0.9f);
+								b = randRange(0.0f, 0.9f);
+								a = randRange(0.6f, 0.8f);
 
-									int type = fireworksManager->GetRandomType_Quick();
-									fireworksManager->Explode((FireworksManager::Type)type, shotPos, afterScale, Math::Color{ r,g,b,a }, seVolume);
-								}
+								int type = fireworksManager->GetRandomType_Quick();
+								fireworksManager->Explode((FireworksManager::Type)type, shotPos, afterScale, Math::Color{ r,g,b,a }, seVolume);
 							}
 						}
 						break;

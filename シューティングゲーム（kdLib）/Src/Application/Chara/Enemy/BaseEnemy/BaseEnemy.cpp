@@ -16,7 +16,7 @@ void BaseEnemy::Init()
 	m_radian = 0;					//敵画像の回転角度
 
 	m_animCnt = 0;					//現在のアニメーション
-	m_animCntMax = 4;				//アニメーションのコマ数
+	m_animCntMax = 2;				//アニメーションのコマ数
 	m_animSpeed = 5;				//アニメーションのスピード
 
 	m_bActive = true;				//活性状態
@@ -75,12 +75,12 @@ void BaseEnemy::Update(float deltaTime)
 }
 
 //敵を出現させる
-void BaseEnemy::Spawn(Math::Vector2& pos, Math::Vector2& radius, float moveSpeed, float moveDeg, Math::Color& normalColor, Math::Color& hitColor, float hp, float bulletSpeed, float shotCoolTime, const float shotCoolTimeNoiseMax,const float spawnShotCoolTime)
+void BaseEnemy::Spawn(Math::Vector2& pos, Math::Vector2& radius, float moveSpeed, float moveDeg, Math::Color& normalColor, Math::Color& hitColor, float hp, float bulletSpeed, float shotCoolTime, const float shotCoolTimeNoiseMax, const float spawnShotCoolTime)
 {
 	//座標
 	m_pos = pos;
-	
-	
+
+
 	//移動量
 	m_moveSpeed = moveSpeed;
 	{
@@ -98,9 +98,6 @@ void BaseEnemy::Spawn(Math::Vector2& pos, Math::Vector2& radius, float moveSpeed
 		m_scale.x = radius.x / texRadiusX;
 		m_scale.y = radius.y / texRadiusY;
 	}
-
-	//敵の向き
-	if (m_move.x > 0)m_scale.x *= -1;
 
 	//行列作成
 	Math::Matrix scaleMat, rotationMat, transMat;
@@ -130,7 +127,7 @@ void BaseEnemy::Spawn(Math::Vector2& pos, Math::Vector2& radius, float moveSpeed
 		float right = m_pos.x + m_radius.x;
 		float top = m_pos.y + m_radius.y;
 		float bottom = m_pos.y - m_radius.y;
-		if (left >SCREEN_LEFT && right < SCREEN_RIGHT && top < SCREEN_TOP && bottom > SCREEN_BOTTOM )
+		if (left > SCREEN_LEFT && right < SCREEN_RIGHT && top < SCREEN_TOP && bottom > SCREEN_BOTTOM)
 		{
 			m_timer = 10;
 		}
@@ -142,7 +139,7 @@ void BaseEnemy::Draw()
 {
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	char path[50];
-	sprintf_s(path, sizeof(path), "Texture/Enemy/Enemy%d.png", (int)m_animCnt);
+	sprintf_s(path, sizeof(path), "Texture/Enemy/Enemy/Enemy%d.png", (int)m_animCnt);
 	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get(path), m_color);
 }
 

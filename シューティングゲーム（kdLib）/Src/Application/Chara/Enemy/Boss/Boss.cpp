@@ -204,49 +204,7 @@ void Boss::Action1()
 		}
 	}
 
-	//敵を落とす
-	if (m_fallEnemyCoolTimer <= 0)
-	{
-		//落とす敵は五体
-		//プレイヤーを中心に半径200メートル以内に落とす
-		//落とす範囲
-		float areaRadius = 200;
-		float offsetY = 300;		//300上の位置から落とす(もし画面内スタートだったら、画面外からスタートさせる)
-		Math::Vector2 pos;
-		Math::Vector2 enemyRadius = { 30,30 };
-		std::shared_ptr<Enemy10>enemy;
-		std::shared_ptr<AttackArea>area;
-		Math::Color enemyColor = { 1,1,1,1 };
-		float startDeg = 135;		//左上向きに発射
-		Math::Vector2 spawnPos = { m_pos.x - m_radius.x / 2.0f,m_pos.y + m_radius.y / 2.0f };
-
-		//攻撃範囲の発生
-		pos = { randRange(s_pPlayerPos->x - areaRadius, s_pPlayerPos->x + areaRadius), randRange(s_pPlayerPos->y - areaRadius, s_pPlayerPos->y + areaRadius) };
-		area = m_pGame->GetAttackAreaManager()->Emit(pos, enemyRadius * 2);
-
-		//敵を落とす
-		enemy = std::make_shared<Enemy10>();
-		enemy->Init();
-		enemy->InitOriginal(area, m_pGame->GetBack()->GetFireworks());
-		enemy->Spawn(spawnPos, enemyRadius, 400, startDeg, enemyColor, enemyColor, 9999, NULL, NULL);
-		m_pGame->GetEnemyManager()->GetEnemyList().push_back(enemy);
-
-		std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Throw.wav",SoundCache::SoundState::NotPlaying);
-		se->SetVolume(0.1f);
-		se->Play(false);
-
-		//クールタイム
-		if (m_fallEnemyCnt > 3)
-		{
-			m_fallEnemyCoolTimer = randRange(5, 8);
-			m_fallEnemyCnt = 0;
-		}
-		else
-		{
-			m_fallEnemyCoolTimer = 0.3f;
-			m_fallEnemyCnt++;
-		}
-	}
+	
 	
 	//if (m_circleShotCoolTimer <= 0)
 	//{
@@ -281,23 +239,49 @@ void Boss::Action1()
 
 void Boss::Action2()
 {
-	//通常弾はプレイヤーに向けて発射
-	if (m_shotCoolTimer <= 0)
+	
+	//敵を落とす
+	if (m_fallEnemyCoolTimer <= 0)
 	{
-		std::shared_ptr<Enemy9>enemy;
-		enemy = std::make_shared<Enemy9>(m_pGame->GetEnemyManager().get());
-		enemy->Init();
+		//落とす敵は五体
+		//プレイヤーを中心に半径200メートル以内に落とす
+		//落とす範囲
+		float areaRadius = 200;
+		float offsetY = 300;		//300上の位置から落とす(もし画面内スタートだったら、画面外からスタートさせる)
+		Math::Vector2 pos;
+		Math::Vector2 enemyRadius = { 30,30 };
+		std::shared_ptr<Enemy10>enemy;
+		std::shared_ptr<AttackArea>area;
+		Math::Color enemyColor = { 1,1,1,1 };
+		float startDeg = 135;		//左上向きに発射
+		Math::Vector2 spawnPos = { m_pos.x - m_radius.x / 2.0f,m_pos.y + m_radius.y / 2.0f };
 
-		float explodeCnt = 2;
-		float increaseShotNum = 2;
-		float shotNum = 4;
-		float shotArcRadian = DirectX::XMConvertToRadians(150);
-		Math::Vector2 shotPos = { m_pos.x - m_radius.x,m_pos.y };
-		enemy->InitOriginal(explodeCnt, increaseShotNum, shotNum, shotArcRadian);
-		enemy->Spawn(shotPos, Math::Vector2{ 32,32 }, 300, 135, Math::Color{ 1,1,1,1 }, Math::Color{ 1,0.8,0.8,1 }, 999, 220, 0.5f, 0, 0);
+		//攻撃範囲の発生
+		pos = { randRange(s_pPlayerPos->x - areaRadius, s_pPlayerPos->x + areaRadius), randRange(s_pPlayerPos->y - areaRadius, s_pPlayerPos->y + areaRadius) };
+		area = m_pGame->GetAttackAreaManager()->Emit(pos, enemyRadius * 2);
+
+		//敵を落とす
+		enemy = std::make_shared<Enemy10>();
+		enemy->Init();
+		enemy->InitOriginal(area, m_pGame->GetBack()->GetFireworks());
+		enemy->Spawn(spawnPos, enemyRadius, 400, startDeg, enemyColor, enemyColor, 9999, NULL, NULL);
 		m_pGame->GetEnemyManager()->GetEnemyList().push_back(enemy);
 
-		m_shotCoolTimer = 5;
+		std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Throw.wav", SoundCache::SoundState::NotPlaying);
+		se->SetVolume(0.1f);
+		se->Play(false);
+
+		//クールタイム
+		if (m_fallEnemyCnt > 3)
+		{
+			m_fallEnemyCoolTimer = randRange(2, 4);
+			m_fallEnemyCnt = 0;
+		}
+		else
+		{
+			m_fallEnemyCoolTimer = 0.3f;
+			m_fallEnemyCnt++;
+		}
 	}
 }
 
@@ -325,10 +309,29 @@ void Boss::Action3()
 		}
 	}
 
+	//通常弾はプレイヤーに向けて発射
+	if (m_shotCoolTimer <= 0)
+	{
+		std::shared_ptr<Enemy9>enemy;
+		enemy = std::make_shared<Enemy9>(m_pGame->GetEnemyManager().get());
+		enemy->Init();
+
+		float explodeCnt = 2;
+		float increaseShotNum = 2;
+		float shotNum = 4;
+		float shotArcRadian = DirectX::XMConvertToRadians(150);
+		Math::Vector2 shotPos = { m_pos.x - m_radius.x,m_pos.y };
+		enemy->InitOriginal(explodeCnt, increaseShotNum, shotNum, shotArcRadian);
+		enemy->Spawn(shotPos, Math::Vector2{ 32,32 }, 300, 135, Math::Color{ 1,1,1,1 }, Math::Color{ 1,0.8,0.8,1 }, 10, 220, 0.5f, 0, 0);
+		m_pGame->GetEnemyManager()->GetEnemyList().push_back(enemy);
+
+		m_shotCoolTimer = 5;
+	}
+
 	if (m_circleShotCoolTimer <= 0)
 	{
-		//弾を30発出す
-		int bulletNum = 30;
+		//弾を20発出す
+		int bulletNum = 20;
 		float bulletSpeed = 250;
 		Math::Vector2 vec;
 		//一発目はプレイヤー目掛けて撃つ
@@ -367,13 +370,13 @@ void Boss::Action4()
 		Math::Vector2 pos = { m_pos.x - m_radius.x, m_pos.y };
 		Math::Vector2 move;
 		float radian = atan2f(playerPos.y - pos.y, playerPos.x - pos.x);
-		move.x = cosf(radian) * m_bulletSpeed;
-		move.y = sinf(radian) * m_bulletSpeed;
+		move.x = cosf(radian) * m_bulletSpeed * 1.5f;
+		move.y = sinf(radian) * m_bulletSpeed * 1.5f;
 		m_pGame->GetBulletManager()->Shoot(pos, move);
 		m_shotCnt++;
-		if (m_shotCnt >= 6)
+		if (m_shotCnt >= 3)
 		{
-			m_shotCoolTimer = m_shotCoolTime * 3;
+			m_shotCoolTimer = m_shotCoolTime * 9;
 			m_shotCnt = 0;
 		}
 		else
@@ -386,7 +389,7 @@ void Boss::Action4()
 	{
 		//弾を30発出す
 		int bulletNum = 25;
-		float bulletSpeed = 280;
+		float bulletSpeed = 350;
 		Math::Vector2 vec;
 		//一発目はプレイヤー目掛けて撃つ
 		float startRadian = atan2(s_pPlayerPos->y - m_pos.y, s_pPlayerPos->x - m_pos.x);
@@ -399,9 +402,9 @@ void Boss::Action4()
 			m_pGame->GetBulletManager()->Shoot(m_pos, vec);
 		}
 		//circleShotを3回撃ったら長めのクールタイム
-		if (m_circleShotCnt >= 10)
+		if (m_circleShotCnt >= 1)
 		{
-			m_circleShotCoolTimer = 2;
+			m_circleShotCoolTimer = 1.5f;
 			m_circleShotCnt = 0;
 		}
 		//普通のクールタイム
@@ -440,14 +443,14 @@ void Boss::Action4()
 		m_pGame->GetEnemyManager()->GetEnemyList().push_back(enemy);
 
 		//クールタイム
-		if (m_fallEnemyCnt > 3)
+		if (m_fallEnemyCnt > randRange(8, 12))
 		{
-			m_fallEnemyCoolTimer = randRange(5, 8);
+			m_fallEnemyCoolTimer = randRange(4, 5);
 			m_fallEnemyCnt = 0;
 		}
 		else
 		{
-			m_fallEnemyCoolTimer = 0.3f;
+			m_fallEnemyCoolTimer = 0.4f;
 			m_fallEnemyCnt++;
 		}
 	}

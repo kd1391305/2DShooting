@@ -26,6 +26,8 @@ public:
 
 	void GameClear();
 
+	void StartBossScene();
+
 	std::shared_ptr<Player> GetPlayer() { return m_player; }
 	std::shared_ptr<EnemyManager>GetEnemyManager() { return m_enemyManager; }
 	std::shared_ptr<BulletManager> GetBulletManager() { return m_bulletManager; }

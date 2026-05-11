@@ -12,6 +12,7 @@
 #include"../SceneManager.h"
 #include"../GameScene/GameScene.h"
 #include"../TitleScene/TitleScene.h"
+#include"../../Mouse/Mouse.h"
 
 void GameOverScene::Init()
 {
@@ -33,6 +34,10 @@ void GameOverScene::Init()
 
 	//ゲームに戻るボタンを選択中でゲームオーバーシーンを始める
 	m_gameButton->SetSelect(true);
+
+	m_game->GetBack()->Update(0);
+
+	MOUSE.ShowCursorTex(true);
 }
 
 void GameOverScene::Update()
@@ -55,6 +60,7 @@ void GameOverScene::Update()
 			m_game->GetPlayer()->Init();
 			m_game->GetPlayer()->Invincible(1.0f);
 			m_game->SetContinueFlg(true);
+			MOUSE.ShowCursorTex(false);
 		}
 	}
 

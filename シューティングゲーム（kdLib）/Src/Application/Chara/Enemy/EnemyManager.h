@@ -37,11 +37,11 @@ public:
 		float spawnShotCoolTime = 0.0f;		//スポーン時の追加クールタイム
 	};
 
+	void Spawn_Boss();
+
 private:
 	//スポーンする
 	void Spawn();
-
-	void Spawn_Boss();
 
 	void Spawn_Row();
 	void Spawn_Cross();
@@ -55,6 +55,8 @@ private:
 	void Spawn_Line_Upper_Lower();
 	void Spawn_Random1();
 	void Spawn_Random2();
+	void Spawn_Random3();
+	void Spawn_Random4();
 	
 
 	//このスポーン関数は各確率のときに呼び出す
@@ -77,6 +79,8 @@ private:
 		Line_Upper_Lower,	//敵が上下に出てきて避けるゲーム
 		Random1,			//ランダムに敵が出てくる
 		Random2,			//ある程度の規則性の中でランダム出現
+		Random3,			//プレイヤー目掛けてランダムスポーン
+		Random4,			//プレイヤー目掛けてランダムスポーン
 		Kind
 	};
 
@@ -95,4 +99,15 @@ private:
 	bool m_bSpawnBoss = false;
 
 	bool m_bEmptySpawnFlg = false;		//敵がいないとき、スポーンするフラグ
+
+	//プレイヤー目掛けてランダムスポーン
+	bool m_bSpawnRandom;				//ランダムにスポーンするフラグ（プレイヤー目掛けて突進する）
+	float m_spawnRandomTimer;			//ランダムにスポーンする時間を測る
+	void Update_RandomSpawn();
+
+	//敵が雨のように降ってくる
+	bool m_bSpawnRandom2;				//ランダムにスポーンするフラグ（プレイヤー目掛けて突進する）
+	float m_spawnRandom2Timer;			//ランダムにスポーンする時間を測る
+	void Update_RandomSpawn2();
+
 };

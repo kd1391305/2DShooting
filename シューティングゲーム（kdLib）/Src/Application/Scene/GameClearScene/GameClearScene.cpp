@@ -12,6 +12,7 @@
 #include"../../TextureCache/TextureCache.h"
 #include"../../main.h"
 #include"../../Tools/RandEx/RandEx.h"
+#include"../../Mouse/Mouse.h"
 
 void GameClearScene::Init()
 {
@@ -37,6 +38,8 @@ void GameClearScene::Init()
 	bgm->Play(true);
 
 	m_shotCoolTimer = 8;
+
+	MOUSE.ShowCursorTex(true);
 }
 
 void GameClearScene::Update()

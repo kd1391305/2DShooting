@@ -10,8 +10,8 @@
 //コンストラクタ
 EnemyManager::EnemyManager()
 {
-	//ゲーム開始から25秒間は敵をスポーンしない
-	m_spawnCoolTimer = 25.0f;
+	//ゲーム開始から30秒間は敵をスポーンしない
+	m_spawnCoolTimer = 30.0f;
 
 	//敵のスポーン確率
 	//重みを代入
@@ -27,6 +27,8 @@ EnemyManager::EnemyManager()
 	m_spawnProbability[SpawnPutturn::Line_Upper_Lower]		= 0.1;
 	m_spawnProbability[SpawnPutturn::Random1]				= 0.3;
 	m_spawnProbability[SpawnPutturn::Random2]				= 1;
+	m_spawnProbability[SpawnPutturn::Random3]				= 2;
+	m_spawnProbability[SpawnPutturn::Random4]				= 1;
 
 	//重みの合計を求める
 	float sum = 0;
@@ -65,6 +67,32 @@ void EnemyManager::Update(float deltaTime)
 
 			float noise = randRange(0.0f, 5.0f);
 			m_spawnCoolTimer = m_spawnCoolTime + noise;
+		}
+	}
+
+	//ランダムに出現するフラグが立っていたら
+	if (m_bSpawnRandom)
+	{
+		m_spawnRandomTimer -= deltaTime;
+		if (m_spawnRandomTimer <= 0)
+		{
+			m_bSpawnRandom = false;
+		}
+		else
+		{
+			Update_RandomSpawn();
+		}
+	}
+	if (m_bSpawnRandom2)
+	{
+		m_spawnRandom2Timer -= deltaTime;
+		if (m_spawnRandom2Timer <= 0)
+		{
+			m_bSpawnRandom2 = false;
+		}
+		else
+		{
+			Update_RandomSpawn2();
 		}
 	}
 
@@ -168,6 +196,12 @@ void EnemyManager::Spawn()
 	case SpawnPutturn::Random2:
 		Spawn_Random2();
 		break;
+	case SpawnPutturn::Random3:
+		Spawn_Random3();
+		break;
+	case SpawnPutturn::Random4:
+		Spawn_Random4();
+		break;
 	}
 }
 
@@ -177,7 +211,7 @@ void EnemyManager::Spawn_Boss()
 	//スポーンに必要な共通の変数の初期化
 	SpawnData spawnData;
 	spawnData.radius = {160,160 };									//出現する大きさ
-	spawnData.pos = { SCREEN_RIGHT + spawnData.pos.x,0 };			//出現座標
+	spawnData.pos = { SCREEN_RIGHT + spawnData.radius.x,0 };		//出現座標
 	spawnData.moveSpeed = 200;										//移動速度
 	spawnData.moveDeg = 180;										//移動する方向
 	spawnData.normalColor = { 1,1,1,1 };							//通常時の色
@@ -251,7 +285,7 @@ void EnemyManager::Spawn_Row()
 			enemy->Init();
 			//列の最後の敵には追加で花火を3発持たせる
 			if (j == enemyNum - 1)enemy->AddFireworksNum(2);
-			else enemy->AddFireworksNum(-3);
+			else enemy->AddFireworksNum(-2);
 			enemy->Spawn(spawnPos[i][j], spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 			m_enemyList.push_back(enemy);
 		}
@@ -1132,6 +1166,23 @@ void EnemyManager::Spawn_Random2()
 
 }
 
+void EnemyManager::Spawn_Random3()
+{
+	m_bSpawnRandom = true;
+	m_spawnRandomTimer = 7.0f;
+
+	m_spawnCoolTimer = m_spawnCoolTime;
+}
+
+void EnemyManager::Spawn_Random4()
+{
+	m_bSpawnRandom2 = true;
+	m_spawnRandom2Timer = 6.0f;
+
+	m_spawnCoolTimer = m_spawnCoolTime;
+
+}
+
 void EnemyManager::Spawn_Row2(int enemyNum, Math::Vector2 pos,float moveSpeed,float moveDeg)
 {
 	std::shared_ptr<Enemy1>enemy;
@@ -1176,6 +1227,67 @@ void EnemyManager::Spawn_Row3(int enemyNum, Math::Vector2 pos, float moveSpeed, 
 		enemy = std::make_shared<Enemy1>();
 		enemy->Init();
 		enemy->Spawn(spawnPos, enemyRadius, moveSpeed, moveDeg, normalColor, hitColor, 20, moveSpeed * 1.4f, 3, 1, randRange(0, 1.0f));
+		m_enemyList.push_back(enemy);
+	}
+}
+
+void EnemyManager::Update_RandomSpawn()
+{
+	if (rand() % 20 == 0)
+	{
+		float spawnRadius = SCREEN_WIDTH + 100;
+
+		SpawnData spawnData;
+		spawnData.radius = { 32,32 };										//出現する大きさ
+		//spawnData.pos = ;		//出現座標
+		spawnData.moveSpeed = 320;										//移動速度
+		//spawnData.moveDeg = 180;											//移動する方向
+		spawnData.normalColor = { 0,1,1,1 };						//通常時の色
+		spawnData.hitColor = { 0,1,1,1 };							//当たった時の色
+		spawnData.hp = 10;												//HP
+		spawnData.bulletSpeed = 200;										//弾の速度
+		spawnData.shotCoolTime = 999.0f;									//弾を撃つクールタイム
+		spawnData.shotCoolTimeNoiseMax = 0;								//弾を撃つクールタイムのランダム値
+		spawnData.spawnShotCoolTime = 1.5f;								//（shotCoolTime　+ spawnShotCoolTime = スポーンしてから初めて弾を撃つまでの時間）
+
+		spawnData.moveDeg = randRange(120, 240);
+		float radian = DirectX::XMConvertToRadians(spawnData.moveDeg + 180);
+		spawnData.pos = { cosf(radian) * spawnRadius,sinf(radian) * spawnRadius };
+
+		spawnData.pos += m_pGame->GetPlayer()->GetPos();
+
+		//プレイヤー目掛けて敵が押し寄せる
+		std::shared_ptr<Enemy1>enemy;
+		enemy = std::make_shared<Enemy1>();
+		enemy->Init();
+		enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
+		m_enemyList.push_back(enemy);
+	}
+}
+
+void EnemyManager::Update_RandomSpawn2()
+{
+	if (rand() % 15 == 0)
+	{
+		SpawnData spawnData;
+		spawnData.radius = { 32,32 };										//出現する大きさ
+		//spawnData.pos = ;		//出現座標
+		spawnData.moveSpeed = 350;										//移動速度
+		spawnData.moveDeg = 270;											//移動する方向
+		spawnData.normalColor = { 0.8,0,0.8,1 };						//通常時の色
+		spawnData.hitColor = { 1,0,1,1 };							//当たった時の色
+		spawnData.hp = 10;												//HP
+		spawnData.bulletSpeed = 200;										//弾の速度
+		spawnData.shotCoolTime = 999.0f;									//弾を撃つクールタイム
+		spawnData.shotCoolTimeNoiseMax = 0;								//弾を撃つクールタイムのランダム値
+		spawnData.spawnShotCoolTime = 1.5f;								//（shotCoolTime　+ spawnShotCoolTime = スポーンしてから初めて弾を撃つまでの時間）
+		spawnData.pos = {randRange(0,SCREEN_RIGHT-spawnData.radius.x),SCREEN_TOP + spawnData.radius.y};
+
+		//プレイヤー目掛けて敵が押し寄せる
+		std::shared_ptr<Enemy1>enemy;
+		enemy = std::make_shared<Enemy1>();
+		enemy->Init();
+		enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
 		m_enemyList.push_back(enemy);
 	}
 }

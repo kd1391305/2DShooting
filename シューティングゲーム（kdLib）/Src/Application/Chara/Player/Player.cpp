@@ -307,6 +307,9 @@ void Player::Action(float deltaTime)
 					m_chargeAnim = nullptr;
 					m_bChargeMaxFlg = false;
 					m_shotCoolTimer = m_chargeshotCoolTime;
+					//Œø‰Ê‰¹‚ðŽ~‚ß‚é
+					std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
+					se->Stop();
 					return;
 				}
 
