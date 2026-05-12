@@ -30,18 +30,6 @@ void FireworksManager::Update(float deltaTime)
 			m_list.erase(m_list.begin() + i);
 		}
 	}
-
-	if (APP.m_fps < 50)
-	{
-		if (m_list.size() >= 15)
-		{
-			for (int i = 0; i < 5; i++)
-			{
-				PushPool((Type)m_list.front()->GetType(), m_list.front());
-				m_list.erase(m_list.begin());
-			}
-		}
-	}
 }
 
 //•`‰æ

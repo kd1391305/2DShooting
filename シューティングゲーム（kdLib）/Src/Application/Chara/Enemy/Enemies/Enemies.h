@@ -5,6 +5,7 @@
 class EnemyManager;
 class AttackArea;
 class FireworksManager;
+class LinkEnemyList;
 
 //’e‚ğ¶‚É‚Ü‚Á‚·‚®Œ‚‚Â‚¾‚¯‚Ì“G
 class Enemy1 :public BaseEnemy
@@ -103,23 +104,6 @@ private:
 	std::queue<Math::Vector2> m_nextPos;	//Ÿ‚ÉŒü‚©‚¤À•W
 };
 
-//“G‚ğ’èˆÊ’u‚Å‰ñ“]‚³‚¹‚é
-class Enemy8 :public BaseEnemy
-{
-public:
-	void Action(float deltaTime)override;
-
-	void PostInit(Math::Vector2 rotationPos,float rotationRadius,float deltaRadian);
-
-private:
-	
-	Math::Vector2 m_rotationPos;	//‰ñ“]‚·‚é’†Si²j
-	float m_rotationRadius;			//‰ñ“]‚·‚é”¼Œa
-	float m_radian;
-	float m_deltaRadian;
-	bool m_bRotationFlg;			//‰ñ“]‚µ‚Ä‚¢‚é‚©H
-};
-
 //“G‚ğËo‚·‚é“G
 //Ëo‚µ‚½“G‚ª‚Ü‚½Ëo
 //‚»‚µ‚ÄA‚Ü‚½Ëo
@@ -160,4 +144,3 @@ private:
 	std::shared_ptr<FireworksManager>m_pFireworksManager;
 
 };
-

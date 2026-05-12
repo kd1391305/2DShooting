@@ -28,7 +28,7 @@ struct Particle
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.96f;
+			m_color *= 0.98f;
 		}
 		//生存時間が終了したか？
 		return m_life > 0 || m_color.A() > 0.01f;
@@ -73,7 +73,7 @@ struct Particle2
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.96f;
+			m_color *= 0.98f;
 		}
 		//生存時間が終了したか？
 		return m_life > 0 || m_color.A() > 0.01f;
@@ -107,7 +107,7 @@ struct Particle3
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.96f;
+			m_color *= 0.98f;
 		}
 		//生存時間が終了したか？
 		return m_life > 0 || m_color.A() > 0.01f;
@@ -182,7 +182,7 @@ struct Particle4
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.96f;
+			m_color *= 0.98f;
 		}
 		//生存時間が終了したか？
 		return m_life > 0 || m_color.A() > 0.01f;

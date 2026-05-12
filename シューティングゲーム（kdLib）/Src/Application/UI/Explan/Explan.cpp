@@ -3,7 +3,7 @@
 #include"../../Font/DWriteCustom.h"
 void Explan::Init()
 {
-	m_timer = 0;
+	
 	m_endTime = 8.0f;
 
 	m_color = { 0.9f,0.9f,0.9f,0.7f };

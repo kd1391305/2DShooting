@@ -219,6 +219,7 @@ void Enemy5::Action(float deltaTime)
 	}
 }
 
+
 void Enemy5::InitOriginal(float deltaRadian, float shotNum, float shotArcRadian)
 {
 	m_deltaRadian = deltaRadian;
@@ -335,18 +336,6 @@ void Enemy7::PostInit()
 	m_move = vec * m_moveSpeed;
 }
 
-void Enemy8::Action(float deltaTime)
-{
-	if (m_shotCoolTimer <= 0)
-	{
-		
-	}
-}
-
-void Enemy8::PostInit(Math::Vector2 rotationPos, float rotationRadius, float deltaRadian)
-{
-}
-
 void Enemy9::Action(float deltaTime)
 {
 	if (m_explodeCnt > 0)
@@ -395,7 +384,6 @@ void Enemy9::InitOriginal(int explodeCnt, int increaseShotNum, int shotNum, floa
 void Enemy10::Action(float deltaTime)
 {
 	m_timer = 0;
-
 	
 	if (m_move.y < -400)m_move.y = -400;
 	
@@ -427,7 +415,7 @@ void Enemy10::Action(float deltaTime)
 				float scale;
 				float seVolume = 0.05f;
 				color = { randRange(0,1),randRange(0,1),randRange(0,1),randRange(0.7,1.0f) };
-				for (int i = 0; i < 5; i++)
+				for (int i = 0; i < m_fireworksNum; i++)
 				{
 					pos = m_pos;
 					pos += {randRange(-50, 50), randRange(-50, 50)};

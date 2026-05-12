@@ -1,5 +1,27 @@
 #include"DWriteCustom.h"
 
+void DWriteCustom::Init()
+{
+	// DirectWrite用コンポーネントを作成
+	m_pWrite = new DirectWriteCustomFont(&m_data);
+
+	// 初期化
+	m_pWrite->Init(D3D.GetSwapChain());
+
+	// フォントデータを改変
+	m_data.fontSize = 60;
+	m_data.fontWeight = DWRITE_FONT_WEIGHT_ULTRA_BLACK;
+	m_data.Color = D2D1::ColorF(D2D1::ColorF::White);
+	m_data.font = m_pWrite->GetFontName(0);
+	/*	m_data.shadowColor = D2D1::ColorF(D2D1::ColorF::Gray);
+		m_data.shadowOffset = D2D1::Point2F(5.0f, -5.0f);*/
+	m_data.shadowColor = D2D1::ColorF(D2D1::ColorF::Gray);
+	m_data.shadowOffset = D2D1::Point2F(0, 0);
+
+	// フォントをセット
+	m_pWrite->SetFont(m_data);
+}
+
 //描画1（登録されているフォントデータのまま描画する）
 void DWriteCustom::Draw(const std::string str, Math::Vector2 pos)
 {

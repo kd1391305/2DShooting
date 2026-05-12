@@ -57,12 +57,10 @@ private:
 	void Spawn_Random2();
 	void Spawn_Random3();
 	void Spawn_Random4();
-	
 
 	//このスポーン関数は各確率のときに呼び出す
 	void Spawn_Row2(int enemyNum, Math::Vector2 pos,float moveSpeed,float moveDeg);
 	void Spawn_Row3(int enemyNum, Math::Vector2 pos,float moveSpeed,float moveDeg);
-
 
 	//敵がスポーンするタイプ
 	enum SpawnPutturn
@@ -101,13 +99,13 @@ private:
 	bool m_bEmptySpawnFlg = false;		//敵がいないとき、スポーンするフラグ
 
 	//プレイヤー目掛けてランダムスポーン
-	bool m_bSpawnRandom;				//ランダムにスポーンするフラグ（プレイヤー目掛けて突進する）
-	float m_spawnRandomTimer;			//ランダムにスポーンする時間を測る
+	bool m_bSpawnRandom=false;				//ランダムにスポーンするフラグ（プレイヤー目掛けて突進する）
+	float m_spawnRandomTimer=0;				//ランダムにスポーンする時間を測る
 	void Update_RandomSpawn();
 
 	//敵が雨のように降ってくる
-	bool m_bSpawnRandom2;				//ランダムにスポーンするフラグ（プレイヤー目掛けて突進する）
-	float m_spawnRandom2Timer;			//ランダムにスポーンする時間を測る
+	bool m_bSpawnRandom2=false;				//ランダムにスポーンするフラグ（プレイヤー目掛けて突進する）
+	float m_spawnRandom2Timer=0;			//ランダムにスポーンする時間を測る
 	void Update_RandomSpawn2();
 
 };

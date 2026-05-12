@@ -24,14 +24,7 @@ public:
 	long Get() { return m_score; }
 
 	long GetHighScore() {
-		while (!m_waitScore.empty())
-		{
-			m_score += m_waitScore.front();
-			m_waitScore.pop();
-		}
-		if (m_highScore > m_score)
-			return m_highScore;
-		else return m_score;
+		return m_highScore;
 	}
 	
 	//‘Å‚¿ã‚°”‚ğƒJƒEƒ“ƒg

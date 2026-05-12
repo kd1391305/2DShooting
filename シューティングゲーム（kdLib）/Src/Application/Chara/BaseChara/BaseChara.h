@@ -48,6 +48,7 @@ public:
 	Math::Vector2 GetRadius() { return m_radius; }
 	virtual Math::Color GetColor() { return m_color; }
 	float GetHp() { return m_hp; }
+	float GetHpMax() { return m_hpMax; }
 
 	void SetPos(Math::Vector2 set) { m_pos = set; }
 	void SetMove(Math::Vector2 set) { m_move = set; }

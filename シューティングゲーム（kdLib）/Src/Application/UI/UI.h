@@ -22,6 +22,8 @@ public:
 
 	void CreateBossGauge(float* hpMax,float* hp);
 
+	void EndExplan() { m_explan = nullptr; }
+
 private:
 
 	std::shared_ptr<Score> m_score;

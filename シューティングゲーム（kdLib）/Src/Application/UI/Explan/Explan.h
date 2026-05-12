@@ -14,9 +14,15 @@ public:
 		return m_color.A() <= 0 && m_timer >= m_endTime;
 	}
 
+	void End() 
+	{
+		m_timer = m_endTime;
+		m_color.A(0);
+	}
+
 private:
 
-	float m_timer;					//Œo‰ßŠÔ‚ğ‘ª‚é
+	float m_timer = 0;					//Œo‰ßŠÔ‚ğ‘ª‚é
 
 	float m_endTime;				//I—¹ŠÔ‚ğ‘ª‚é
 

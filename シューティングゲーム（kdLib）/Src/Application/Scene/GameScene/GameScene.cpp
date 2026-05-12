@@ -56,7 +56,7 @@ void Game::Init()
 	m_back->StartZoomIn();
 
 	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav");
-	bgm->SetVolume(0.002f);
+	bgm->SetVolume(0.01f);
 	bgm->Play(true);
 
 	//スタート直後のフラグを立てる
@@ -68,6 +68,12 @@ void Game::Init()
 //更新
 void Game::Update()
 {
+	if (Timer::Instance().GetStopTime() > 0)
+	{
+		return;
+	}
+
+
 	const double deltaTime = Timer::Instance().GetDeltaTime();
 
 	if (m_bStartFlg)
@@ -77,7 +83,7 @@ void Game::Update()
 		if (m_player->GetPos().x >= m_StartPosX)
 		{
 			m_bStartFlg = false;
-			if(!m_bContinue)m_UI->Init(m_player.get());
+			if (!m_bContinue)m_UI->Init(m_player.get());
 		}
 		else
 		{
@@ -90,71 +96,74 @@ void Game::Update()
 	//ゲームクリアフラグがたっているとき
 	if (m_bGameClearFlg)
 	{
+		//50fps以下だと花火を発生させない
+		if (deltaTime <= 1.0f / 50)
+		{
+			if (rand() % 6 == 0)
+			{
+				//花火を打ち上げる
+				m_enemyManager->GetBoss()->ExplodeFireworks(4);
+			}
+		}
+
 		m_changeSceneWait -= deltaTime;
 		if (m_changeSceneWait <= 0)
 		{
-			SceneManager::Instance().ChangeState(std::make_shared<GameClearScene>(m_back,m_UI->GetScoreInst()->Get(),m_UI->GetScoreInst()->GetHighScore(),m_UI->GetScoreInst()->GetExplodeNum()));
+			SceneManager::Instance().ChangeState(std::make_shared<GameClearScene>(m_back, m_UI->GetScoreInst()->Get(), m_UI->GetScoreInst()->GetHighScore(), m_UI->GetScoreInst()->GetExplodeNum()));
 
 			std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav");
 			bgm->Stop();
 			MOUSE.ShowCursorTex(true);
 		}
 	}
-
-	//プレイヤーの行動
-	m_player->Action(deltaTime);
-
-	//当たり判定
-	//プレイヤー　と　敵
-	CollisionPlayer_Enemy(m_player, m_enemyManager->GetEnemyList());
-
-	//プレイヤー　と　敵の弾
-	CollisionPlayer_EBullet(m_player, m_bulletManager->GetEnemyList());
-
-	//プレイヤーの弾　と　敵
-	CollisionPlayerBullet_Enemy(m_bulletManager->GetPlayerList(), m_enemyManager->GetEnemyList(), m_back->GetFireworks(),m_hitEffectManager ,m_UI->GetScoreInst());
+	else
 	{
-		std::shared_ptr<Boss> boss = m_enemyManager->GetBoss();
-		if (boss)
+
+		//プレイヤーの行動
+		m_player->Action(deltaTime);
+
+		//当たり判定
+		//プレイヤー　と　敵
+		CollisionPlayer_Enemy(m_player, m_enemyManager->GetEnemyList());
+
+		//プレイヤー　と　敵の弾
+		CollisionPlayer_EBullet(m_player, m_bulletManager->GetEnemyList());
+
+		//プレイヤーの弾　と　敵
+		CollisionPlayerBullet_Enemy(m_bulletManager->GetPlayerList(), m_enemyManager->GetEnemyList(), m_back->GetFireworks(), m_hitEffectManager, m_UI->GetScoreInst());
 		{
-			//プレイヤーの弾　と　ボス
-			CollisionPlayer_Boss(m_player, boss);
+			std::shared_ptr<Boss> boss = m_enemyManager->GetBoss();
+			if (boss)
+			{
+				//プレイヤーの弾　と　ボス
+				CollisionPlayer_Boss(m_player, boss);
 
-			//プレイヤー　と　ボス
-			CollisionPlayerBullet_Boss(m_bulletManager->GetPlayerList(), boss, m_back->GetFireworks(),m_hitEffectManager,m_UI->GetScoreInst());
+				//プレイヤー　と　ボス
+				CollisionPlayerBullet_Boss(m_bulletManager->GetPlayerList(), boss, m_back->GetFireworks(), m_hitEffectManager, m_UI->GetScoreInst());
 
-			//プレイヤー　と　攻撃範囲
-			CollisionPlayer_AttackArea(m_player, m_attackAreaManager);
+				//プレイヤー　と　攻撃範囲
+				CollisionPlayer_AttackArea(m_player, m_attackAreaManager);
 
-			//攻撃範囲の更新
-			m_attackAreaManager->Update(deltaTime);
+				//攻撃範囲の更新
+				m_attackAreaManager->Update(deltaTime);
+			}
 		}
+
+
+		//プレイヤーの更新
+		m_player->Update(deltaTime);
+
+		//すべての敵の更新
+		m_enemyManager->Update(deltaTime);
+
+		//全ての弾の更新
+		m_bulletManager->Update(deltaTime);
+
+		//全てのヒットエフェクトの更新
+		m_hitEffectManager->Update(deltaTime);
 	}
 	//背景の更新
 	m_back->Update(deltaTime);
-
-	//プレイヤーの更新
-	m_player->Update(deltaTime);
-
-	//すべての敵の更新
-	if (!m_bGameClearFlg)
-	{
-		m_enemyManager->Update(deltaTime);
-		
-	}
-	else
-	{
-		if (rand() % 6 == 0)
-		{
-			//花火を打ち上げる
-			m_enemyManager->GetBoss()->ExplodeFireworks(5);
-		}
-	}
-	//全ての弾の更新
-	m_bulletManager->Update(deltaTime);
-
-	//全てのヒットエフェクトの更新
-	m_hitEffectManager->Update(deltaTime);
 
 	//HeadUpDisplay（UI）の更新
 	m_UI->Update(deltaTime);
@@ -200,11 +209,7 @@ void Game::GameOver()
 		MOUSE.ShowCursorTex(true);
 	}
 	std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charage.wav");
-	if (!se->IsPlay())
-	{
-		se->SetVolume(0.0005f);
-		se->Play(false);
-	}
+	se->Stop();
 }
 
 void Game::GameClear()
@@ -219,12 +224,7 @@ void Game::GameClear()
 	bgm->Stop();
 	
 	std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
-	if (!se->IsPlay())
-	{
-		se->SetVolume(0.0005f);
-		se->Play(false);
-	}
-
+	se->Stop();
 }
 
 //ボスシーンへ

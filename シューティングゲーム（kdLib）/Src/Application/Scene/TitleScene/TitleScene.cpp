@@ -47,7 +47,7 @@ void TitleScene::Init()
 
 	//BGM‚ð—¬‚·
 	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");
-	bgm->SetVolume(0.01f);
+	bgm->SetVolume(0.02f);
 	bgm->Play(true);
 
 	m_bChangeScene = false;
@@ -140,7 +140,7 @@ void TitleScene::Update()
 					Math::Color color = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
 					Math::Color color2 = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
 					FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
-					float seVolume = 0.01f;
+					float seVolume = 0.001f;
 					for (int j = 0; j < 2; j++)
 					{
 						m_back->GetFireworks()->Explode(type,

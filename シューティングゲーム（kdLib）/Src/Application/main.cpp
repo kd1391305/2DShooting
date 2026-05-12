@@ -2,6 +2,8 @@
 
 #include "Scene.h"
 
+#include"Timer/Timer.h"
+
 //===================================================================
 // メイン
 //===================================================================
@@ -200,6 +202,8 @@ void Application::Execute()
 
 		// ゲーム更新処理
 		SCENE.Update();
+		
+
 
 		// ゲーム描画処理
 		SHADER.m_spriteShader.Begin();
@@ -245,8 +249,9 @@ void Application::Execute()
 			m_fps = (count * 1000) / (st - baseTime);
 			baseTime = st;
 			count = 0;
+			std::string titleBar = "花火繚乱 FPS:" + std::to_string(APP.m_fps);
+			SetWindowTextA(APP.m_window.GetWndHandle(), titleBar.c_str());
 		}
-
 	}
 
 	// ゲーム解放

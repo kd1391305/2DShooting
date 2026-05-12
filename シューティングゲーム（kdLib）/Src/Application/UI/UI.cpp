@@ -84,7 +84,7 @@ void UI::Draw()
 	m_score->Draw();
 
 	DWriteCustom::Instance().SetShadow({ -1,-1 }, { 0.0f, 0.7f, 0.7f, 0.7f });
-	DWriteCustom::Instance().Draw("‘Ì—Í", { -575, 345 },15);
+	DWriteCustom::Instance().Draw("‘Ì—Í", { -575, 342 },15);
 	DWriteCustom::Instance().SetShadow({}, {});
 	//ƒQ[ƒW‚Ì•`‰æ
 	m_playerGauge->Draw();

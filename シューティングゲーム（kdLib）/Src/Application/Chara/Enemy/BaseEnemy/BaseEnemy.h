@@ -50,6 +50,19 @@ public:
 
 	bool IsActive() { return m_bActive; }
 
+	//誘爆するか？
+	bool IsChainExplode()
+	{
+		return m_bChainExplode && m_chainExplodeWait <= 0;
+	}
+
+	//誘爆する時間と誘爆フラグをセット
+	bool StartChainExplode(const float chainExplodeWait = 0.5f , const bool bChainExplode = true)
+	{
+		m_chainExplodeWait = chainExplodeWait;
+		m_bChainExplode = bChainExplode;
+	}
+
 	void SetActive(bool set) { m_bActive = set; }
 
 	void AddFireworksNum(int add) { m_fireworksNum += add; }
@@ -69,7 +82,7 @@ protected:
 
 	float m_timer;								//出現してから何秒経ったか？（画面外判定に使う）
 
-	static	BulletManager* s_pBulletManager;	//弾を打つためにアドレスをEnemy共通で持っておく
+	static BulletManager* s_pBulletManager;		//弾を打つためにアドレスをEnemy共通で持っておく
 	static Math::Vector2* s_pPlayerPos;			//プレイヤーに撃つためにプレイヤーの座標
 
 	bool m_bActive;								//敵の活性状態
@@ -86,5 +99,9 @@ protected:
 	float m_hitEffectTimer;						//ヒットエフェクト発生中のタイマー（０になったらエフェクトを切る）
 	const float m_hitEffectTime = 0.1f;			//ヒットエフェクトの時間
 
-	int m_fireworksNum = 3;					//倒したときに出現させる花火の数
+	int m_fireworksNum = 5;					//倒したときに出現させる花火の数
+
+	//爆発するまでの時間
+	float m_chainExplodeWait = 0;
+	bool m_bChainExplode = false;
 };

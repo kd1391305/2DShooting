@@ -10,8 +10,8 @@
 //コンストラクタ
 EnemyManager::EnemyManager()
 {
-	//ゲーム開始から30秒間は敵をスポーンしない
-	m_spawnCoolTimer = 30.0f;
+	//ゲーム開始から10秒間は敵をスポーンしない
+	m_spawnCoolTimer = 10.0f;
 
 	//敵のスポーン確率
 	//重みを代入
@@ -27,7 +27,7 @@ EnemyManager::EnemyManager()
 	m_spawnProbability[SpawnPutturn::Line_Upper_Lower]		= 0.1;
 	m_spawnProbability[SpawnPutturn::Random1]				= 0.3;
 	m_spawnProbability[SpawnPutturn::Random2]				= 1;
-	m_spawnProbability[SpawnPutturn::Random3]				= 2;
+	m_spawnProbability[SpawnPutturn::Random3]				= 1;
 	m_spawnProbability[SpawnPutturn::Random4]				= 1;
 
 	//重みの合計を求める
@@ -45,6 +45,12 @@ EnemyManager::EnemyManager()
 //更新
 void EnemyManager::Update(float deltaTime)
 {
+	//デバッグ
+	if (GetAsyncKeyState('0') & 0x8000)
+	{
+		m_bEmptySpawnFlg = true;
+	}
+
 	//ボスがいないときだけ敵をスポーンさせる
 	if (!m_boss && !m_bSpawnBoss)
 	{
@@ -77,6 +83,7 @@ void EnemyManager::Update(float deltaTime)
 		if (m_spawnRandomTimer <= 0)
 		{
 			m_bSpawnRandom = false;
+			m_bEmptySpawnFlg = true;
 		}
 		else
 		{
@@ -89,6 +96,7 @@ void EnemyManager::Update(float deltaTime)
 		if (m_spawnRandom2Timer <= 0)
 		{
 			m_bSpawnRandom2 = false;
+			m_bEmptySpawnFlg = true;
 		}
 		else
 		{
@@ -109,10 +117,8 @@ void EnemyManager::Update(float deltaTime)
 		}
 	}
 
-
 	//ボス出現の条件
-	
-	if (Timer::Instance().GetTime() >120 && !m_pGame->GetGameClearFlg())
+	if (Timer::Instance().GetTime() >180 && !m_pGame->GetGameClearFlg())
 	{
 		if (!m_boss)
 		{
@@ -1172,6 +1178,8 @@ void EnemyManager::Spawn_Random3()
 	m_spawnRandomTimer = 7.0f;
 
 	m_spawnCoolTimer = m_spawnCoolTime;
+
+	m_bEmptySpawnFlg = false;
 }
 
 void EnemyManager::Spawn_Random4()
@@ -1181,6 +1189,7 @@ void EnemyManager::Spawn_Random4()
 
 	m_spawnCoolTimer = m_spawnCoolTime;
 
+	m_bEmptySpawnFlg = false;
 }
 
 void EnemyManager::Spawn_Row2(int enemyNum, Math::Vector2 pos,float moveSpeed,float moveDeg)
@@ -1233,7 +1242,7 @@ void EnemyManager::Spawn_Row3(int enemyNum, Math::Vector2 pos, float moveSpeed, 
 
 void EnemyManager::Update_RandomSpawn()
 {
-	if (rand() % 20 == 0)
+	if (rand() % 30 == 0)
 	{
 		float spawnRadius = SCREEN_WIDTH + 100;
 
@@ -1261,13 +1270,14 @@ void EnemyManager::Update_RandomSpawn()
 		enemy = std::make_shared<Enemy1>();
 		enemy->Init();
 		enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
+		enemy->AddFireworksNum(-2);
 		m_enemyList.push_back(enemy);
 	}
 }
 
 void EnemyManager::Update_RandomSpawn2()
 {
-	if (rand() % 15 == 0)
+	if (rand() % 30 == 0)
 	{
 		SpawnData spawnData;
 		spawnData.radius = { 32,32 };										//出現する大きさ
@@ -1288,6 +1298,7 @@ void EnemyManager::Update_RandomSpawn2()
 		enemy = std::make_shared<Enemy1>();
 		enemy->Init();
 		enemy->Spawn(spawnData.pos, spawnData.radius, spawnData.moveSpeed, spawnData.moveDeg, spawnData.normalColor, spawnData.hitColor, spawnData.hp, spawnData.bulletSpeed, spawnData.shotCoolTime, spawnData.shotCoolTimeNoiseMax, spawnData.spawnShotCoolTime);
+		enemy->AddFireworksNum(-2);
 		m_enemyList.push_back(enemy);
 	}
 }

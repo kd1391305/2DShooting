@@ -140,7 +140,7 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 					if (!e->IsActive())
 					{
 						//ƒXƒRƒA‚ð‰ÁŽZ‚·‚é
-						score->Add(100 * e->GetFireworksNum());
+						score->Add(10 * e->GetHpMax());
 
 						//‘‘Å‚¿ã‚°”‚ðƒJƒEƒ“ƒg
 						score->AddExplodeNum(e->GetFireworksNum());
@@ -181,6 +181,12 @@ bool CollisionPlayerBullet_Enemy(std::vector<std::shared_ptr<PlayerBullet>>& pla
 								fireworksManager->Explode((FireworksManager::Type)type, shotPos, afterScale, Math::Color{ r,g,b,a }, seVolume);
 							}
 						}
+
+						//—U”š‚·‚é“G‚ð’T‚·
+						/*for (auto& chainEnemy : enemyList)
+						{
+							if(IsCollision(chainEnemy->GetPos(),))
+						}*/
 						break;
 					}
 				}

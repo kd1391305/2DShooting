@@ -19,3 +19,5 @@ void Light::Draw(Math::Vector2 pos, Math::Vector2 radius,Math::Color&color)
 	SHADER.m_spriteShader.SetMatrix(mat);
 	SHADER.m_spriteShader.DrawTex_Src(tex, color);
 }
+
+

@@ -129,19 +129,20 @@ void Fireworks1::Draw(float backScale)
 
 	//行列作成
 	Math::Matrix scale, rotation, trans, mat;
-	if (!m_bExploded)
-	{
-		scale = Math::Matrix::CreateScale(m_beforeScale * backScale);
-	}
-	else
-	{
-		scale = Math::Matrix::CreateScale(m_afterScale * backScale);
-	}
+	
 	trans = Math::Matrix::CreateTranslation(m_pos.x * backScale, m_pos.y * backScale, 0);
 
 	//360°を10個に割り、回転させて描画
 	for (int i = 0; i < 10; i++)
 	{
+		if (!m_bExploded)
+		{
+			scale = Math::Matrix::CreateScale(m_beforeScale * backScale - 0.01f * i);
+		}
+		else
+		{
+			scale = Math::Matrix::CreateScale(m_afterScale * backScale - 0.01f * i);
+		}
 		rotation = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(360 / 10 * i));
 		SHADER.m_spriteShader.SetMatrix(scale * rotation * trans);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex);
@@ -202,7 +203,7 @@ void Fireworks1::Explode()
 {
 	//活性状態にする
 	m_bActive = true;
-	m_lightTimer = 0.03f;
+	m_lightTimer = 0.08f;
 	m_circleActiveNum = m_circleList.size();
 
 	//爆発したフラグを立てる
@@ -228,7 +229,7 @@ void Fireworks1::Explode()
 		float r = m_color.R() + randRange(-0.1f, 0.1f);
 		float g = m_color.G() + randRange(-0.1f, 0.1f);
 		float b = m_color.B() + randRange(-0.1f, 0.1f);
-		float a = m_color.A() + randRange(-0.1f, 0.1f);
+		float a = 1;
 		p.m_color = { r,g,b,a };
 
 		radian = DirectX::XMConvertToRadians(randRange(0, 360));
@@ -237,7 +238,7 @@ void Fireworks1::Explode()
 		p.m_move = vec * randRange(0, m_explodeSpeedMax);
 
 		//寿命
-		p.m_life = randRange(1.5,2.3);		//0.45秒～0.6秒
+		p.m_life = randRange(0.5, 0.8);
 	}
 }
 
@@ -498,7 +499,7 @@ void Fireworks1::Release()
 //{
 //	//花火を活性状態にする
 //	m_bActive = true;
-//	m_lightTimer = 0.03f;
+//	m_lightTimer = 0.08f;
 //	m_circleActiveNum = m_circleList.size();
 //	m_lineActiveNum = m_lineList.size();
 //
@@ -570,7 +571,7 @@ void Fireworks3::Init()
 	m_tex->CreateRenderTarget(m_texRadius * 2, m_texRadius * 2);
 
 	//花火の火の部分を作成
-	while (m_circleList.size() < 25)
+	while (m_circleList.size() < 15)
 	{
 		m_circleList.emplace_back();
 	}
@@ -666,7 +667,6 @@ void Fireworks3::Draw(float backScale)
 		std::shared_ptr<KdTexture>tex = TextureCache::Instance().Get("Texture/Fireworks/Particle.png");
 		for (int i = m_circleActiveNum - 1; i >= 0; i--)
 		{
-
 			m_circleList[i].Draw(tex);
 		}
 	}
@@ -691,19 +691,16 @@ void Fireworks3::Draw(float backScale)
 	{
 		rotation = Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(360 / 8 * i));
 		SHADER.m_spriteShader.SetMatrix(scale * rotation * trans);
-		SHADER.m_spriteShader.DrawTex_Src(m_tex);
-		SHADER.m_spriteShader.DrawTex_Src(m_tex, Math::Color{ 0.8f,0.8f,0.8f,1 });
+		for (int i = 0; i < 2; i++)SHADER.m_spriteShader.DrawTex_Src(m_tex);
 	}
 
 	//一瞬だけ光る処理
 	if (m_lightTimer > 0)
 	{
-		
-		float radius = m_texRadius * m_afterScale * backScale * randRange(0.7f, 1.2f);
+		float radius = m_texRadius * m_afterScale * backScale * randRange(0.7, 1.0f);
 		Math::Color color = m_color * 2;
 		color.A(m_lightTimer * 4);
 		Light::Instance().Draw(m_pos * backScale, Math::Vector2{ radius,radius }, color);
-		
 	}
 }
 
@@ -760,7 +757,7 @@ void Fireworks3::Explode()
 	//花火を活性状態にする
 	m_bActive = true;
 	m_bExploded = true;
-	m_lightTimer = 0.03f;
+	m_lightTimer = 0.08f;
 	m_circleActiveNum = m_circleList.size();
 
 	
@@ -778,6 +775,8 @@ void Fireworks3::Explode()
 			texPos.y + randRange(-3.5f,3.5f)
 		};
 
+		p.Update(0,m_baseScale);
+
 		//移動量を
 		
 		radian = DirectX::XMConvertToRadians(randRange(0, 360));
@@ -792,10 +791,10 @@ void Fireworks3::Explode()
 		float r = m_color.R() + randRange(-0.1f, 0.1f);
 		float g = m_color.G() + randRange(-0.1f, 0.1f);
 		float b = m_color.B() + randRange(-0.1f, 0.1f);
-		float a = m_color.A() + randRange(-0.1f, 0.1f);
+		float a = 1;
 		p.m_color = { r,g,b,a };
 
-		p.m_life = randRange(1.5,2.3);
+		p.m_life = randRange(0.5, 0.8);
 	}
 	
 }
@@ -909,17 +908,16 @@ void Fireworks4::Draw(float backScale)
 	m_tex->SetRenderTarget();
 
 	//花弁の描画
-	for (auto& p : m_petalList)
 	{
-		for (int i = 0; i < 8; i++)
+		KdTexture* tex = TextureCache::Instance().Get("Texture/Petal.png").get();
+		Math::Matrix scale = Math::Matrix::CreateScale(0.3f, 0.3f, 0);
+		for (auto& p : m_petalList)
 		{
-			Math::Matrix scale = Math::Matrix::CreateScale(0.2f, 0.2f, 0);
 			Math::Matrix trans = Math::Matrix::CreateTranslation(p.m_pos.x, p.m_pos.y, 0);
 			SHADER.m_spriteShader.SetMatrix(scale * trans);
-			SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/Petal.png"), p.m_color);
+			for (int i = 0; i < 2; i++)SHADER.m_spriteShader.DrawTex_Src(tex, p.m_color);
 		}
 	}
-
 	//描画先をBuckBufferに戻す
 	D3D.SetBackBuffer();
 
@@ -942,7 +940,6 @@ void Fireworks4::Draw(float backScale)
 		SHADER.m_spriteShader.SetMatrix(scale * rotation * trans);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex);
 		SHADER.m_spriteShader.DrawTex_Src(m_tex, Math::Color{ 0.8f,0.8f,0.8f,1 });
-
 	}
 	//一瞬だけ光る処理
 	if (m_lightTimer > 0)
@@ -1005,7 +1002,7 @@ void Fireworks4::Explode()
 	//爆発したフラグを立てる
 	m_bActive = true;
 	m_bExploded = true;
-	m_lightTimer = 0.03f;
+	m_lightTimer = 0.08f;
 	m_petalActiveNum = m_petalList.size();
 
 	Math::Vector2 texPos;
@@ -1028,14 +1025,12 @@ void Fireworks4::Explode()
 		float r = m_color.R() + randRange(-0.1f, 0.1f);
 		float g = m_color.G() + randRange(-0.1f, 0.1f);
 		float b = m_color.B() + randRange(-0.1f, 0.1f);
-		float a = m_color.A() + randRange(-0.1f, 0.1f);
+		float a = 1;
 		p.m_color = { r,g,b,a };
 
 		//寿命
-		p.m_life = randRange(1.5,2.3);		//0.45秒～0.6秒
+		p.m_life = randRange(0.5, 0.8);
 	}
-	
-
 }
 
 //解放
@@ -1238,7 +1233,7 @@ void Fireworks4::Release()
 //	//爆発したフラグを立てる
 //	m_bActive = true;
 //	m_bExploded = true;
-//	m_lightTimer = 0.03f;
+//	m_lightTimer = 0.08f;
 //	m_trailActiveNum = m_trailList.size();
 //
 //	Math::Vector2 texPos;
@@ -1478,7 +1473,7 @@ void Fireworks4::Release()
 //	//花火を活性状態にする
 //	m_bActive = true;
 //	m_bExploded = true;
-//	m_lightTimer = 0.03f;
+//	m_lightTimer = 0.08f;
 //	m_circleActiveNum = m_circleList.size();
 //	m_trailBuffer.clear();
 //

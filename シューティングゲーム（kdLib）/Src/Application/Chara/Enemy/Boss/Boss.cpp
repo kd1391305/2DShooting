@@ -86,7 +86,7 @@ void Boss::Draw()
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	char path[50];
 	sprintf_s(path, sizeof(path), "Texture/Enemy/Boss/Boss%d.png", (int)m_animCnt);
-	if (m_hitEffectTimer <= 0 || !m_bHitChargeMax)
+	if (m_hitEffectTimer <= 0 || !m_bHitChargeMax || m_hp > 0)
 	{
 		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get(path), m_color);
 	}
@@ -164,7 +164,7 @@ void Boss::ExplodeFireworks(float power)
 {
 	m_bHitChargeMax = true;
 
-	for (int i = 0; i < power / 2.0f; i++)
+	for (int i = 0; i < power; i++)
 	{
 		float radian = DirectX::XMConvertToRadians(randRange(0, 360));
 		Math::Vector2 vec;
@@ -239,7 +239,28 @@ void Boss::Action1()
 
 void Boss::Action2()
 {
-	
+	//通常弾はプレイヤーに向けて発射
+	if (m_shotCoolTimer <= 0)
+	{
+		const Math::Vector2 playerPos = m_pGame->GetPlayer()->GetPos();
+		Math::Vector2 pos = { m_pos.x - m_radius.x, m_pos.y };
+		Math::Vector2 move;
+		float radian = atan2f(playerPos.y - pos.y, playerPos.x - pos.x);
+		move.x = cosf(radian) * m_bulletSpeed;
+		move.y = sinf(radian) * m_bulletSpeed;
+		m_pGame->GetBulletManager()->Shoot(pos, move);
+		m_shotCnt++;
+		if (m_shotCnt >= 3)
+		{
+			m_shotCoolTimer = m_shotCoolTime * 3;
+			m_shotCnt = 0;
+		}
+		else
+		{
+			m_shotCoolTimer = m_shotCoolTime;
+		}
+	}
+
 	//敵を落とす
 	if (m_fallEnemyCoolTimer <= 0)
 	{
@@ -265,6 +286,7 @@ void Boss::Action2()
 		enemy->Init();
 		enemy->InitOriginal(area, m_pGame->GetBack()->GetFireworks());
 		enemy->Spawn(spawnPos, enemyRadius, 400, startDeg, enemyColor, enemyColor, 9999, NULL, NULL);
+		enemy->AddFireworksNum(-2);
 		m_pGame->GetEnemyManager()->GetEnemyList().push_back(enemy);
 
 		std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Throw.wav", SoundCache::SoundState::NotPlaying);
@@ -309,25 +331,6 @@ void Boss::Action3()
 		}
 	}
 
-	//通常弾はプレイヤーに向けて発射
-	if (m_shotCoolTimer <= 0)
-	{
-		std::shared_ptr<Enemy9>enemy;
-		enemy = std::make_shared<Enemy9>(m_pGame->GetEnemyManager().get());
-		enemy->Init();
-
-		float explodeCnt = 2;
-		float increaseShotNum = 2;
-		float shotNum = 4;
-		float shotArcRadian = DirectX::XMConvertToRadians(150);
-		Math::Vector2 shotPos = { m_pos.x - m_radius.x,m_pos.y };
-		enemy->InitOriginal(explodeCnt, increaseShotNum, shotNum, shotArcRadian);
-		enemy->Spawn(shotPos, Math::Vector2{ 32,32 }, 300, 135, Math::Color{ 1,1,1,1 }, Math::Color{ 1,0.8,0.8,1 }, 10, 220, 0.5f, 0, 0);
-		m_pGame->GetEnemyManager()->GetEnemyList().push_back(enemy);
-
-		m_shotCoolTimer = 5;
-	}
-
 	if (m_circleShotCoolTimer <= 0)
 	{
 		//弾を20発出す
@@ -339,7 +342,7 @@ void Boss::Action3()
 		float radian;
 		for (int i = 0; i < bulletNum; i++)
 		{
-			radian = startRadian + DirectX::XMConvertToRadians(360 / bulletNum * i);
+			radian = startRadian + DirectX::XMConvertToRadians(360.0f / bulletNum * i);
 			vec.x = cosf(radian) * bulletSpeed;
 			vec.y = sinf(radian) * bulletSpeed;
 			m_pGame->GetBulletManager()->Shoot(m_pos, vec);
@@ -370,8 +373,8 @@ void Boss::Action4()
 		Math::Vector2 pos = { m_pos.x - m_radius.x, m_pos.y };
 		Math::Vector2 move;
 		float radian = atan2f(playerPos.y - pos.y, playerPos.x - pos.x);
-		move.x = cosf(radian) * m_bulletSpeed * 1.5f;
-		move.y = sinf(radian) * m_bulletSpeed * 1.5f;
+		move.x = cosf(radian) * m_bulletSpeed * 1.25f;
+		move.y = sinf(radian) * m_bulletSpeed * 1.25f;
 		m_pGame->GetBulletManager()->Shoot(pos, move);
 		m_shotCnt++;
 		if (m_shotCnt >= 3)
@@ -389,14 +392,14 @@ void Boss::Action4()
 	{
 		//弾を30発出す
 		int bulletNum = 25;
-		float bulletSpeed = 350;
+		float bulletSpeed = 320;
 		Math::Vector2 vec;
 		//一発目はプレイヤー目掛けて撃つ
 		float startRadian = atan2(s_pPlayerPos->y - m_pos.y, s_pPlayerPos->x - m_pos.x);
 		float radian;
 		for (int i = 0; i < bulletNum; i++)
 		{
-			radian = startRadian + DirectX::XMConvertToRadians(360 / bulletNum * i);
+			radian = startRadian + DirectX::XMConvertToRadians(360.0f / bulletNum * i);
 			vec.x = cosf(radian) * bulletSpeed;
 			vec.y = sinf(radian) * bulletSpeed;
 			m_pGame->GetBulletManager()->Shoot(m_pos, vec);
@@ -440,10 +443,11 @@ void Boss::Action4()
 		enemy->Init();
 		enemy->InitOriginal(area, m_pGame->GetBack()->GetFireworks());
 		enemy->Spawn(spawnPos, enemyRadius, 500, startDeg, enemyColor, enemyColor, 9999, NULL, NULL);
+		enemy->AddFireworksNum(-2);
 		m_pGame->GetEnemyManager()->GetEnemyList().push_back(enemy);
 
 		//クールタイム
-		if (m_fallEnemyCnt > randRange(8, 12))
+		if (m_fallEnemyCnt > randRange(8, 10))
 		{
 			m_fallEnemyCoolTimer = randRange(4, 5);
 			m_fallEnemyCnt = 0;

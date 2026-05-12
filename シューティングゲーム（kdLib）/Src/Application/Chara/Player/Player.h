@@ -39,8 +39,7 @@ public:
 		m_hp -= damage;
 		if (m_hp <= 0)
 		{
-			m_hp = 5;
-			//Dead();			//“|‚ê‚½Žž‚Ìˆ—‚ðŒÄ‚Ño‚·
+			Dead();			//“|‚ê‚½Žž‚Ìˆ—‚ðŒÄ‚Ño‚·
 		}
 		if (m_hp > m_hpMax)m_hp = m_hpMax;
 	}

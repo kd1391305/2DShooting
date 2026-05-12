@@ -1,4 +1,3 @@
-#pragma once
 #include "BaseEnemy.h"
 #include"../../../Font/DWriteCustom.h"
 #include"../../../Tools/RandEx/RandEx.h"
@@ -34,6 +33,12 @@ void BaseEnemy::Update(float deltaTime)
 	//クールタイムを減らす
 	m_shotCoolTimer -= deltaTime;
 	if (m_shotCoolTimer < 0)m_shotCoolTimer = 0;
+
+	//誘爆フラグが立っていたら
+	if (m_bChainExplode)
+	{
+		m_chainExplodeWait -= deltaTime;
+	}
 
 	if (m_bHitFlg)
 	{

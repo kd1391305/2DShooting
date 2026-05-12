@@ -34,7 +34,7 @@ void GameClearScene::Init()
 
 	//BGMを流す
 	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");
-	bgm->SetVolume(0.001f);
+	bgm->SetVolume(0.01f);
 	bgm->Play(true);
 
 	m_shotCoolTimer = 8;
@@ -89,8 +89,8 @@ void GameClearScene::Update()
 	if (m_shotCoolTimer <= 0)
 	{
 		{
-			int shotNum = 8;
-			int noise = randRange(-4, 0);
+			int shotNum = 10;
+			int noise = randRange(-4, 4);
 			shotNum += noise;
 			FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
 			for (int i = 0; i < shotNum; i++)
@@ -102,11 +102,11 @@ void GameClearScene::Update()
 				Math::Vector2 startPos = { startX,SCREEN_BOTTOM - 30 - randRange(0,200) };
 				Math::Vector2 startMove = { 0,randRange(270,370) };
 				float beforeScale = randRange(0.3f, 0.5f);
-				float afterScale = randRange(0.4f, 0.7f);
+				float afterScale = randRange(0.4f, 0.6f);
 				Math::Color color = { randRange(0,1),randRange(0.0f,1),randRange(0.0f,1),randRange(0.5f,1) };
 				Math::Color color2 = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
 			
-				for (int i = 0; i < 2; i++)
+				for (int j = 0; j < 2; j++)
 				{
 					m_back->GetFireworks()->Shoot(type,
 						startPos, startMove, beforeScale, afterScale, color);
@@ -115,11 +115,10 @@ void GameClearScene::Update()
 				m_back->GetFireworks()->Shoot(type,
 					startPos, startMove, beforeScale, afterScale / 1.2, color);
 				m_back->GetFireworks()->Shoot(type,
-					startPos, startMove, beforeScale, afterScale / 1.5, color);
+					startPos, startMove, beforeScale, afterScale / 1.4, color);
 			}
 		}
 		//クールタイムを設ける
-		
 		m_shotCoolTimer = randRange(10, 16);
 
 		//タイトル専用の花火効果音を流す
@@ -143,18 +142,21 @@ void GameClearScene::Draw()
 	//スコアを描画
 	{
 		DWriteCustom::Instance().SetFontSize(40);
-		DWriteCustom::Instance().Draw("得点 :", { -160,80 });
-		DWriteCustom::Instance().Draw("最高得点 :", { -240,-20 });
-		DWriteCustom::Instance().Draw("総打ち上げ数 :", { -320,-120 });
-		DWriteCustom::Instance().Draw("点", { 320,80 });
-		DWriteCustom::Instance().Draw("点", { 320,-20 });
-		DWriteCustom::Instance().Draw("回", { 320,-120 });
+		DWriteCustom::Instance().Draw("打ち上げ数 :", { -320,80 });
+		DWriteCustom::Instance().Draw("得点 :", { -200,-20 });
+		DWriteCustom::Instance().Draw("最高得点 :", { -280,-120 });
+
+		DWriteCustom::Instance().Draw("回", { 390,80 });
+		DWriteCustom::Instance().Draw("点", { 390,-20 });
+		DWriteCustom::Instance().Draw("点", { 390,-120 });
 	}
 	{
-		DWriteCustom::Instance().SetFontSize(60);
-		DrawScore(m_score, { -30,100 });
-		DrawScore(m_highScore,{ -30,0 });
-		DrawScore(m_explodeNum, { -30,-100 });
+		DWriteCustom::Instance().ChangeFont(FontName::Orbitron);
+		DWriteCustom::Instance().SetFontSize(55);
+		DrawScore(m_explodeNum, { -30,88 });
+		DrawScore(m_score, { -30,-12 });
+		DrawScore(m_highScore, { -30,-112 });
+		DWriteCustom::Instance().ChangeFont(FontName::KleeOne);
 	}
 
 	DWriteCustom::Instance().SetShadow({},{});
@@ -173,7 +175,7 @@ void GameClearScene::DrawScore(int score, Math::Vector2 pos)
 	//一桁ずつ描画
 	for (int i = 0; i < 8; i++)
 	{
-		if (!drawFlg && scoreStr[i] == '0')continue;
+		if (!drawFlg && scoreStr[i] == '0' && i != 7)continue;
 		else drawFlg = true;
 
 		std::string digit;
@@ -181,11 +183,11 @@ void GameClearScene::DrawScore(int score, Math::Vector2 pos)
 		if (scoreStr[i] == '1')
 		{
 			//+4右にずらす
-			DWriteCustom::Instance().Draw(digit, { pos.x + i * 40.0f + 5,pos.y });
+			DWriteCustom::Instance().Draw(digit, { pos.x + i * 50.0f + 5,pos.y });
 		}
 		else
 		{
-			DWriteCustom::Instance().Draw(digit, { pos.x + i * 40.0f,	pos.y });
+			DWriteCustom::Instance().Draw(digit, { pos.x + i * 50.0f,	pos.y });
 		}
 	}
 }
