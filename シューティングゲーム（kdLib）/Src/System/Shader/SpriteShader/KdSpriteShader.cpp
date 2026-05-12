@@ -72,7 +72,7 @@ bool KdSpriteShader::Init()
 
 	//ƒtƒHƒ“ƒgŠÖŒW
 	spriteBatch = new DirectX::SpriteBatch(D3D.GetDevContext());
-	spriteFont = new DirectX::SpriteFont(D3D.GetDev(), L"SpriteFont.dat");
+	//spriteFont = new DirectX::SpriteFont(D3D.GetDev(), L"SpriteFont.dat");
 
 	return true;
 }

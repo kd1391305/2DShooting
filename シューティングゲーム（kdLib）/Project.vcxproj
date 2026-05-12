@@ -180,7 +180,6 @@
     <ClInclude Include="Src\Application\Fireworks\FireworksManager.h" />
     <ClInclude Include="Src\Application\Key\KeyManager.h" />
     <ClInclude Include="Src\Application\Light\Light.h" />
-    <ClInclude Include="Src\Application\Mouse\Mouse.h" />
     <ClInclude Include="Src\Application\Scene.h" />
     <ClInclude Include="Src\Application\main.h" />
     <ClInclude Include="Src\Application\Scene\BaseScene\BaseScene.h" />
@@ -241,7 +240,6 @@
     <ClCompile Include="Src\Application\Fireworks\Fireworks.cpp" />
     <ClCompile Include="Src\Application\Fireworks\FireworksManager.cpp" />
     <ClCompile Include="Src\Application\Light\Light.cpp" />
-    <ClCompile Include="Src\Application\Mouse\Mouse.cpp" />
     <ClCompile Include="Src\Application\Scene.cpp" />
     <ClCompile Include="Src\Application\main.cpp" />
     <ClCompile Include="Src\Application\Scene\GameClearScene\GameClearScene.cpp" />

@@ -28,7 +28,6 @@ bool CollisionPlayer_Enemy(std::shared_ptr<Player> player, std::vector<std::shar
 			player->Damage(10);
 			player->Invincible(1.5f);			//1.5ïbä‘ñ≥ìG
 			e->Damage(10);
-			Timer::Instance().Stop(0.35f);		//0.35ïbí‚é~
 			return true;
 		}
 	}
@@ -49,7 +48,6 @@ bool CollisionPlayer_EBullet(std::shared_ptr<Player> player, std::vector<std::sh
 			player->Damage(10);
 			player->Invincible(1.5f);			//1.5ïbä‘ñ≥ìG
 			b->SetActive(false);
-			Timer::Instance().Stop(0.35f);		//0.35ïbí‚é~
 			return true;
 		}
 	}
@@ -71,7 +69,6 @@ bool CollisionPlayer_Boss(std::shared_ptr<Player> player, std::shared_ptr<Boss> 
 		//ñ≥ìGéûä‘
 		player->Invincible(1.5f);			//1.5ïbä‘ñ≥ìG
 		
-		Timer::Instance().Stop(0.35f);		//0.35ïbí‚é~
 		return true;
 	}
 	return false;
@@ -92,13 +89,9 @@ bool CollisionPlayer_AttackArea(std::shared_ptr<Player> player, std::shared_ptr<
 			//ñ≥ìGéûä‘
 			player->Invincible(1.5f);			//1.5ïbä‘ñ≥ìG
 
-			Timer::Instance().Stop(0.35f);		//0.35ïbí‚é~
-
 			return true;
 		}
-
 	}
-
 	return false;
 }
 

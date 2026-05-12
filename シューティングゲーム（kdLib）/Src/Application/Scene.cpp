@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include"Scene/SceneManager.h"
 #include"Scene/TitleScene/TitleScene.h"
-#include"Mouse/Mouse.h"
 #include"Key/KeyManager.h"
 #include"Timer/Timer.h"
 #include"Background/Back.h"
@@ -15,15 +14,12 @@
 void Scene::Draw2D()
 {
 	SceneManager::Instance().Draw();
-	
-	MOUSE.Draw();
 }
 
 void Scene::Update()
 {
 	Timer::Instance().Update();
 	KEY.Update();
-	MOUSE.Update();
 	SceneManager::Instance().Update();
 
 	//デバッグ
@@ -31,7 +27,6 @@ void Scene::Update()
 	if (GetAsyncKeyState('1') & 0x8000)
 	{
 		SceneManager::Instance().ChangeState(std::make_shared<TitleScene>());
-		MOUSE.ShowCursorTex(true);
 	}
 
 	//ゲームクリアシーンへ
@@ -39,6 +34,7 @@ void Scene::Update()
 	{
 		std::shared_ptr<Back>back = std::make_shared<Back>();
 		back->Init();
+		back->StartZoomIn();
 		SceneManager::Instance().ChangeState(std::make_shared< GameClearScene>(back,99999999,9999,9999));
 	}
 
@@ -47,6 +43,7 @@ void Scene::Update()
 	{
 		std::shared_ptr<Back>back = std::make_shared<Back>();
 		back->Init();
+		back->StartZoomIn();
 		std::shared_ptr<Game> game = std::make_shared<Game>(back);
 		SceneManager::Instance().ChangeState(std::make_shared< GameOverScene>(game));
 		game->GetUI()->EndExplan();
@@ -58,6 +55,7 @@ void Scene::Update()
 		std::shared_ptr<Game>game; 
 		std::shared_ptr<Back>back = std::make_shared<Back>();
 		back->Init();
+		back->StartZoomIn();
 		game = std::make_shared<Game>(back);
 		SceneManager::Instance().ChangeState(game);
 		game->StartBossScene();
@@ -76,6 +74,8 @@ void Scene::Init()
 	srand(timeGetTime());
 	SceneManager::Instance().ChangeState(std::make_shared<TitleScene>());
 	Timer::Instance().Reset();
+
+	ShowCursor(false);
 }
 
 void Scene::Release()

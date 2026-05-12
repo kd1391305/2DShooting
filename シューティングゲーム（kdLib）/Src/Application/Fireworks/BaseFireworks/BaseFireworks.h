@@ -22,13 +22,13 @@ struct Particle
 		m_pos += m_move * deltaTime;
 
 		//空気抵抗
-		m_move *= 0.98f;
+		m_move *= pow(0.98f, deltaTime * 60);
 
 		//生存時間を減らす
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.98f;
+			m_color *= pow(0.98f, deltaTime * 60);
 		}
 		//生存時間が終了したか？
 		return m_life > 0 || m_color.A() > 0.01f;
@@ -62,7 +62,7 @@ struct Particle2
 		m_pos += m_move * deltaTime;
 
 		//空気抵抗
-		m_move *= 0.95f;
+		m_move *= pow(0.95f, deltaTime * 60);
 
 		//行列作成
 		Math::Matrix scale = Math::Matrix::CreateScale(m_scale.x, m_scale.y, 0);
@@ -73,7 +73,7 @@ struct Particle2
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.98f;
+			m_color *= pow(0.98f, deltaTime * 60);
 		}
 		//生存時間が終了したか？
 		return m_life > 0 || m_color.A() > 0.01f;
@@ -97,7 +97,7 @@ struct Particle3
 		m_pos += m_move * deltaTime;
 
 		//空気抵抗
-		m_move *= 0.98f;
+		m_move *= pow(0.98f, deltaTime * 60);
 
 		//行列作成
 		Math::Matrix scale = Math::Matrix::CreateScale(m_scale * baseScale);
@@ -107,7 +107,7 @@ struct Particle3
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.98f;
+			m_color *= pow(0.98f, deltaTime * 60);
 		}
 		//生存時間が終了したか？
 		return m_life > 0 || m_color.A() > 0.01f;
@@ -173,7 +173,7 @@ struct Particle4
 		m_pos += m_move * deltaTime;
 
 		//空気抵抗
-		m_move *= 0.98f;
+		m_move *= pow(0.98f, deltaTime * 60);
 
 		//トレイルの更新
 		m_trail.Update(m_pos);
@@ -182,7 +182,7 @@ struct Particle4
 		m_life -= deltaTime;
 		if (m_life <= 0)
 		{
-			m_color *= 0.98f;
+			m_color *= pow(0.98f, deltaTime * 60);
 		}
 		//生存時間が終了したか？
 		return m_life > 0 || m_color.A() > 0.01f;

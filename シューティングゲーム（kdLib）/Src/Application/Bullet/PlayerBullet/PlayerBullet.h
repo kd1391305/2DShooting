@@ -12,6 +12,8 @@ public:
 	}
 	~PlayerBullet()override{}
 
+	void Update(float deltaTime)override;
+
 	//描画
 	void Draw()override;
 
@@ -25,13 +27,18 @@ public:
 	//敵を貫通した数を返す
 	int GetPierceNum() { return m_pierceNum; }
 	
-	void SetPower(float set) { m_power = set; }
+	void SetPower(float set) { 
+		m_power = set;
+		//大きさを変更する
+		m_radius = 16 + m_power / 7.0f;
+	}
 
 	void SetPos(Math::Vector2 pos) { m_pos = pos; }
 
-	float GetRadius()override { return m_radius + m_power; }
+	float GetRadius()override { return m_radius; }
 private:
 
 	int m_power;			//チャージしたパワー（パワー１ = 敵を一体倒す）
 	int m_pierceNum;		//敵を貫いた回数
+	float m_anim;				//アニメーションカウント
 };

@@ -151,9 +151,6 @@
     <Filter Include="Src\Application\Key">
       <UniqueIdentifier>{a93a58f7-cd93-42f2-be2a-2e013798a3e7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Mouse">
-      <UniqueIdentifier>{e101341c-1c8d-42d1-9d30-8ed1b67374ed}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\Chara\Enemy\Boss\AttackArea">
       <UniqueIdentifier>{61a89a24-5682-489d-a25a-1f464aced0d2}</UniqueIdentifier>
     </Filter>
@@ -357,9 +354,6 @@
     <ClInclude Include="Src\Application\Key\KeyManager.h">
       <Filter>Src\Application\Key</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Mouse\Mouse.h">
-      <Filter>Src\Application\Mouse</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\Chara\Enemy\Boss\AttackArea\AttackArea.h">
       <Filter>Src\Application\Chara\Enemy\Boss\AttackArea</Filter>
     </ClInclude>
@@ -520,9 +514,6 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Animtion\HitEffect\HitEffectManager.cpp">
       <Filter>Src\Application\Animtion\HItEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\Mouse\Mouse.cpp">
-      <Filter>Src\Application\Mouse</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\Chara\Enemy\Boss\AttackArea\AttackArea.cpp">
       <Filter>Src\Application\Chara\Enemy\Boss\AttackArea</Filter>

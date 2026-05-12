@@ -118,7 +118,7 @@ void EnemyManager::Update(float deltaTime)
 	}
 
 	//ƒ{ƒXoŒ»‚ÌðŒ
-	if (Timer::Instance().GetTime() >180 && !m_pGame->GetGameClearFlg())
+	if (Timer::Instance().GetTime() >100 && !m_pGame->GetGameClearFlg())
 	{
 		if (!m_boss)
 		{
