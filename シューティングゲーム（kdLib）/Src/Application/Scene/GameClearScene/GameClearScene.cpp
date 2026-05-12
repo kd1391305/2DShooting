@@ -7,7 +7,6 @@
 #include"../SceneManager.h"
 #include"../TitleScene/TitleScene.h"
 #include"../GameScene/GameScene.h"
-#include"../../Font/DWriteCustom.h"
 #include"../../SoundCache/SoundCache.h"
 #include"../../TextureCache/TextureCache.h"
 #include"../../main.h"
@@ -135,41 +134,95 @@ void GameClearScene::Draw()
 		Math::Matrix scaleMat = Math::Matrix::CreateScale(1.2f, 1.2f, 0);
 		Math::Matrix transMat = Math::Matrix::CreateTranslation(0, 200, 0);
 		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
-		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/GameClear/GameClear.png"));
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/GameClear.png"));
 	}
 
-	DWriteCustom::Instance().SetShadow({ -1,-1 }, { 0,1,1,1 });
 	//スコアを描画
+	float explodeNumPosY = 60;
+	float scorePosY		 = -40;
+	float highScorePosY	 = -140;
 	{
-		DWriteCustom::Instance().SetFontSize(40);
-		DWriteCustom::Instance().Draw("打ち上げ数 :", { -320,80 });
-		DWriteCustom::Instance().Draw("得点 :", { -200,-20 });
-		DWriteCustom::Instance().Draw("最高得点 :", { -280,-120 });
+		Math::Matrix scaleMat, transMat;
+		//打ち上げ数
+		scaleMat = Math::Matrix::CreateScale(0.25f);
+		transMat = Math::Matrix::CreateTranslation(-260, explodeNumPosY, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/ExplodeNum.png"));
 
-		DWriteCustom::Instance().Draw("回", { 390,80 });
-		DWriteCustom::Instance().Draw("点", { 390,-20 });
-		DWriteCustom::Instance().Draw("点", { 390,-120 });
+		//得点
+		transMat = Math::Matrix::CreateTranslation(-200, scorePosY, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/Score.png"));
+
+		//ハイスコア
+		transMat = Math::Matrix::CreateTranslation(-240, highScorePosY, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/HighScore.png"));
+
+
+		//回テキスト
+		transMat = Math::Matrix::CreateTranslation(400, explodeNumPosY, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/kai.png"));
+
+		//点テキスト
+		{
+			KdTexture* tex = TextureCache::Instance().Get("Texture/UI/ten.png").get();
+			transMat = Math::Matrix::CreateTranslation(400, scorePosY, 0);
+			SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+			SHADER.m_spriteShader.DrawTex_Src(tex);
+			transMat = Math::Matrix::CreateTranslation(400, highScorePosY, 0);
+			SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+			SHADER.m_spriteShader.DrawTex_Src(tex);
+		}
+
+		//コロンテキスト
+		{
+			float colonPosX = -110;
+
+			KdTexture* tex = TextureCache::Instance().Get("Texture/UI/colon.png").get();
+			transMat = Math::Matrix::CreateTranslation(colonPosX, explodeNumPosY, 0);
+			SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+			SHADER.m_spriteShader.DrawTex_Src(tex);
+			transMat = Math::Matrix::CreateTranslation(colonPosX, scorePosY, 0);
+			SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+			SHADER.m_spriteShader.DrawTex_Src(tex);
+			transMat = Math::Matrix::CreateTranslation(colonPosX, highScorePosY, 0);
+			SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+			SHADER.m_spriteShader.DrawTex_Src(tex);
+		}
 	}
 	{
-		DWriteCustom::Instance().ChangeFont(FontName::Orbitron);
-		DWriteCustom::Instance().SetFontSize(55);
-		DrawScore(m_explodeNum, { -30,88 });
-		DrawScore(m_score, { -30,-12 });
-		DrawScore(m_highScore, { -30,-112 });
-		DWriteCustom::Instance().ChangeFont(FontName::KleeOne);
+		float offsetY = 3;
+		DrawScore(m_explodeNum, { -30,explodeNumPosY + offsetY });
+		DrawScore(m_score, { -30,scorePosY + offsetY });
+		DrawScore(m_highScore, { -30,highScorePosY + offsetY });
 	}
 
-	DWriteCustom::Instance().SetShadow({},{});
-	m_titleButton->Draw();
-	DWriteCustom::Instance().Draw("タイトルへ", { -300 ,- 252 },40);
-	m_gameButton->Draw();
-	DWriteCustom::Instance().Draw("もう一度", { 110, -252 },40);
+	{
+		//タイトルボタン
+		m_titleButton->Draw();
+		Math::Matrix scaleMat, transMat;
+		scaleMat = Math::Matrix::CreateScale(0.22f);
+		transMat = Math::Matrix::CreateTranslation(m_titleButton->GetPos().x, m_titleButton->GetPos().y, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/GoToTitle.png"));
+
+		//ゲームに戻るボタン
+		m_gameButton->Draw();
+		transMat = Math::Matrix::CreateTranslation(m_gameButton->GetPos().x, m_gameButton->GetPos().y, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/Retry.png"));
+	}
 }
 
 void GameClearScene::DrawScore(int score, Math::Vector2 pos)
 {
 	bool drawFlg = false;
 	char scoreStr[10];
+	char path[50];
+	Math::Matrix scaleMat, transMat;
+	scaleMat = Math::Matrix::CreateScale(0.4f);
 	sprintf_s(scoreStr, sizeof(scoreStr), "%.8ld", score);
 	float scorePosY = -160;
 	//一桁ずつ描画
@@ -177,18 +230,10 @@ void GameClearScene::DrawScore(int score, Math::Vector2 pos)
 	{
 		if (!drawFlg && scoreStr[i] == '0' && i != 7)continue;
 		else drawFlg = true;
-
-		std::string digit;
-		digit = scoreStr[i];
-		if (scoreStr[i] == '1')
-		{
-			//+4右にずらす
-			DWriteCustom::Instance().Draw(digit, { pos.x + i * 50.0f + 5,pos.y });
-		}
-		else
-		{
-			DWriteCustom::Instance().Draw(digit, { pos.x + i * 50.0f,	pos.y });
-		}
+		sprintf_s(path, sizeof(path), "Texture/UI/Digit/%c.png", scoreStr[i]);
+		transMat = Math::Matrix::CreateTranslation(pos.x + 50 * i, pos.y, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get(path));
 	}
 }
 

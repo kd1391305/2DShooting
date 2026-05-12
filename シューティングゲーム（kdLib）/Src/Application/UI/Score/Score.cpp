@@ -1,5 +1,5 @@
 #include"Score.h"
-#include"../../Font/DWriteCustom.h"
+#include"../../TextureCache/TextureCache.h"
 
 //デストラクタ
 Score::~Score()
@@ -36,64 +36,31 @@ void Score::Update()
 
 void Score::Draw()
 {
-	const float tempFontSize = DWriteCustom::Instance().GetFontSize();
-	DWriteCustom::Instance().SetFontSize(13);
+	Math::Matrix scaleMat, transMat;
+	{
+		scaleMat = Math::Matrix::CreateScale(0.1f);
+		transMat = Math::Matrix::CreateTranslation(-362, 340, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/Score_White.png"));
+		transMat = Math::Matrix::CreateTranslation(-380, 310, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/HighScore_White.png"));
+	}
 
-	D2D1_COLOR_F tempColor = DWriteCustom::Instance().GetColor();
-	DWriteCustom::Instance().SetShadow({ -1,-1 }, { 0.0f, 0.7f, 0.7f, 0.7f });
+	{
+		KdTexture* tex = TextureCache::Instance().Get("Texture/UI/colon.png").get();
+		scaleMat = Math::Matrix::CreateScale(0.1f);
+		transMat = Math::Matrix::CreateTranslation(-338, 340, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(tex);
+		transMat = Math::Matrix::CreateTranslation(-338, 310, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(tex);
+	}
 
-	DWriteCustom::Instance().Draw("      得点 :", { -440,350 });
-	DWriteCustom::Instance().Draw("最高得点 :", { -440,320 });
-	DWriteCustom::Instance().SetShadow({}, {});
-	
-
-	DWriteCustom::Instance().SetFontSize(20);
-	DWriteCustom::Instance().ChangeFont(FontName::Orbitron);
 	//現在のスコアを描画
-	{
-		char score[10];
-		sprintf_s(score, sizeof(score), "%.8ld", m_score);
-		float scorePosY = 355;
-		//一桁ずつ描画
-		for (int i = 0; i < 8; i++)
-		{
-			std::string digit;
-			digit = score[i];
-			if (score[i] == '1')
-			{
-				//+4右にずらす
-				DWriteCustom::Instance().Draw(digit, { -360 + i * 18.0f + 4,scorePosY });
-			}
-			else
-			{
-				DWriteCustom::Instance().Draw(digit, { -360 + i * 18.0f,	scorePosY });
-			}
-		}
-	}
-	//ハイスコアを描画する
-	{
-		char highScore[10];
-		sprintf_s(highScore, sizeof(highScore), "%.8ld", m_highScore);
-		float highScorePosY = 325;
-		//一桁ずつ描画
-		for (int i = 0; i < 8; i++)
-		{
-			std::string digit;
-			digit = highScore[i];
-			if (highScore[i] == '1')
-			{
-				//+4右にずらす
-				DWriteCustom::Instance().Draw(digit, { -360 + i * 18.0f + 4,highScorePosY });
-			}
-			else
-			{
-				DWriteCustom::Instance().Draw(digit, { -360 + i * 18.0f,	highScorePosY });
-			}
-		}
-	}
-	//フォントを元に戻す
-	DWriteCustom::Instance().ChangeFont(FontName::KleeOne);
-	DWriteCustom::Instance().SetFontSize(tempFontSize);
+	DrawScore(m_score, { -310,340 });
+	DrawScore(m_highScore, { -310,310 });
 }
 
 void Score::Add(int addScore)
@@ -147,4 +114,23 @@ bool Score::SaveHighScore()
 
 	//セーブができなかった
 	return false;
+}
+
+void Score::DrawScore(int score, Math::Vector2 pos)
+{
+	bool drawFlg = false;
+	char scoreStr[9];
+	char path[50];
+	Math::Matrix scaleMat, transMat;
+	scaleMat = Math::Matrix::CreateScale(0.17f);
+	sprintf_s(scoreStr, sizeof(scoreStr), "%.8d", score);
+	float scorePosY = -160;
+	//一桁ずつ描画
+	for (int i = 0; i < 8; i++)
+	{
+		transMat = Math::Matrix::CreateTranslation(pos.x + 15 * i, pos.y, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		sprintf_s(path, sizeof(path), "Texture/UI/Digit/%c.png", scoreStr[i]);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get(path));
+	}
 }

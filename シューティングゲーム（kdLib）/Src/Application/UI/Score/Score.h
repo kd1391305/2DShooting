@@ -39,11 +39,13 @@ private:
 	//ハイスコアをセーブする
 	bool SaveHighScore();
 
+	void DrawScore(int score,Math::Vector2 pos);
+
 	long m_score=0;			//現在のスコア
 	long m_highScore=0;		//最大スコア
 
 	std::queue<int>m_waitScore;			//加算するのを待っているスコア待機列
-	static const int s_waitCnt = 6;		//6フレーム間で平等にスコアを加算する
+	static const int s_waitCnt = 12;	//12フレーム間で平等にスコアを加算する
 
 	long m_explodeNum = 0;
 };

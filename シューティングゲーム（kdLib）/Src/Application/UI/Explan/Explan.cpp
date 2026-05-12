@@ -1,6 +1,5 @@
 #include"Explan.h"
 #include"../../TextureCache/TextureCache.h"
-#include"../../Font/DWriteCustom.h"
 void Explan::Init()
 {
 	
@@ -54,7 +53,10 @@ void Explan::Draw()
 		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
 		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/TransKey.png"), m_color);
 
-		DWriteCustom::Instance().Draw("移動", { -525, -270 }, fontSize, m_fontColor);
+		scaleMat = Math::Matrix::CreateScale(0.15f);
+		transMat = Math::Matrix::CreateTranslation(-500, -290, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/Trans.png"));
 
 		//チャージキー
 		scaleMat = Math::Matrix::CreateScale(0.22f, 0.22f, 0);
@@ -62,6 +64,9 @@ void Explan::Draw()
 		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
 		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/ZKey.png"), m_color);
 		
-		DWriteCustom::Instance().Draw("チャージ", { -338,-270 }, fontSize, m_fontColor);
+		scaleMat = Math::Matrix::CreateScale(0.15f);
+		transMat = Math::Matrix::CreateTranslation(-290, -290, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/Charge.png"));
 	}
 }

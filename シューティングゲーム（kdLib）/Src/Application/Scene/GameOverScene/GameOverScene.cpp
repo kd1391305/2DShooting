@@ -4,7 +4,6 @@
 #include"../../Fireworks/FireworksManager.h"
 #include"../../Bullet/BulletManager.h"
 #include"../../Background/Back.h"
-#include"../../Font/DWriteCustom.h"
 #include"../../main.h"
 #include"../../Timer/Timer.h"
 #include"../../Tools/Button/Button.h"
@@ -13,6 +12,7 @@
 #include"../GameScene/GameScene.h"
 #include"../TitleScene/TitleScene.h"
 #include"../../Mouse/Mouse.h"
+#include"../../TextureCache/TextureCache.h"
 
 void GameOverScene::Init()
 {
@@ -104,11 +104,26 @@ void GameOverScene::Draw()
 
 	float posY = -80;
 
-	DWriteCustom::Instance().SetShadow({ -2. - 2 }, { 0.8f,0.2f,0.2f,0.8f });
-	DWriteCustom::Instance().Draw("Game Over", { -310,250 }, 120, { 0.8f,0.8f,0.8f,1.0f });
-	DWriteCustom::Instance().SetShadow({}, {});
-	DWriteCustom::Instance().Draw("タイトルへ", Math::Vector2{ -225,posY }, 30);
-	DWriteCustom::Instance().Draw("コンティニュー", {49,posY}, 30);
+	Math::Matrix scaleMat, transMat;
+	{
+		//ゲームオーバー
+		scaleMat = Math::Matrix::CreateScale(0.5f);
+		transMat = Math::Matrix::CreateTranslation(0, 200,0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/GameOver.png"));
+
+		//タイトルへ
+		scaleMat = Math::Matrix::CreateScale(0.18f);
+		transMat = Math::Matrix::CreateTranslation(m_titleButton->GetPos().x, m_titleButton->GetPos().y, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/GoToTitle.png"));
+
+		//コンティニュー
+		scaleMat = Math::Matrix::CreateScale(0.18f);
+		transMat = Math::Matrix::CreateTranslation(m_gameButton->GetPos().x, m_gameButton->GetPos().y, 0);
+		SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+		SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/Continue.png"));
+	}
 }
 
 void GameOverScene::Release()

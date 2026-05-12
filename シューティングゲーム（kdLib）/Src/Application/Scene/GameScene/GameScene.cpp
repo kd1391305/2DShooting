@@ -11,7 +11,6 @@
 #include"../SceneManager.h"
 #include"../GameOverScene/GameOverScene.h"
 #include"../GameClearScene/GameClearScene.h"
-#include"../../Font/DWriteCustom.h"
 #include"../../main.h"
 #include"../../UI/Score/Score.h"
 #include"../../SoundCache/SoundCache.h"
@@ -68,13 +67,17 @@ void Game::Init()
 //更新
 void Game::Update()
 {
+	const double deltaTime = Timer::Instance().GetDeltaTime();
+	//背景の更新
+	m_back->Update(deltaTime);
+
+	//HeadUpDisplay（UI）の更新
+	m_UI->Update(deltaTime);
+
 	if (Timer::Instance().GetStopTime() > 0)
 	{
 		return;
 	}
-
-
-	const double deltaTime = Timer::Instance().GetDeltaTime();
 
 	if (m_bStartFlg)
 	{
@@ -162,11 +165,7 @@ void Game::Update()
 		//全てのヒットエフェクトの更新
 		m_hitEffectManager->Update(deltaTime);
 	}
-	//背景の更新
-	m_back->Update(deltaTime);
-
-	//HeadUpDisplay（UI）の更新
-	m_UI->Update(deltaTime);
+	
 }
 
 //描画
@@ -208,7 +207,7 @@ void Game::GameOver()
 		bgm->Stop();
 		MOUSE.ShowCursorTex(true);
 	}
-	std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charage.wav");
+	std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
 	se->Stop();
 }
 

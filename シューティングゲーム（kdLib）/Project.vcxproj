@@ -178,8 +178,6 @@
     <ClInclude Include="Src\Application\Fireworks\BaseFireworks\BaseFireworks.h" />
     <ClInclude Include="Src\Application\Fireworks\Fireworks.h" />
     <ClInclude Include="Src\Application\Fireworks\FireworksManager.h" />
-    <ClInclude Include="Src\Application\Font\DirectWriteCustomFont.h" />
-    <ClInclude Include="Src\Application\Font\DWriteCustom.h" />
     <ClInclude Include="Src\Application\Key\KeyManager.h" />
     <ClInclude Include="Src\Application\Light\Light.h" />
     <ClInclude Include="Src\Application\Mouse\Mouse.h" />
@@ -242,8 +240,6 @@
     <ClCompile Include="Src\Application\Fireworks\BaseFireworks\BaseFireworks.cpp" />
     <ClCompile Include="Src\Application\Fireworks\Fireworks.cpp" />
     <ClCompile Include="Src\Application\Fireworks\FireworksManager.cpp" />
-    <ClCompile Include="Src\Application\Font\DirectWriteCustomFont.cpp" />
-    <ClCompile Include="Src\Application\Font\DWriteCustom.cpp" />
     <ClCompile Include="Src\Application\Light\Light.cpp" />
     <ClCompile Include="Src\Application\Mouse\Mouse.cpp" />
     <ClCompile Include="Src\Application\Scene.cpp" />

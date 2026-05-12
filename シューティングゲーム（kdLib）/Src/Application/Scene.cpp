@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include"Scene/SceneManager.h"
 #include"Scene/TitleScene/TitleScene.h"
-#include"Font/DWriteCustom.h"
 #include"Mouse/Mouse.h"
 #include"Key/KeyManager.h"
 #include"Timer/Timer.h"
@@ -29,54 +28,52 @@ void Scene::Update()
 
 	//デバッグ
 	//タイトルへ
-	//if (GetAsyncKeyState('1') & 0x8000)
-	//{
-	//	SceneManager::Instance().ChangeState(std::make_shared<TitleScene>());
-	//	MOUSE.ShowCursorTex(true);
-	//}
+	if (GetAsyncKeyState('1') & 0x8000)
+	{
+		SceneManager::Instance().ChangeState(std::make_shared<TitleScene>());
+		MOUSE.ShowCursorTex(true);
+	}
 
-	////ゲームクリアシーンへ
-	//if (GetAsyncKeyState('2') & 0x8000)
-	//{
-	//	std::shared_ptr<Back>back = std::make_shared<Back>();
-	//	back->Init();
-	//	SceneManager::Instance().ChangeState(std::make_shared< GameClearScene>(back,9999,9999,9999));
-	//}
+	//ゲームクリアシーンへ
+	if (GetAsyncKeyState('2') & 0x8000)
+	{
+		std::shared_ptr<Back>back = std::make_shared<Back>();
+		back->Init();
+		SceneManager::Instance().ChangeState(std::make_shared< GameClearScene>(back,99999999,9999,9999));
+	}
 
-	////ゲームオーバーシーン
-	//if (GetAsyncKeyState('3') & 0x8000)
-	//{
-	//	std::shared_ptr<Back>back = std::make_shared<Back>();
-	//	back->Init();
-	//	std::shared_ptr<Game> game = std::make_shared<Game>(back);
-	//	SceneManager::Instance().ChangeState(std::make_shared< GameOverScene>(game));
-	//	game->GetUI()->EndExplan();
-	//}
+	//ゲームオーバーシーン
+	if (GetAsyncKeyState('3') & 0x8000)
+	{
+		std::shared_ptr<Back>back = std::make_shared<Back>();
+		back->Init();
+		std::shared_ptr<Game> game = std::make_shared<Game>(back);
+		SceneManager::Instance().ChangeState(std::make_shared< GameOverScene>(game));
+		game->GetUI()->EndExplan();
+	}
 
-	////ボスシーン
-	//if (GetAsyncKeyState('4') & 0x8000)
-	//{
-	//	std::shared_ptr<Game>game; 
-	//	std::shared_ptr<Back>back = std::make_shared<Back>();
-	//	back->Init();
-	//	game = std::make_shared<Game>(back);
-	//	SceneManager::Instance().ChangeState(game);
-	//	game->StartBossScene();
-	//	game->GetUI()->EndExplan();
-	//	SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav").get()->Stop();
-	//}
+	//ボスシーン
+	if (GetAsyncKeyState('4') & 0x8000)
+	{
+		std::shared_ptr<Game>game; 
+		std::shared_ptr<Back>back = std::make_shared<Back>();
+		back->Init();
+		game = std::make_shared<Game>(back);
+		SceneManager::Instance().ChangeState(game);
+		game->StartBossScene();
+		game->GetUI()->EndExplan();
+		SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav").get()->Stop();
+	}
 
-	//if (GetAsyncKeyState('9') & 0x8000)
-	//{
-	//	AUDIO.StopAll();
-	//}
+	if (GetAsyncKeyState('9') & 0x8000)
+	{
+		AUDIO.StopAll();
+	}
 }
 
 void Scene::Init()
 {
 	srand(timeGetTime());
-	DWriteCustom::Instance().Init();
-
 	SceneManager::Instance().ChangeState(std::make_shared<TitleScene>());
 	Timer::Instance().Reset();
 }

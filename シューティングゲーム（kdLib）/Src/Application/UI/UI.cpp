@@ -5,7 +5,6 @@
 #include"../Chara/Player/Player.h"
 #include"Explan/Explan.h"
 #include"../TextureCache/TextureCache.h"
-#include"../Font/DWriteCustom.h"
 
 //初期化
 void UI::Init(Player* player)
@@ -22,8 +21,6 @@ void UI::Init(Player* player)
 		player->GetHPMaxAddress(),		//MaxHPのアドレス
 		player->GetHPAddress(),			//HPのアドレス
 		1);								//ゲージが減るスピード
-
-
 
 	m_explan = std::make_shared<Explan>();
 	m_explan->Init();
@@ -54,7 +51,7 @@ void UI::Draw()
 {
 	//UI背景描画
 	SHADER.m_spriteShader.ClearMatrix();
-	Math::Vector2 radius = { 220,32 };
+	Math::Vector2 radius = { 225,32 };
 	Math::Color color = { 0.1f,0.1f,0.1f,0.7f };
 	float cx = SCREEN_LEFT + radius.x;
 	float cy = SCREEN_TOP - radius.y;
@@ -70,6 +67,7 @@ void UI::Draw()
 	Math::Color gray = { 0.8f,0.8f,0.8f,0.9f };
 	SHADER.m_spriteShader.DrawLine(x2, y2, x3, y3, &gray);
 	SHADER.m_spriteShader.DrawLine(x2, y2, SCREEN_LEFT, y2, &gray);
+	SHADER.m_spriteShader.DrawLine(x2 + 1, y2 + 1, SCREEN_LEFT, y2, &gray);
 
 	//プレイヤーアイコンの描画
 	{
@@ -83,9 +81,12 @@ void UI::Draw()
 	//スコアの描画
 	m_score->Draw();
 
-	DWriteCustom::Instance().SetShadow({ -1,-1 }, { 0.0f, 0.7f, 0.7f, 0.7f });
-	DWriteCustom::Instance().Draw("体力", { -575, 342 },15);
-	DWriteCustom::Instance().SetShadow({}, {});
+	Math::Matrix scaleMat, transMat;
+	scaleMat = Math::Matrix::CreateScale(0.1f);
+	transMat = Math::Matrix::CreateTranslation(-559, 328, 0);
+	SHADER.m_spriteShader.SetMatrix(scaleMat * transMat);
+	SHADER.m_spriteShader.DrawTex_Src(TextureCache::Instance().Get("Texture/UI/HP.png"));
+
 	//ゲージの描画
 	m_playerGauge->Draw();
 
