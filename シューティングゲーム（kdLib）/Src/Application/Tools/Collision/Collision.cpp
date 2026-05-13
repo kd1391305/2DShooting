@@ -201,7 +201,7 @@ bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& play
 	for (auto& bullet : playerBullet)
 	{
 		if (!bullet->IsActive())continue;
-		if (IsCollision(bossPos, bossRadius, bullet->GetPos(), bullet->GetRadius()))
+		if (IsCollision_Boss(bullet->GetPos(), Math::Vector2{bullet->GetRadius(),bullet->GetRadius()}, boss))
 		{
 			//ダメージ
 			boss->Damage(10 * bullet->GetPower());
@@ -227,10 +227,7 @@ bool CollisionPlayerBullet_Boss(std::vector<std::shared_ptr<PlayerBullet>>& play
 			bullet->SetActive(false);
 
 			//ヒットエフェクト
-			Math::Vector2 emitPos;
-			emitPos.y = bullet->GetPos().y;
-			emitPos.x = boss->GetPos().x - boss->GetRadius().x;
-			hitEffectManager->Emit(emitPos, boss->GetMove());
+			hitEffectManager->Emit(bullet->GetPos(), boss->GetMove());
 
 			//当たった時の処理
 			boss->OnHit();
@@ -276,4 +273,48 @@ bool IsCollision_Box(Math::Vector2 pos1, Math::Vector2 radius1, Math::Vector2 po
 	}
 
 	return false;
+}
+
+//ボス用の当たり判定
+bool IsCollision_Boss(Math::Vector2 pos, Math::Vector2 radius, std::shared_ptr<Boss> boss)
+{
+	//ボスは平行四辺形での当たり判定
+	Math::Vector2 bossPos = boss->GetPos();
+	Math::Vector2 bossRadius = boss->GetRadius();
+
+	//まず四角形で当たり判定
+	if (IsCollision_Box(pos, radius, bossPos, bossRadius))
+	{
+		//ボス以外は円での当たり判定
+		float left, right, top, bottom;
+
+		Math::Vector2 leftTop, rightTop, leftBottom, rightBottom;
+
+		leftTop = { bossPos.x - bossRadius.x * 0.8f,bossPos.y + bossRadius.y };
+		leftBottom = bossPos - bossRadius;
+		rightTop = bossPos + bossRadius;
+		rightBottom = { bossPos.x + bossRadius.x * 0.8f,bossPos.y - bossRadius.y };
+
+		//ボスの左斜辺より右側だったら
+		if (IsCross(leftTop, leftBottom, pos) <= 0)
+		{
+			//ボスの右斜辺より左側だったら
+			if (IsCross(rightBottom, rightTop, pos) >= 0)
+			{
+				//上下の当たり判定はIsCollision_Boxで行っているので判定しない
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool IsCollision_Boss(Math::Vector2 pos, float radius, std::shared_ptr<Boss> boss)
+{
+	return false;
+}
+
+float IsCross(Math::Vector2 linePos1, Math::Vector2 linePos2, Math::Vector2 pos)
+{
+	return (linePos2.x - linePos1.x) * (pos.y - linePos1.y) - (linePos2.y - linePos1.y) * (pos.x - linePos1.x);
 }

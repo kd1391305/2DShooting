@@ -19,7 +19,7 @@ void PlayerBullet::Update(float deltaTime)
 	}
 
 	//çsóÒçÏê¨
-	Math::Matrix scaleMat = Math::Matrix::CreateScale(-1 - m_power/7.0f, 1 + m_power/7.0f, 0);
+	Math::Matrix scaleMat = Math::Matrix::CreateScale(-1 - m_power / 7.0f, 1 + m_power / 7.0f, 0);
 	Math::Matrix transMat = Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
 	m_mat = scaleMat * transMat;
 }
@@ -38,8 +38,9 @@ void PlayerBullet::Pierce()
 void PlayerBullet::Draw()
 {
 	Math::Rectangle rect;
-	if(m_power == 10)	rect = { (11 + (int)m_anim)*32, 5 * 32, 32, 32 };
-	else				rect = {(11+(int)m_anim)*32, 0, 32, 32 };
+	if (m_power == 10)	rect = { (11 + (int)m_anim) * 32, 5 * 32, 32, 32 };
+	else				rect = { (11 + (int)m_anim) * 32, 0, 32, 32 };
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(TextureCache::Instance().Get("Texture/Bullet/Bullet.png").get(), 0, 0, &rect, &Math::Color{ 1,1,1,1 });
+
 }

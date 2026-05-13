@@ -11,7 +11,6 @@
 #include"../../TextureCache/TextureCache.h"
 #include"../../main.h"
 #include"../../Tools/RandEx/RandEx.h"
-#include"../../Mouse/Mouse.h"
 
 void GameClearScene::Init()
 {
@@ -38,7 +37,7 @@ void GameClearScene::Init()
 
 	m_shotCoolTimer = 8;
 
-	MOUSE.ShowCursorTex(true);
+	m_gameButton->SetSelect(true);
 }
 
 void GameClearScene::Update()
@@ -50,8 +49,7 @@ void GameClearScene::Update()
 	m_gameButton->Update();
 	if (m_gameButton->IsSelect())
 	{
-		if ((KEY.IsDown(VK_LBUTTON) && m_gameButton->GetActionType() == Button::ActionType::Mouse) ||
-			(KEY.IsDown(VK_RETURN)))
+		if (KEY.IsDown(VK_RETURN))
 		{
 			SceneManager::Instance().ChangeState(std::make_shared<Game>(m_back));
 			std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");
@@ -62,8 +60,7 @@ void GameClearScene::Update()
 	m_titleButton->Update();
 	if (m_titleButton->IsSelect())
 	{
-		if ((KEY.IsDown(VK_LBUTTON) && m_titleButton->GetActionType() == Button::ActionType::Mouse) ||
-			(KEY.IsDown(VK_RETURN)))
+		if (KEY.IsDown(VK_RETURN))
 		{
 			SceneManager::Instance().ChangeState(std::make_shared<TitleScene>(m_back));
 			std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");

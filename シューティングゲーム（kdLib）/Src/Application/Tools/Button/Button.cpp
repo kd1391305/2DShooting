@@ -1,25 +1,8 @@
 #include "Button.h"
-#include"../../Mouse/Mouse.h"
 #include"../../TextureCache/TextureCache.h"
 
 void Button::Update()
 {
-	if (MOUSE.Hit(m_pos, m_radius))
-	{
-		if (MOUSE.IsMove())
-		{
-			m_bSelect = true;
-			m_actionType = ActionType::Mouse;
-		}
-	}
-	else
-	{
-		if (m_actionType == ActionType::Mouse)
-		{
-			m_bSelect = false;
-		}
-	}
-
 	Math::Matrix scaleMat, transMat;
 		
 	//‘I‘ð’†‚Å‚ ‚é‚È‚ç
@@ -45,7 +28,6 @@ void Button::Draw()
 void Button::SetSelect(bool set)
 {
 	m_bSelect = set;
-	m_actionType = ActionType::Key;
 }
 
 void ButtonEx::SetTex(std::string path)

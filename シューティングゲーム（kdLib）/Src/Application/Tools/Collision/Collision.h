@@ -41,3 +41,12 @@ bool IsCollision(Math::Vector2 pos1,float radius1, Math::Vector2 pos2,float radi
 
 //矩形当たり判定
 bool IsCollision_Box(Math::Vector2 pos1, Math::Vector2 radius1, Math::Vector2 pos2, Math::Vector2 radius2);
+
+//ボス用の当たり判定(長方形と平行四辺形)
+bool IsCollision_Boss(Math::Vector2 pos, Math::Vector2 radius, std::shared_ptr<Boss>boss);
+
+//ボス用の当たり判定（円と平行四辺形）
+bool IsCollision_Boss(Math::Vector2 pos, float radius, std::shared_ptr<Boss>boss);
+
+//線の位置と点の位置を調べる（ -1 = 左側、 0 = 重なっている, 1 = 右側）
+float IsCross(Math::Vector2 linePos1, Math::Vector2 linePos2, Math::Vector2 pos);

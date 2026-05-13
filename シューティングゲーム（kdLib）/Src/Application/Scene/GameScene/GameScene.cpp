@@ -15,7 +15,6 @@
 #include"../../UI/Score/Score.h"
 #include"../../SoundCache/SoundCache.h"
 #include"../../Animtion/HitEffect/HitEffectManager.h"
-#include"../../Mouse/Mouse.h"
 #include"../../Chara/Enemy/Boss/AttackArea/AttackAreaManager.h"
 #include"../../Chara/Enemy/Boss/Boss.h"
 
@@ -60,8 +59,6 @@ void Game::Init()
 
 	//スタート直後のフラグを立てる
 	m_bStartFlg = true;
-
-	MOUSE.ShowCursorTex(false);
 }
 
 //更新
@@ -116,7 +113,6 @@ void Game::Update()
 
 			std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav");
 			bgm->Stop();
-			MOUSE.ShowCursorTex(true);
 		}
 	}
 	else
@@ -205,7 +201,6 @@ void Game::GameOver()
 			std::dynamic_pointer_cast<Game> (SceneManager::Instance().GetCurrentState())));
 		std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/hanamatsuri.wav");
 		bgm->Stop();
-		MOUSE.ShowCursorTex(true);
 	}
 	std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Charge.wav");
 	se->Stop();

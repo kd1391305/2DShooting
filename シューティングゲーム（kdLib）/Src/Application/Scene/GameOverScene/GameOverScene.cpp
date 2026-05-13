@@ -11,7 +11,6 @@
 #include"../SceneManager.h"
 #include"../GameScene/GameScene.h"
 #include"../TitleScene/TitleScene.h"
-#include"../../Mouse/Mouse.h"
 #include"../../TextureCache/TextureCache.h"
 
 void GameOverScene::Init()
@@ -37,7 +36,7 @@ void GameOverScene::Init()
 
 	m_game->GetBack()->Update(0);
 
-	MOUSE.ShowCursorTex(true);
+	m_gameButton->SetSelect(true);
 }
 
 void GameOverScene::Update()
@@ -53,22 +52,19 @@ void GameOverScene::Update()
 	m_gameButton->Update();
 	if (m_gameButton->IsSelect())
 	{
-		if ((KEY.IsDown(VK_LBUTTON) && m_gameButton->GetActionType() == Button::ActionType::Mouse) ||
-			(KEY.IsDown(VK_RETURN)))
+		if(KEY.IsDown(VK_RETURN))
 		{
 			SceneManager::Instance().ChangeState(m_game);
 			m_game->GetPlayer()->Init();
 			m_game->GetPlayer()->Invincible(1.0f);
 			m_game->SetContinueFlg(true);
-			MOUSE.ShowCursorTex(false);
 		}
 	}
 
 	m_titleButton->Update();
 	if (m_titleButton->IsSelect())
 	{
-		if ((KEY.IsDown(VK_LBUTTON) && m_titleButton->GetActionType() == Button::ActionType::Mouse) ||
-			(KEY.IsDown(VK_RETURN)))
+		if (KEY.IsDown(VK_RETURN))
 		{
 			SceneManager::Instance().ChangeState(std::make_shared<TitleScene>(m_game->GetBack()));
 		}

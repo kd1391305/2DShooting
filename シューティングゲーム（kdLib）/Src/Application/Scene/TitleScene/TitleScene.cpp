@@ -3,7 +3,6 @@
 #include"../GameScene/GameScene.h"
 #include"../../Key/KeyManager.h"
 #include"../../Fireworks/FireworksManager.h"
-#include"../../Mouse/Mouse.h"
 #include"../../main.h"
 #include"../../Background/Back.h"
 #include"../../Timer/Timer.h"
@@ -42,8 +41,6 @@ void TitleScene::Init()
 		m_back->Init();
 	}
 
-	m_shotCoolTimer = 2;
-
 	//BGMを流す
 	std::shared_ptr<KdSoundInstance> bgm = SoundCache::Instance().Get("Sound/BGM/yukyunotokie.wav");
 	bgm->SetVolume(0.02f);
@@ -80,47 +77,11 @@ void TitleScene::Update()
 	}
 	else
 	{
-		m_shotCoolTimer -= deltaTime;
-		//マウスクリックで花火を出現
-		if (KEY.IsDown(VK_LBUTTON))
-		{
-			//花火を打ち上げる色、大きさをランダムで
-			if (m_shotCoolTimer <= 0)
-			{
-				Math::Vector2 pos = MOUSE.GetPosf() / m_back->GetAllScale();
-				float afterScale = randRange(0.7f, 1.1f);
-				Math::Color color = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
-				Math::Color color2 = { randRange(0,0.8f),randRange(0.0f,0.8f),randRange(0.0f,0.8f),randRange(0.5f,0.7f) };
-				FireworksManager::Type type = m_back->GetFireworks()->GetRandomType_Quick();
-				float seVolume = 0.01f;
-				for (int i = 0; i < 3; i++)
-				{
-					m_back->GetFireworks()->Explode(type,
-						pos, afterScale, color, seVolume);
-				}
-				//二重花火にする（花火の中にちいさな花火を追加）
-				m_back->GetFireworks()->Explode(type,
-					pos, afterScale / 1.5f, color, seVolume);
-
-				//クールタイムを設ける
-				m_shotCoolTimer = randRange(0.1, 0.2);
-			}
-		}
-
 		//スタートボタンの更新
 		m_start->Update();
-		if (m_start->IsSelect() || KEY.IsDown(VK_RETURN))
+		if (m_start->IsSelect())
 		{
-			if (!m_bHitCursor)
-			{
-				m_bHitCursor = true;
-				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Cursor.wav");
-				se->SetVolume(0.1f);
-				se->Play(false);
-			}
-
-			if ((KEY.IsDown(VK_LBUTTON) && m_start->GetActionType() == Button::ActionType::Mouse) ||
-				(KEY.IsDown(VK_RETURN)))
+			if (KEY.IsDown(VK_RETURN))
 			{
 				//効果音発生
 				std::shared_ptr<KdSoundInstance> se = SoundCache::Instance().Get("Sound/SE/Click.wav");
@@ -130,7 +91,6 @@ void TitleScene::Update()
 				//シーン切り替えの準備をする
 				m_bChangeScene = true;
 				m_changeSceneWaitTimer = m_changeSceneWait;
-
 
 				for (int i = 0; i < 15; i++)
 				{
@@ -150,10 +110,6 @@ void TitleScene::Update()
 						pos, afterScale / 1.5f, color, seVolume);
 				}
 			}
-		}
-		else
-		{
-			m_bHitCursor = false;
 		}
 	}
 
@@ -189,7 +145,3 @@ void TitleScene::Release()
 	
 }
 
-void TitleScene::ExplodeFireworks()
-{
-	
-}

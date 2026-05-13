@@ -27,12 +27,6 @@ private:
 	Math::Vector2 m_namePos;
 	Math::Matrix m_nameMat;
 
-	//花火を撃つクールタイム
-	float m_shotCoolTimer;
-
-	//カーソルが当たっているか？
-	bool m_bHitCursor;
-
 	//シーン切り替え用
 	const float m_changeSceneWait = 1.0f;
 	float m_changeSceneWaitTimer;
@@ -43,5 +37,4 @@ private:
 	float m_enterKeyAlpha;
 	float m_enterKeyDeltaAlpha;
 
-	void ExplodeFireworks();
 };

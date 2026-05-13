@@ -94,8 +94,6 @@ void Scene::ImGuiUpdate()
 	if (ImGui::Begin("Debug Window"))
 	{
 		ImGui::Text("FPS : %d", APP.m_fps);
-		ImGui::Text("MAX_FPS : %d", APP.m_maxFps);
-		ImGui::Text("MouseX : %d\nMuseY : %d", MOUSE.GetPos().x, MOUSE.GetPos().y);
 		ImGui::End();
 	}
 }
